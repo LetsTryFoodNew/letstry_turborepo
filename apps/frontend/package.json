@@ -59,7 +59,7 @@
     "@types/react-dom": "^19",
     "@vitest/browser-playwright": "^4.0.13",
     "@vitest/coverage-v8": "^4.0.13",
-    "eslint": "^9",
+    "eslint": "^9.18.0",
     "eslint-config-next": "16.0.3",
     "eslint-plugin-storybook": "^10.0.8",
     "husky": "^9.1.7",
