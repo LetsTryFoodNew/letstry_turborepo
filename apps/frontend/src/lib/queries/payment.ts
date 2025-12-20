@@ -40,17 +40,3 @@ export const INITIATE_UPI_QR_PAYMENT = gql`
   }
 `;
 
-export const INITIATE_CARD_PAYMENT = gql`
-  mutation InitiateCardPayment($input: InitiateCardPaymentInput!) {
-    initiateCardPayment(input: $input) {
-      paymentOrderId
-      status
-      zaakpayTxnId
-      redirectUrl
-      responseCode
-      responseMessage
-      cardType
-      maskedCardNumber
-    }
-  }
-`;

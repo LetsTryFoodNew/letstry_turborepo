@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Loader2, Lock } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { graphqlClient } from '@/lib/graphql/client-factory';
-import { INITIATE_CARD_PAYMENT } from '@/lib/queries/payment';
+import { INITIATE_PAYMENT } from '@/lib/queries/payment';
 import { FormInput } from './FormInput';
 
 interface CardPaymentProps {
@@ -39,29 +39,16 @@ export const CardPayment: React.FC<CardPaymentProps> = ({
 
   const { mutate: initiatePayment, isPending } = useMutation({
     mutationFn: async (data: CardFormData) => {
-      const response = await graphqlClient.request(INITIATE_CARD_PAYMENT, {
+      const response = await graphqlClient.request(INITIATE_PAYMENT, {
         input: {
           cartId,
-          buyerEmail: userDetails.email,
-          buyerName: userDetails.name,
-          buyerPhone: userDetails.phone,
-          cardNumber: data.cardNumber.replace(/\s/g, ''),
-          nameOnCard: data.nameOnCard,
-          expiryMonth: data.expiryMonth,
-          expiryYear: data.expiryYear,
-          cvv: data.cvv,
         },
       });
-      return response.initiateCardPayment;
+      return response.initiatePayment;
     },
     onSuccess: (data) => {
-      if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
-      } else if (data.status === 'SUCCESS') {
-        window.location.href = `${window.location.origin}/payment/success?orderId=${data.paymentOrderId}`;
-      } else {
-        // Handle other statuses or errors
-        console.error('Payment not successful:', data);
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
       }
     },
     onError: (error: any) => {

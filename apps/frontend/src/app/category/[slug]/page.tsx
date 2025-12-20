@@ -5,6 +5,8 @@ import { ProductGrid } from '@/components/category-page/ProductGrid';
 import { Product } from '@/components/category-page/ProductCard';
 import { notFound } from 'next/navigation';
 
+export const revalidate = 1800;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

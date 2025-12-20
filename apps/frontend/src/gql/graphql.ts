@@ -20,6 +20,11 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type AddProductsToCategoryInput = {
+  categoryId: Scalars['ID']['input'];
+  productIds: Array<Scalars['ID']['input']>;
+};
+
 export type AddToCartInput = {
   attributes?: InputMaybe<Scalars['JSON']['input']>;
   productId: Scalars['ID']['input'];
@@ -50,6 +55,13 @@ export type Address = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type AdminOrdersResponse = {
+  __typename?: 'AdminOrdersResponse';
+  meta: PaginationMeta;
+  orders: Array<OrderWithUserInfo>;
+  summary: OrdersSummary;
+};
+
 export type Banner = {
   __typename?: 'Banner';
   _id: Scalars['ID']['output'];
@@ -70,6 +82,11 @@ export type Banner = {
   thumbnailUrl?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['DateTime']['output'];
   url: Scalars['String']['output'];
+};
+
+export type CancelOrderInput = {
+  orderId: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Cart = {
@@ -143,6 +160,24 @@ export type Charges = {
   freeDeliveryThreshold: Scalars['Float']['output'];
   gstPercentage: Scalars['Float']['output'];
   handlingCharge: Scalars['Float']['output'];
+};
+
+export type ChecksumDataType = {
+  __typename?: 'ChecksumDataType';
+  amount: Scalars['String']['output'];
+  buyerEmail: Scalars['String']['output'];
+  buyerFirstName: Scalars['String']['output'];
+  buyerPhoneNumber: Scalars['String']['output'];
+  checksum: Scalars['String']['output'];
+  currency: Scalars['String']['output'];
+  merchantIdentifier: Scalars['String']['output'];
+  mode: Scalars['String']['output'];
+  orderId: Scalars['String']['output'];
+  productDescription: Scalars['String']['output'];
+  returnUrl: Scalars['String']['output'];
+  txnDate: Scalars['String']['output'];
+  txnType: Scalars['String']['output'];
+  zpPayOption: Scalars['String']['output'];
 };
 
 export type Coupon = {
@@ -250,7 +285,7 @@ export type CreatePolicyInput = {
 export type CreateProductInput = {
   allergens?: InputMaybe<Scalars['String']['input']>;
   brand: Scalars['String']['input'];
-  categoryId: Scalars['String']['input'];
+  categoryIds: Array<Scalars['String']['input']>;
   currency?: InputMaybe<Scalars['String']['input']>;
   description: Scalars['String']['input'];
   favourite?: InputMaybe<Scalars['Boolean']['input']>;
@@ -302,6 +337,65 @@ export type CreateUserInput = {
   signupSource?: InputMaybe<Scalars['JSON']['input']>;
 };
 
+export type CustomerDetails = {
+  __typename?: 'CustomerDetails';
+  _id: Scalars['ID']['output'];
+  activeCart?: Maybe<Scalars['JSON']['output']>;
+  addresses: Scalars['JSON']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  currentSessionId?: Maybe<Scalars['String']['output']>;
+  deviceInfo?: Maybe<Scalars['JSON']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  firebaseUid?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  identityId: Scalars['String']['output'];
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  isEmailVerified: Scalars['Boolean']['output'];
+  isGuest: Scalars['Boolean']['output'];
+  isPhoneVerified: Scalars['Boolean']['output'];
+  lastActiveAt?: Maybe<Scalars['DateTime']['output']>;
+  lastIp?: Maybe<Scalars['String']['output']>;
+  lastLoginAt?: Maybe<Scalars['DateTime']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  lifetimeValue: Scalars['Float']['output'];
+  marketingSmsOptIn?: Maybe<Scalars['Boolean']['output']>;
+  mergedGuestIds: Array<Scalars['String']['output']>;
+  orders: Scalars['JSON']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  registeredAt?: Maybe<Scalars['DateTime']['output']>;
+  role: Scalars['String']['output'];
+  sessionIds: Array<Scalars['String']['output']>;
+  signupSource?: Maybe<Scalars['JSON']['output']>;
+  status: IdentityStatus;
+  totalOrders: Scalars['Int']['output'];
+  totalSpent: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export enum CustomerPlatform {
+  Android = 'ANDROID',
+  Ios = 'IOS',
+  Web = 'WEB'
+}
+
+export enum CustomerSortField {
+  CreatedAt = 'CREATED_AT',
+  LastActive = 'LAST_ACTIVE',
+  TotalOrders = 'TOTAL_ORDERS',
+  TotalSpent = 'TOTAL_SPENT'
+}
+
+export type CustomerSummary = {
+  __typename?: 'CustomerSummary';
+  newThisMonth: Scalars['Int']['output'];
+  platformStats: PlatformStats;
+  statusStats: StatusStats;
+  totalCustomers: Scalars['Int']['output'];
+  totalGuests: Scalars['Int']['output'];
+  totalRegistered: Scalars['Int']['output'];
+  totalRevenue: Scalars['Int']['output'];
+};
+
 export type DashboardStats = {
   __typename?: 'DashboardStats';
   activeBanners: Scalars['Float']['output'];
@@ -319,8 +413,71 @@ export enum DiscountType {
   Percentage = 'PERCENTAGE'
 }
 
+export type EnrichedCustomer = {
+  __typename?: 'EnrichedCustomer';
+  _id: Scalars['ID']['output'];
+  activeCartItemsCount?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  currentSessionId?: Maybe<Scalars['String']['output']>;
+  deviceInfo?: Maybe<Scalars['JSON']['output']>;
+  displayPhone?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  firebaseUid?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  identityId: Scalars['String']['output'];
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  isEmailVerified: Scalars['Boolean']['output'];
+  isGuest: Scalars['Boolean']['output'];
+  isPhoneVerified: Scalars['Boolean']['output'];
+  lastActiveAt?: Maybe<Scalars['DateTime']['output']>;
+  lastIp?: Maybe<Scalars['String']['output']>;
+  lastLoginAt?: Maybe<Scalars['DateTime']['output']>;
+  lastName?: Maybe<Scalars['String']['output']>;
+  lifetimeValue: Scalars['Float']['output'];
+  marketingSmsOptIn?: Maybe<Scalars['Boolean']['output']>;
+  mergedGuestIds: Array<Scalars['String']['output']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  registeredAt?: Maybe<Scalars['DateTime']['output']>;
+  role: Scalars['String']['output'];
+  sessionIds: Array<Scalars['String']['output']>;
+  signupSource?: Maybe<Scalars['JSON']['output']>;
+  status: IdentityStatus;
+  totalOrders: Scalars['Int']['output'];
+  totalSpent: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type GeocodeAddressInput = {
   address: Scalars['String']['input'];
+};
+
+export type GetAllOrdersInput = {
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  limit?: Scalars['Int']['input'];
+  page?: Scalars['Int']['input'];
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+  status?: InputMaybe<OrderStatus>;
+  userSearch?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GetCustomersInput = {
+  endDate?: InputMaybe<Scalars['JSON']['input']>;
+  limit?: Scalars['Int']['input'];
+  maxSpent?: InputMaybe<Scalars['Float']['input']>;
+  minSpent?: InputMaybe<Scalars['Float']['input']>;
+  page?: Scalars['Int']['input'];
+  platform?: InputMaybe<CustomerPlatform>;
+  searchTerm?: InputMaybe<Scalars['String']['input']>;
+  sortBy?: InputMaybe<CustomerSortField>;
+  sortOrder?: InputMaybe<SortOrder>;
+  startDate?: InputMaybe<Scalars['JSON']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GetMyOrdersInput = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  page?: InputMaybe<Scalars['Float']['input']>;
+  status?: InputMaybe<OrderStatus>;
 };
 
 export type GoogleMapsAddressOutput = {
@@ -348,14 +505,59 @@ export type Guest = {
   sessionId: Scalars['String']['output'];
 };
 
+export enum IdentityStatus {
+  Active = 'ACTIVE',
+  Guest = 'GUEST',
+  Merged = 'MERGED',
+  Registered = 'REGISTERED',
+  Suspended = 'SUSPENDED',
+  Verified = 'VERIFIED'
+}
+
+export type InitiatePaymentInput = {
+  amount: Scalars['String']['input'];
+  cartId: Scalars['String']['input'];
+  currency: Scalars['String']['input'];
+};
+
+export type InitiatePaymentResponse = {
+  __typename?: 'InitiatePaymentResponse';
+  checkoutUrl: Scalars['String']['output'];
+  checksumData: ChecksumDataType;
+  paymentOrderId: Scalars['String']['output'];
+};
+
+export type InitiateUpiQrPaymentInput = {
+  buyerEmail: Scalars['String']['input'];
+  buyerName: Scalars['String']['input'];
+  buyerPhone: Scalars['String']['input'];
+  cartId: Scalars['String']['input'];
+};
+
+export type InitiateUpiQrPaymentResponse = {
+  __typename?: 'InitiateUpiQrPaymentResponse';
+  amount: Scalars['String']['output'];
+  currency: Scalars['String']['output'];
+  expiresAt?: Maybe<Scalars['String']['output']>;
+  paymentOrderId: Scalars['String']['output'];
+  qrCodeData: Scalars['String']['output'];
+  qrCodeUrl?: Maybe<Scalars['String']['output']>;
+  responseCode?: Maybe<Scalars['String']['output']>;
+  responseMessage?: Maybe<Scalars['String']['output']>;
+  zaakpayTxnId?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addProductVariant: Product;
+  addProductsToCategory: Scalars['Boolean']['output'];
   addToCart: Cart;
   adminLogin: Scalars['String']['output'];
+  adminLogout: Scalars['String']['output'];
   applyCoupon: Cart;
   archiveCategory: Category;
   archiveProduct: Product;
+  cancelOrder: OrderType;
   clearCart: Cart;
   createAddress: Address;
   createAdmin: Scalars['String']['output'];
@@ -370,13 +572,20 @@ export type Mutation = {
   deleteBanner: Banner;
   deletePolicy: Policy;
   deleteProduct: Product;
+  initiatePayment: InitiatePaymentResponse;
+  initiateUpiQrPayment: InitiateUpiQrPaymentResponse;
+  logout: Scalars['String']['output'];
+  processRefund: RefundResponse;
   removeCoupon: Cart;
   removeFromCart: Cart;
   removeProductVariant: Product;
+  removeProductsFromCategory: Scalars['Boolean']['output'];
   sendOtp: Scalars['String']['output'];
   setDefaultProductVariant: Product;
+  subscribeNewsletter: SubscribeNewsletterResponse;
   unarchiveCategory: Category;
   unarchiveProduct: Product;
+  unsubscribeNewsletter: SubscribeNewsletterResponse;
   updateAddress: Address;
   updateBanner: Banner;
   updateCartItem: Cart;
@@ -387,6 +596,7 @@ export type Mutation = {
   updateProductStock: Product;
   updateProductVariant: Product;
   updateProductVariantStock: Product;
+  updateUserActivity: Scalars['Boolean']['output'];
   verifyOtpAndLogin: Scalars['String']['output'];
   verifyWhatsAppOtp: Scalars['String']['output'];
 };
@@ -395,6 +605,11 @@ export type Mutation = {
 export type MutationAddProductVariantArgs = {
   input: CreateProductVariantInput;
   productId: Scalars['ID']['input'];
+};
+
+
+export type MutationAddProductsToCategoryArgs = {
+  input: AddProductsToCategoryInput;
 };
 
 
@@ -421,6 +636,11 @@ export type MutationArchiveCategoryArgs = {
 
 export type MutationArchiveProductArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationCancelOrderArgs = {
+  input: CancelOrderInput;
 };
 
 
@@ -490,6 +710,21 @@ export type MutationDeleteProductArgs = {
 };
 
 
+export type MutationInitiatePaymentArgs = {
+  input: InitiatePaymentInput;
+};
+
+
+export type MutationInitiateUpiQrPaymentArgs = {
+  input: InitiateUpiQrPaymentInput;
+};
+
+
+export type MutationProcessRefundArgs = {
+  input: ProcessRefundInput;
+};
+
+
 export type MutationRemoveFromCartArgs = {
   productId: Scalars['ID']['input'];
 };
@@ -498,6 +733,11 @@ export type MutationRemoveFromCartArgs = {
 export type MutationRemoveProductVariantArgs = {
   productId: Scalars['ID']['input'];
   variantId: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveProductsFromCategoryArgs = {
+  input: RemoveProductsFromCategoryInput;
 };
 
 
@@ -512,6 +752,11 @@ export type MutationSetDefaultProductVariantArgs = {
 };
 
 
+export type MutationSubscribeNewsletterArgs = {
+  input: SubscribeNewsletterInput;
+};
+
+
 export type MutationUnarchiveCategoryArgs = {
   id: Scalars['ID']['input'];
 };
@@ -519,6 +764,11 @@ export type MutationUnarchiveCategoryArgs = {
 
 export type MutationUnarchiveProductArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUnsubscribeNewsletterArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -595,10 +845,125 @@ export type MutationVerifyWhatsAppOtpArgs = {
   phoneNumber: Scalars['String']['input'];
 };
 
+export type NewsletterSubscription = {
+  __typename?: 'NewsletterSubscription';
+  _id: Scalars['ID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  ipAddress?: Maybe<Scalars['String']['output']>;
+  isActive: Scalars['Boolean']['output'];
+  source?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type OrderItemType = {
+  __typename?: 'OrderItemType';
+  name: Scalars['String']['output'];
+  price: Scalars['String']['output'];
+  productId: Scalars['String']['output'];
+  quantity: Scalars['Float']['output'];
+  sku: Scalars['String']['output'];
+  totalPrice: Scalars['String']['output'];
+};
+
+export enum OrderStatus {
+  Cancelled = 'CANCELLED',
+  Confirmed = 'CONFIRMED',
+  Delivered = 'DELIVERED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING',
+  Refunded = 'REFUNDED',
+  Shipped = 'SHIPPED'
+}
+
+export type OrderStatusCount = {
+  __typename?: 'OrderStatusCount';
+  cancelled: Scalars['Int']['output'];
+  confirmed: Scalars['Int']['output'];
+  delivered: Scalars['Int']['output'];
+  pending: Scalars['Int']['output'];
+  processing: Scalars['Int']['output'];
+  refunded: Scalars['Int']['output'];
+  shipped: Scalars['Int']['output'];
+};
+
+export type OrderType = {
+  __typename?: 'OrderType';
+  _id: Scalars['String']['output'];
+  cancellationReason?: Maybe<Scalars['String']['output']>;
+  cancelledAt?: Maybe<Scalars['DateTime']['output']>;
+  cartId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  currency: Scalars['String']['output'];
+  deliveredAt?: Maybe<Scalars['DateTime']['output']>;
+  identityId: Scalars['String']['output'];
+  items: Array<OrderItemType>;
+  orderId: Scalars['String']['output'];
+  orderStatus: OrderStatus;
+  paymentOrderId: Scalars['String']['output'];
+  shippingAddressId?: Maybe<Scalars['String']['output']>;
+  totalAmount: Scalars['String']['output'];
+  trackingNumber?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type OrderUserInfo = {
+  __typename?: 'OrderUserInfo';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName?: Maybe<Scalars['String']['output']>;
+  identityId: Scalars['String']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  status: Scalars['String']['output'];
+};
+
+export type OrderWithUserInfo = {
+  __typename?: 'OrderWithUserInfo';
+  _id: Scalars['String']['output'];
+  cancellationReason?: Maybe<Scalars['String']['output']>;
+  cancelledAt?: Maybe<Scalars['DateTime']['output']>;
+  cartId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  currency: Scalars['String']['output'];
+  deliveredAt?: Maybe<Scalars['DateTime']['output']>;
+  identityId: Scalars['String']['output'];
+  items: Array<OrderItemType>;
+  orderId: Scalars['String']['output'];
+  orderStatus: OrderStatus;
+  paymentOrderId: Scalars['String']['output'];
+  shippingAddressId?: Maybe<Scalars['String']['output']>;
+  totalAmount: Scalars['String']['output'];
+  trackingNumber?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  userInfo?: Maybe<OrderUserInfo>;
+};
+
+export type OrdersSummary = {
+  __typename?: 'OrdersSummary';
+  statusCounts: OrderStatusCount;
+  totalOrders: Scalars['Int']['output'];
+};
+
 export type PaginatedCategories = {
   __typename?: 'PaginatedCategories';
   items: Array<Category>;
   meta: PaginationMeta;
+};
+
+export type PaginatedCustomersResponse = {
+  __typename?: 'PaginatedCustomersResponse';
+  customers: Array<EnrichedCustomer>;
+  meta: PaginationMeta;
+  summary: CustomerSummary;
+};
+
+export type PaginatedOrdersResponse = {
+  __typename?: 'PaginatedOrdersResponse';
+  limit: Scalars['Float']['output'];
+  orders: Array<OrderType>;
+  page: Scalars['Float']['output'];
+  total: Scalars['Float']['output'];
+  totalPages: Scalars['Float']['output'];
 };
 
 export type PaginatedProducts = {
@@ -620,6 +985,54 @@ export type PaginationMeta = {
   page: Scalars['Int']['output'];
   totalCount: Scalars['Int']['output'];
   totalPages: Scalars['Int']['output'];
+};
+
+export enum PaymentMethod {
+  CreditCard = 'CREDIT_CARD',
+  DebitCard = 'DEBIT_CARD',
+  NetBanking = 'NET_BANKING',
+  Upi = 'UPI',
+  Wallet = 'WALLET'
+}
+
+export type PaymentOrderType = {
+  __typename?: 'PaymentOrderType';
+  _id: Scalars['String']['output'];
+  amount: Scalars['String']['output'];
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  currency: Scalars['String']['output'];
+  executedAt?: Maybe<Scalars['DateTime']['output']>;
+  failureReason?: Maybe<Scalars['String']['output']>;
+  identityId: Scalars['String']['output'];
+  orderId?: Maybe<Scalars['String']['output']>;
+  paymentEventId: Scalars['String']['output'];
+  paymentMethod?: Maybe<PaymentMethod>;
+  paymentOrderId: Scalars['String']['output'];
+  paymentOrderStatus: PaymentStatus;
+  pspResponseMessage?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  zaakpayOrderId?: Maybe<Scalars['String']['output']>;
+  zaakpayToken?: Maybe<Scalars['String']['output']>;
+  zaakpayTxnId?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PaymentStatus {
+  Executing = 'EXECUTING',
+  Failed = 'FAILED',
+  NotStarted = 'NOT_STARTED',
+  PartiallyRefunded = 'PARTIALLY_REFUNDED',
+  Pending = 'PENDING',
+  Refunded = 'REFUNDED',
+  Success = 'SUCCESS'
+}
+
+export type PaymentStatusResponse = {
+  __typename?: 'PaymentStatusResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  paymentOrder: PaymentOrderType;
+  paymentOrderId: Scalars['String']['output'];
+  status: PaymentStatus;
 };
 
 export type PhoneCheckOutput = {
@@ -655,6 +1068,13 @@ export type PlacePredictionOutput = {
   secondaryText: Scalars['String']['output'];
 };
 
+export type PlatformStats = {
+  __typename?: 'PlatformStats';
+  android: Scalars['Int']['output'];
+  ios: Scalars['Int']['output'];
+  web: Scalars['Int']['output'];
+};
+
 export type Policy = {
   __typename?: 'Policy';
   _id: Scalars['ID']['output'];
@@ -671,14 +1091,21 @@ export type PriceRange = {
   min: Scalars['Float']['output'];
 };
 
+export type ProcessRefundInput = {
+  paymentOrderId: Scalars['String']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+  refundAmount: Scalars['String']['input'];
+};
+
 export type Product = {
   __typename?: 'Product';
   _id: Scalars['ID']['output'];
   allergens?: Maybe<Scalars['String']['output']>;
   availableVariants: Array<ProductVariant>;
   brand: Scalars['String']['output'];
+  categories?: Maybe<Array<Category>>;
   category?: Maybe<Category>;
-  categoryId: Scalars['String']['output'];
+  categoryIds: Array<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   currency: Scalars['String']['output'];
   defaultVariant?: Maybe<ProductVariant>;
@@ -779,12 +1206,22 @@ export type Query = {
   coupons: Array<Coupon>;
   dashboardStats: DashboardStats;
   geocodeAddress: GoogleMapsAddressOutput;
+  getAllCustomers: PaginatedCustomersResponse;
+  getAllNewsletterSubscriptions: Array<NewsletterSubscription>;
+  getAllOrders: AdminOrdersResponse;
+  getCustomerDetails: CustomerDetails;
+  getMyOrders: PaginatedOrdersResponse;
+  getNewsletterSubscriptionCount: Scalars['Float']['output'];
+  getOrderById: OrderType;
+  getPaymentOrderById: PaymentOrderType;
+  getPaymentStatus: PaymentStatusResponse;
   getPlaceDetails: PlaceDetailsOutput;
   guest?: Maybe<Guest>;
   guestByGuestId?: Maybe<Guest>;
   hello: Scalars['String']['output'];
   myAddresses: Array<Address>;
   myCart?: Maybe<Cart>;
+  myPayments: Array<PaymentOrderType>;
   policies: Array<Policy>;
   policiesByType: Array<Policy>;
   policy?: Maybe<Policy>;
@@ -847,6 +1284,51 @@ export type QueryCouponArgs = {
 
 export type QueryGeocodeAddressArgs = {
   input: GeocodeAddressInput;
+};
+
+
+export type QueryGetAllCustomersArgs = {
+  input: GetCustomersInput;
+};
+
+
+export type QueryGetAllNewsletterSubscriptionsArgs = {
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryGetAllOrdersArgs = {
+  input: GetAllOrdersInput;
+};
+
+
+export type QueryGetCustomerDetailsArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetMyOrdersArgs = {
+  input: GetMyOrdersInput;
+};
+
+
+export type QueryGetNewsletterSubscriptionCountArgs = {
+  isActive?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryGetOrderByIdArgs = {
+  orderId: Scalars['String']['input'];
+};
+
+
+export type QueryGetPaymentOrderByIdArgs = {
+  paymentOrderId: Scalars['String']['input'];
+};
+
+
+export type QueryGetPaymentStatusArgs = {
+  paymentOrderId: Scalars['String']['input'];
 };
 
 
@@ -924,6 +1406,18 @@ export type QuerySearchProductsArgs = {
   searchTerm: Scalars['String']['input'];
 };
 
+export type RefundResponse = {
+  __typename?: 'RefundResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  refundId: Scalars['String']['output'];
+  status: PaymentStatus;
+};
+
+export type RemoveProductsFromCategoryInput = {
+  categoryId: Scalars['ID']['input'];
+  productIds: Array<Scalars['ID']['input']>;
+};
+
 export type ReverseGeocodeInput = {
   latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
@@ -932,6 +1426,32 @@ export type ReverseGeocodeInput = {
 export type SearchPlacesInput = {
   query: Scalars['String']['input'];
   sessionToken?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum SortOrder {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
+export type StatusStats = {
+  __typename?: 'StatusStats';
+  active: Scalars['Int']['output'];
+  guest: Scalars['Int']['output'];
+  registered: Scalars['Int']['output'];
+  suspended: Scalars['Int']['output'];
+  verified: Scalars['Int']['output'];
+};
+
+export type SubscribeNewsletterInput = {
+  email: Scalars['String']['input'];
+  source?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SubscribeNewsletterResponse = {
+  __typename?: 'SubscribeNewsletterResponse';
+  email?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type UpdateAddressInput = {
@@ -1002,7 +1522,7 @@ export type UpdatePolicyInput = {
 export type UpdateProductInput = {
   allergens?: InputMaybe<Scalars['String']['input']>;
   brand?: InputMaybe<Scalars['String']['input']>;
-  categoryId?: InputMaybe<Scalars['String']['input']>;
+  categoryIds?: InputMaybe<Array<Scalars['String']['input']>>;
   currency?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   favourite?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1078,6 +1598,11 @@ export type CheckPhoneExistsQueryVariables = Exact<{
 
 
 export type CheckPhoneExistsQuery = { __typename?: 'Query', checkPhoneExists: { __typename?: 'PhoneCheckOutput', exists: boolean, requiresLogin: boolean, message?: string | null } };
+
+export type AdminLogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AdminLogoutMutation = { __typename?: 'Mutation', adminLogout: string };
 
 export type GetMyCartQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1160,6 +1685,20 @@ export type UpdateGuestMutationVariables = Exact<{
 
 
 export type UpdateGuestMutation = { __typename?: 'Mutation', updateGuest: { __typename?: 'Guest', _id: string, lastActiveAt: any } };
+
+export type InitiatePaymentMutationVariables = Exact<{
+  input: InitiatePaymentInput;
+}>;
+
+
+export type InitiatePaymentMutation = { __typename?: 'Mutation', initiatePayment: { __typename?: 'InitiatePaymentResponse', paymentOrderId: string, checkoutUrl: string, checksumData: { __typename?: 'ChecksumDataType', amount: string, merchantIdentifier: string, orderId: string, buyerEmail: string, buyerFirstName: string, buyerPhoneNumber: string, currency: string, txnType: string, zpPayOption: string, mode: string, productDescription: string, txnDate: string, checksum: string } } };
+
+export type InitiateUpiQrPaymentMutationVariables = Exact<{
+  input: InitiateUpiQrPaymentInput;
+}>;
+
+
+export type InitiateUpiQrPaymentMutation = { __typename?: 'Mutation', initiateUpiQrPayment: { __typename?: 'InitiateUpiQrPaymentResponse', paymentOrderId: string, qrCodeData: string, qrCodeUrl?: string | null, zaakpayTxnId?: string | null, amount: string, currency: string, expiresAt?: string | null, responseCode?: string | null, responseMessage?: string | null } };
 
 export type GetProductBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -1254,6 +1793,11 @@ export const CheckPhoneExistsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CheckPhoneExistsQuery, CheckPhoneExistsQueryVariables>;
+export const AdminLogoutDocument = new TypedDocumentString(`
+    mutation AdminLogout {
+  adminLogout
+}
+    `) as unknown as TypedDocumentString<AdminLogoutMutation, AdminLogoutMutationVariables>;
 export const GetMyCartDocument = new TypedDocumentString(`
     query GetMyCart {
   myCart {
@@ -1484,6 +2028,44 @@ export const UpdateGuestDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<UpdateGuestMutation, UpdateGuestMutationVariables>;
+export const InitiatePaymentDocument = new TypedDocumentString(`
+    mutation InitiatePayment($input: InitiatePaymentInput!) {
+  initiatePayment(input: $input) {
+    paymentOrderId
+    checkoutUrl
+    checksumData {
+      amount
+      merchantIdentifier
+      orderId
+      buyerEmail
+      buyerFirstName
+      buyerPhoneNumber
+      currency
+      txnType
+      zpPayOption
+      mode
+      productDescription
+      txnDate
+      checksum
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<InitiatePaymentMutation, InitiatePaymentMutationVariables>;
+export const InitiateUpiQrPaymentDocument = new TypedDocumentString(`
+    mutation InitiateUpiQrPayment($input: InitiateUpiQrPaymentInput!) {
+  initiateUpiQrPayment(input: $input) {
+    paymentOrderId
+    qrCodeData
+    qrCodeUrl
+    zaakpayTxnId
+    amount
+    currency
+    expiresAt
+    responseCode
+    responseMessage
+  }
+}
+    `) as unknown as TypedDocumentString<InitiateUpiQrPaymentMutation, InitiateUpiQrPaymentMutationVariables>;
 export const GetProductBySlugDocument = new TypedDocumentString(`
     query GetProductBySlug($slug: String!) {
   productBySlug(slug: $slug) {

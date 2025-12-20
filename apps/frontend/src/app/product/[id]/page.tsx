@@ -5,6 +5,8 @@ import { ProductDetails } from '@/components/product-page/ProductDetails';
 import { ProductAccordion } from '@/components/product-page/ProductAccordion';
 import { InfoTable } from '@/components/product-page/InfoTable';
 
+export const revalidate = 1800;
+
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

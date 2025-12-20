@@ -31,9 +31,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # --- 2. BUILD (With Remote Cache) ---
-      # If you changed only 'backend', Turbo downloads 'frontend' from cache
-      # and only actually compiles 'backend'.
       - name: Build Monorepo
         run: pnpm build
 
