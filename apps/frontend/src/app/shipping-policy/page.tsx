@@ -1,6 +1,5 @@
-import React from "react";
 
-function page() {
+export default function ShippingPolicyPage() {
   return (
     <div className=" bg-white px-[15px] md:px-[30px] lg:px-[45px] py-4 text-[#000000] w-full">
       <h1 className="text-lg md:text-2xl lg:text-3xl font-bold text-black mb-3">
@@ -66,5 +65,3 @@ function page() {
     </div>
   );
 }
-
-export default page;

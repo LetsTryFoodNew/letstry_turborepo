@@ -1,6 +1,4 @@
-
-
-function page() {
+export default function RefundCancellationsPage() {
   return (
     
     <div className=" bg-white px-[15px] md:px-[30px] lg:px-[45px] py-4">
@@ -44,5 +42,3 @@ function page() {
     </div>
   )
 }
-
-export default page

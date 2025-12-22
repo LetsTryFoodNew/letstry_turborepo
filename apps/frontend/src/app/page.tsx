@@ -4,7 +4,7 @@ import { BestsellerCarousel } from "@/components/bestseller";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { HealthySnacking } from "@/components/healthy-snacking";
 
-export const revalidate = 3600 * 24;
+export const revalidate = 86400;
 
 
 export default function Home() {
