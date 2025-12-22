@@ -18,10 +18,7 @@ async function bootstrap() {
     app.enableCors({
       origin: configService.get<string>('CORS_ORIGINS')?.split(',') || [
         'http://localhost:3000',
-        'http://localhost:3001',
-        'https://studio.apollographql.com',
-        'https://front.krsna.site',
-        "https://admin.krsna.site"
+        'http://localhost:3001'
       ],
       credentials: true,
     });
