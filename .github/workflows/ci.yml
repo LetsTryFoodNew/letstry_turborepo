@@ -103,5 +103,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /var/www/letstry-turborepo
-            pm2 restart frontend admin
+            pm2 restart frontend || pm2 start ecosystem.config.js --only frontend
+            pm2 restart admin || pm2 start ecosystem.config.js --only admin
             pm2 save
