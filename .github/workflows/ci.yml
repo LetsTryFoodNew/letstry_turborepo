@@ -96,6 +96,18 @@ jobs:
         env:
           NEXT_TURBOPACK: 0
 
+      - name: Prepare Standalone Build
+        run: |
+          # Frontend
+          cp -r apps/frontend/public apps/frontend/.next/standalone/apps/frontend/public || true
+          mkdir -p apps/frontend/.next/standalone/apps/frontend/.next
+          cp -r apps/frontend/.next/static apps/frontend/.next/standalone/apps/frontend/.next/static
+          
+          # Admin
+          cp -r apps/admin/public apps/admin/.next/standalone/apps/admin/public || true
+          mkdir -p apps/admin/.next/standalone/apps/admin/.next
+          cp -r apps/admin/.next/static apps/admin/.next/standalone/apps/admin/.next/static
+
       - name: Deploy Frontend and Admin to EC2
         uses: easingthemes/ssh-deploy@main
         env:
