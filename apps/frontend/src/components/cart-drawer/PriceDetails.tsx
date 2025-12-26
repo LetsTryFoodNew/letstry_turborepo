@@ -28,13 +28,13 @@ export const PriceDetails: React.FC<PriceDetailsProps> = ({
         onClick={onToggle}
         className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
       >
-        <span className="text-sm font-medium text-[#0F4A6A] underline decoration-[#0F4A6A] underline-offset-2">
+        <span className="text-sm font-medium text-[#003B65] underline decoration-[#003B65] underline-offset-2">
           View price details
         </span>
         {isExpanded ? (
-          <ChevronUp className="w-4 h-4 text-[#0F4A6A]" />
+          <ChevronUp className="w-4 h-4 text-[#003B65]" />
         ) : (
-          <ChevronDown className="w-4 h-4 text-[#0F4A6A]" />
+          <ChevronDown className="w-4 h-4 text-[#003B65]" />
         )}
       </button>
 
@@ -109,7 +109,7 @@ export const PriceDetails: React.FC<PriceDetailsProps> = ({
               <div className="pt-2">
                 <div className="flex items-center justify-between text-base font-bold text-gray-900">
                   <span>Grand Total</span>
-                  <span className="text-[#0F4A6A]">₹{priceBreakdown.grandTotal.toFixed(2)}</span>
+                  <span className="text-[#003B65]">₹{priceBreakdown.grandTotal.toFixed(2)}</span>
                 </div>
               </div>
 

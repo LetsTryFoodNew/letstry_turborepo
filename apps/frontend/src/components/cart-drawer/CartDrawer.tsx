@@ -142,7 +142,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-end md:items-stretch md:justify-end isolate">
+        <div className="fixed inset-0 z-[100] flex items-end md:justify-end isolate">
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -159,7 +159,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             animate="animate"
             exit="exit"
             transition={{ type: 'tween', duration: 0.3, ease: 'easeOut' }}
-            className="relative w-full max-w-md h-[90vh] md:h-full bg-white shadow-2xl flex flex-col rounded-t-[20px] md:rounded-t-none"
+            className="relative w-full md:w-[448px] h-[85vh] md:h-full bg-white shadow-2xl flex flex-col rounded-t-[20px] md:rounded-t-none overflow-hidden"
           >
             <CartHeader itemCount={items.length} onClose={onClose} />
 
