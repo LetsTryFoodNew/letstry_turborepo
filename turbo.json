@@ -3,30 +3,60 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "codegen"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "public/**"]
+      "dependsOn": [
+        "^build",
+        "codegen"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "public/**"
+      ]
     },
     "codegen": {
-      "inputs": ["codegen.ts", "src/**/*.ts", "src/**/*.tsx"],
-      "outputs": ["src/gql/**"],
-      "dependsOn": ["^build"]
+      "inputs": [
+        "codegen.ts",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
+      "outputs": [
+        "src/gql/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": [
+        "^check-types"
+      ]
     },
     "type-check": {
-      "dependsOn": ["^type-check"]
+      "dependsOn": [
+        "^type-check"
+      ]
     },
     "test": {
-      "dependsOn": ["^test"],
-      "outputs": ["coverage/**"]
+      "dependsOn": [
+        "^test"
+      ],
+      "outputs": [
+        "coverage/**"
+      ]
     },
     "test:e2e": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "outputs": []
     },
     "dev": {
@@ -39,6 +69,9 @@
     },
     "format": {
       "outputs": []
+    },
+    "seed": {
+      "cache": false
     }
   }
 }
