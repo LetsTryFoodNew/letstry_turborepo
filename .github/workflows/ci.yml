@@ -88,6 +88,14 @@ jobs:
             set -e
             cd /var/www/letstry-turborepo
             
+            # Install production dependencies on the server
+            if command -v pnpm &> /dev/null; then
+              pnpm install --prod
+            else
+              echo "pnpm not found, falling back to npm (might be slow)"
+              npm install --production
+            fi
+            
             # Create logs directory
             mkdir -p logs
             chmod 755 logs
