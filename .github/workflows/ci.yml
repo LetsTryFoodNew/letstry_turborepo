@@ -42,7 +42,9 @@ jobs:
         run: pnpm install
 
       - name: Build Backend
-        run: npx turbo run build --filter=backend
+        run: |
+          rm -rf apps/backend/dist
+          npx turbo run build --filter=backend --no-cache
 
       # --- BACKEND: Deploy and start on EC2 ---
       - name: Deploy Backend to EC2
@@ -96,7 +98,7 @@ jobs:
           echo "${{ secrets.ADMIN_ENV }}" > apps/admin/.env.local
 
       - name: Build Frontend and Admin
-        run: npx turbo run build --filter=frontend --filter=admin
+        run: npx turbo run build --filter=frontend --filter=admin --no-cache
         env:
           NEXT_TURBOPACK: 0
 

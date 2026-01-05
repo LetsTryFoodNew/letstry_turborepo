@@ -20,7 +20,9 @@ export class PackingResolver {
   constructor(
     private readonly packingService: PackingService,
     private readonly packerService: PackerService,
-  ) { }
+  ) {
+    console.log('PackingResolver initialized');
+  }
 
   @ResolveField()
   id(@Parent() packingOrder: any): string {
