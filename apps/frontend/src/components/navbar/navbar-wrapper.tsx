@@ -5,7 +5,7 @@ export const NavbarWrapper = async () => {
   let categories: Array<{ href: string; label: string }> = [];
   
   try {
-    const categoryData = await getHomeCategories(20);
+    const categoryData = await getHomeCategories(10);
     categories = categoryData.items.map((c) => ({
       href: `/category/${c.slug}`,
       label: c.name,

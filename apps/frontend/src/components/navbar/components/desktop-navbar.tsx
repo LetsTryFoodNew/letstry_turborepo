@@ -60,7 +60,7 @@ export const DesktopNavbar = ({
                 {link.hasDropdown && hoveredMenu === link.label && (
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-2 w-56 z-50">
                     <div className="bg-white border border-gray-200 rounded-lg shadow-lg py-2">
-                      {link.dropdownItems?.slice(0, 10).map((item) => (
+                      {link.dropdownItems?.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
