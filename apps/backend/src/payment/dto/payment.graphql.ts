@@ -4,7 +4,7 @@ import {
   InputType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { PaymentStatus, PaymentMethod } from './payment.schema';
+import { PaymentStatus, PaymentMethod } from '../entities/payment.schema';
 
 registerEnumType(PaymentStatus, {
   name: 'PaymentStatus',
@@ -209,50 +209,6 @@ export class OrderType {
   updatedAt: Date;
 }
 
-@ObjectType()
-export class ChecksumDataType {
-  @Field()
-  amount: string;
-
-  @Field()
-  merchantIdentifier: string;
-
-  @Field()
-  orderId: string;
-
-  @Field()
-  returnUrl: string;
-
-  @Field()
-  buyerEmail: string;
-
-  @Field()
-  buyerFirstName: string;
-
-  @Field()
-  buyerPhoneNumber: string;
-
-  @Field()
-  currency: string;
-
-  @Field()
-  txnType: string;
-
-  @Field()
-  zpPayOption: string;
-
-  @Field()
-  mode: string;
-
-  @Field()
-  productDescription: string;
-
-  @Field()
-  txnDate: string;
-
-  @Field()
-  checksum: string;
-}
 
 @ObjectType()
 export class InitiatePaymentResponse {
@@ -260,40 +216,7 @@ export class InitiatePaymentResponse {
   paymentOrderId: string;
 
   @Field()
-  checkoutUrl: string;
-
-  @Field(() => ChecksumDataType)
-  checksumData: ChecksumDataType;
-}
-
-@ObjectType()
-export class InitiateUpiQrPaymentResponse {
-  @Field()
-  paymentOrderId: string;
-
-  @Field()
-  qrCodeData: string;
-
-  @Field({ nullable: true })
-  qrCodeUrl?: string;
-
-  @Field({ nullable: true })
-  expiresAt?: string;
-
-  @Field({ nullable: true })
-  zaakpayTxnId?: string;
-
-  @Field()
-  amount: string;
-
-  @Field()
-  currency: string;
-
-  @Field({ nullable: true })
-  responseCode?: string;
-
-  @Field({ nullable: true })
-  responseMessage?: string;
+  redirectUrl: string;
 }
 
 @ObjectType()

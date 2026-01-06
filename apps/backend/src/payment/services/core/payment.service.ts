@@ -6,16 +6,15 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
-import { PaymentEvent, PaymentOrder, PaymentStatus } from './payment.schema';
-import { PaymentExecutorService } from './payment-executor.service';
+import { PaymentEvent, PaymentOrder, PaymentStatus } from '../../entities/payment.schema';
+import { PaymentExecutorService } from '../domain/payment-executor.service';
 import { RefundService } from './refund.service';
-import { PaymentLoggerService } from '../common/services/payment-logger.service';
+import { PaymentLoggerService } from '../../../common/services/payment-logger.service';
 import {
   InitiatePaymentInput,
   ProcessRefundInput,
-  InitiateUpiQrPaymentInput,
-} from './payment.input';
-import { CartService } from '../cart/cart.service';
+} from '../../dto/payment.input';
+import { CartService } from '../../../cart/cart.service';
 
 @Injectable()
 export class PaymentService {
@@ -29,62 +28,21 @@ export class PaymentService {
     private readonly paymentLogger: PaymentLoggerService,
     private readonly configService: ConfigService,
     private readonly cartService: CartService,
-  ) {}
+  ) { }
 
   async initiatePayment(identityId: string, input: InitiatePaymentInput) {
     try {
-      const paymentEvent = await this.createPaymentEvent({
-        cartId: input.cartId,
-        identityId,
-        amount: input.amount,
-        currency: input.currency,
-      });
+      const cart = await this.cartService.getCartById(input.cartId);
 
-      const paymentOrder = await this.createPaymentOrder({
-        paymentEventId: paymentEvent._id.toString(),
-        identityId,
-        amount: input.amount,
-        currency: input.currency,
-      });
-
-      const checkoutData =
-        await this.paymentExecutorService.executePaymentOrder({
-          paymentOrderId: paymentOrder.paymentOrderId,
-          identityId,
-          amount: input.amount,
-          currency: input.currency,
-          buyerEmail: `identity_${identityId}@temp.com`,
-          buyerName: 'Customer',
-          buyerPhone: '9999999999',
-          productDescription: 'Order Payment',
-          returnUrl: this.getReturnUrl(),
-        });
-
-      return {
-        paymentOrderId: paymentOrder.paymentOrderId,
-        checkoutUrl: checkoutData.checkoutUrl,
-        checksumData: checkoutData.checksumData,
-      };
-    } catch (error) {
-      this.handlePaymentError(error, 'Initiation failed');
-    }
-  }
-
-  async initiateUpiQrPayment(
-    identityId: string,
-    input: InitiateUpiQrPaymentInput,
-  ) {
-    try {
-      const cart = await this.cartService.getCart(identityId);
       if (!cart) {
-        throw new NotFoundException('Cart not found');
+        throw new Error('Cart not found');
       }
 
-      if (cart._id.toString() !== input.cartId) {
-        throw new BadRequestException('Cart ID mismatch');
+      if (cart.identityId.toString() !== identityId) {
+        throw new Error('Unauthorized cart access');
       }
 
-      const amount = cart.totalsSummary.grandTotal.toFixed(2);
+      const amount = cart.totalsSummary.grandTotal.toString();
       const currency = 'INR';
 
       const paymentEvent = await this.createPaymentEvent({
@@ -101,50 +59,28 @@ export class PaymentService {
         currency,
       });
 
-      const zaakpayResponse =
+      const paymentData =
         await this.paymentExecutorService.executePaymentOrder({
           paymentOrderId: paymentOrder.paymentOrderId,
           identityId,
           amount,
           currency,
-          buyerEmail: input.buyerEmail,
-          buyerName: input.buyerName,
-          buyerPhone: input.buyerPhone,
-          productDescription: 'UPI QR Payment',
+          buyerEmail: `identity_${identityId}@temp.com`,
+          buyerName: 'Customer',
+          buyerPhone: '9999999999',
+          productDescription: 'Order Payment',
           returnUrl: this.getReturnUrl(),
-          paymentMode: 'upiqr',
         });
-
-      const base64QrImage =
-        zaakpayResponse.checksumData?.bankPostData?.link ||
-        zaakpayResponse.checksumData?.link ||
-        '';
-
-      if (!base64QrImage) {
-        this.paymentLogger.error('ZaakPay did not return QR code image', '', {
-          paymentOrderId: paymentOrder.paymentOrderId,
-          checksumData: zaakpayResponse.checksumData,
-        });
-        throw new BadRequestException('ZaakPay did not return QR code data');
-      }
 
       return {
         paymentOrderId: paymentOrder.paymentOrderId,
-        qrCodeData: base64QrImage,
-        qrCodeUrl: zaakpayResponse.checkoutUrl,
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
-        zaakpayTxnId: paymentOrder.zaakpayTxnId,
-        amount,
-        currency,
-        responseCode: zaakpayResponse.checksumData?.responseCode || '100',
-        responseMessage:
-          zaakpayResponse.checksumData?.responseDescription ||
-          'UPI QR payment initiated successfully',
+        redirectUrl: paymentData.redirectUrl,
       };
     } catch (error) {
-      this.handlePaymentError(error, 'UPI QR Initiation failed');
+      this.handlePaymentError(error, 'Initiation failed');
     }
   }
+
 
   async getPaymentStatus(paymentOrderId: string) {
     const paymentOrder = await this.paymentOrderModel.findOne({

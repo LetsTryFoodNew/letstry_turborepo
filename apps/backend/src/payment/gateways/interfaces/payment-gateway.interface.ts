@@ -30,8 +30,7 @@ export interface InitiatePaymentParams {
 }
 
 export interface InitiatePaymentResponse {
-  checkoutUrl: string;
-  checksumData: any;
+  redirectUrl: string;
   gatewayOrderId?: string;
   gatewayTransactionId?: string;
 }

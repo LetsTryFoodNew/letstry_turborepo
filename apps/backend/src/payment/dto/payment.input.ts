@@ -13,16 +13,6 @@ export class InitiatePaymentInput {
   @IsNotEmpty()
   @IsString()
   cartId: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  amount: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  currency: string;
 }
 
 @InputType()
@@ -74,27 +64,4 @@ export class BulkTransactionStatusInput {
   @IsNumber()
   @Min(1)
   limit?: number;
-}
-
-@InputType()
-export class InitiateUpiQrPaymentInput {
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  cartId: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  buyerEmail: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  buyerName: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  buyerPhone: string;
 }

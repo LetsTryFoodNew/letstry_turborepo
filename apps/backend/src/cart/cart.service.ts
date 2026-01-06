@@ -30,11 +30,15 @@ export class CartService {
     private readonly cartMergeService: CartMergeService,
     private readonly cartValidationService: CartValidationService,
     private readonly logger: WinstonLoggerService,
-  ) {}
+  ) { }
 
   async getCart(identityId: string): Promise<CartDocument | null> {
     this.logger.log('Fetching cart', { identityId }, 'CartModule');
     return this.cartRepositoryService.getCart(identityId);
+  }
+
+  async getCartById(cartId: string): Promise<CartDocument | null> {
+    return this.cartModel.findOne({ _id: cartId }).exec();
   }
 
   async addToCart(

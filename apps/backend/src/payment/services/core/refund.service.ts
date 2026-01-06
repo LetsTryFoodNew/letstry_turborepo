@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PaymentRefund, PaymentOrder, PaymentStatus } from './payment.schema';
-import { ZaakpayService } from './zaakpay.service';
+import { PaymentRefund, PaymentOrder, PaymentStatus } from '../../entities/payment.schema';
+import { ZaakpayGatewayService } from '../../gateways/zaakpay/zaakpay-gateway.service';
 import { LedgerService } from './ledger.service';
-import { PaymentLoggerService } from '../common/services/payment-logger.service';
+import { PaymentLoggerService } from '../../../common/services/payment-logger.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -14,10 +14,10 @@ export class RefundService {
     private paymentRefundModel: Model<PaymentRefund>,
     @InjectModel(PaymentOrder.name)
     private paymentOrderModel: Model<PaymentOrder>,
-    private zaakpayService: ZaakpayService,
+    private zaakpayGateway: ZaakpayGatewayService,
     private ledgerService: LedgerService,
     private paymentLogger: PaymentLoggerService,
-  ) {}
+  ) { }
 
   async initiateRefund(params: {
     paymentOrderId: string;
@@ -65,7 +65,7 @@ export class RefundService {
     });
 
     try {
-      const zaakpayResponse = await this.zaakpayService.initiateRefund({
+      const zaakpayResponse = await this.zaakpayGateway.initiateRefund({
         orderId: params.paymentOrderId,
         amount: params.isPartialRefund ? params.refundAmount : undefined,
         updateReason: params.reason,
@@ -177,7 +177,7 @@ export class RefundService {
     }
 
     try {
-      const zaakpayStatus = await this.zaakpayService.checkTransactionStatus({
+      const zaakpayStatus = await this.zaakpayGateway.checkTransactionStatus({
         orderId: paymentOrder.paymentOrderId,
         merchantRefId: refund.zaakpayRefundId,
       });

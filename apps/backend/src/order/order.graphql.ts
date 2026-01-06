@@ -7,7 +7,7 @@ import {
 } from '@nestjs/graphql';
 import { OrderStatus } from './order.schema';
 import { PaginationMeta } from '../common/pagination';
-import { PaymentStatus } from '../payment/payment.schema';
+import { PaymentStatus } from '../payment/entities/payment.schema';
 
 registerEnumType(OrderStatus, {
   name: 'OrderStatus',

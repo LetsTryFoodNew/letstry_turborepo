@@ -1,25 +1,23 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { PaymentService } from './payment.service';
+import { PaymentService } from './services/core/payment.service';
 import {
   InitiatePaymentInput,
   ProcessRefundInput,
-  InitiateUpiQrPaymentInput,
-} from './payment.input';
+} from './dto/payment.input';
 import {
   InitiatePaymentResponse,
-  InitiateUpiQrPaymentResponse,
   PaymentStatusResponse,
   RefundResponse,
   PaymentOrderType,
-} from './payment.graphql';
+} from './dto/payment.graphql';
 import { Public } from '../common/decorators/public.decorator';
 import { DualAuthGuard } from '../authentication/common/dual-auth.guard';
 import { OptionalUser } from '../common/decorators/optional-user.decorator';
 
 @Resolver()
 export class PaymentResolver {
-  constructor(private readonly paymentService: PaymentService) {}
+  constructor(private readonly paymentService: PaymentService) { }
 
   @Mutation(() => InitiatePaymentResponse)
   @Public()
@@ -32,19 +30,6 @@ export class PaymentResolver {
       throw new Error('User identification required');
     }
     return this.paymentService.initiatePayment(user._id, input);
-  }
-
-  @Mutation(() => InitiateUpiQrPaymentResponse)
-  @Public()
-  @UseGuards(DualAuthGuard)
-  async initiateUpiQrPayment(
-    @Args('input') input: InitiateUpiQrPaymentInput,
-    @OptionalUser() user: any,
-  ): Promise<InitiateUpiQrPaymentResponse> {
-    if (!user?._id) {
-      throw new Error('User identification required');
-    }
-    return this.paymentService.initiateUpiQrPayment(user._id, input);
   }
 
   @Query(() => PaymentStatusResponse)

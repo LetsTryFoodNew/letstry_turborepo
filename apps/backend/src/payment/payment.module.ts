@@ -2,29 +2,32 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { PaymentEvent, PaymentEventSchema } from './payment.schema';
-import { PaymentOrder, PaymentOrderSchema } from './payment.schema';
-import { Ledger, LedgerSchema } from './payment.schema';
-import { PaymentRefund, PaymentRefundSchema } from './payment.schema';
+import { PaymentEvent, PaymentEventSchema } from './entities/payment.schema';
+import { PaymentOrder, PaymentOrderSchema } from './entities/payment.schema';
+import { Ledger, LedgerSchema } from './entities/payment.schema';
+import { PaymentRefund, PaymentRefundSchema } from './entities/payment.schema';
 import {
   PaymentReconciliation,
   PaymentReconciliationSchema,
-} from './payment.schema';
+} from './entities/payment.schema';
 import { Identity, IdentitySchema } from '../common/schemas/identity.schema';
-import { PaymentService } from './payment.service';
+import { PaymentService } from './services/core/payment.service';
 import { PaymentResolver } from './payment.resolver';
 import { PaymentController } from './payment.controller';
-import { PaymentExecutorService } from './payment-executor.service';
-import { ZaakpayService } from './zaakpay.service';
-import { LedgerService } from './ledger.service';
-import { RefundService } from './refund.service';
+import { PaymentExecutorService } from './services/domain/payment-executor.service';
+import { ZaakpayChecksumService } from './gateways/zaakpay/zaakpay-checksum.service';
+import { ZaakpayHttpService } from './gateways/zaakpay/zaakpay-http.service';
+import { ZaakpayPaymentService } from './gateways/zaakpay/zaakpay-payment.service';
+import { ZaakpayRefundService } from './gateways/zaakpay/zaakpay-refund.service';
+import { ZaakpayStatusService } from './gateways/zaakpay/zaakpay-status.service';
+import { ZaakpaySettlementService } from './gateways/zaakpay/zaakpay-settlement.service';
+import { ZaakpayGatewayService } from './gateways/zaakpay/zaakpay-gateway.service';
+import { LedgerService } from './services/core/ledger.service';
+import { RefundService } from './services/core/refund.service';
 import { PaymentLoggerService } from '../common/services/payment-logger.service';
-import { PaymentGatewayFactory } from './payment-gateway.factory';
+import { PaymentGatewayFactory } from './gateways/payment-gateway.factory';
 import { CartModule } from '../cart/cart.module';
-import { SseService } from './sse/sse.service';
-import { SseController } from './sse/sse.controller';
-import { SseLoggerService } from './sse/sse-logger.service';
-import { WebhookLoggerService } from './webhook-logger.service';
+import { WebhookLoggerService } from './services/domain/webhook-logger.service';
 import { OrderModule } from '../order/order.module';
 
 @Module({
@@ -42,20 +45,24 @@ import { OrderModule } from '../order/order.module';
       { name: Identity.name, schema: IdentitySchema },
     ]),
   ],
-  controllers: [PaymentController, SseController],
+  controllers: [PaymentController],
   providers: [
     PaymentService,
     PaymentResolver,
     PaymentExecutorService,
-    ZaakpayService,
+    ZaakpayChecksumService,
+    ZaakpayHttpService,
+    ZaakpayPaymentService,
+    ZaakpayRefundService,
+    ZaakpayStatusService,
+    ZaakpaySettlementService,
+    ZaakpayGatewayService,
     LedgerService,
     RefundService,
     PaymentLoggerService,
     PaymentGatewayFactory,
-    SseService,
-    SseLoggerService,
     WebhookLoggerService,
   ],
   exports: [PaymentService],
 })
-export class PaymentModule {}
+export class PaymentModule { }

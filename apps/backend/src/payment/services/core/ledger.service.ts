@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Ledger } from './payment.schema';
-import { PaymentLoggerService } from '../common/services/payment-logger.service';
+import { Ledger } from '../../entities/payment.schema';
+import { PaymentLoggerService } from '../../../common/services/payment-logger.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class LedgerService {
   constructor(
     @InjectModel(Ledger.name) private ledgerModel: Model<Ledger>,
     private paymentLogger: PaymentLoggerService,
-  ) {}
+  ) { }
 
   async createLedgerEntry(params: {
     paymentOrderId: string;

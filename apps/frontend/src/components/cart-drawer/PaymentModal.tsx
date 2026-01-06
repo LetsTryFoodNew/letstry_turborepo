@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { PaymentMethodSelector } from './PaymentMethodSelector';
-import { UpiQrPayment } from './UpiQrPayment';
-import { CardPayment } from './CardPayment';
+import { ExpressCheckout } from './ExpressCheckout';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -24,8 +22,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   amount,
   userDetails,
 }) => {
-  const [paymentMethod, setPaymentMethod] = useState<'upi_qr' | 'card'>('upi_qr');
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -44,7 +40,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+            className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden"
           >
             <div className="flex items-center justify-between p-4 border-b border-gray-100">
               <h2 className="text-xl font-bold text-[#0F4A6A]">Complete Payment</h2>
@@ -56,27 +52,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto">
-              <PaymentMethodSelector
-                selectedMethod={paymentMethod}
-                onSelect={setPaymentMethod}
+            <div className="p-6">
+              <ExpressCheckout
+                cartId={cartId}
+                amount={amount}
+                userDetails={userDetails}
               />
-
-              <div className="mt-6">
-                {paymentMethod === 'upi_qr' ? (
-                  <UpiQrPayment
-                    cartId={cartId}
-                    amount={amount}
-                    userDetails={userDetails}
-                  />
-                ) : (
-                  <CardPayment
-                    cartId={cartId}
-                    amount={amount}
-                    userDetails={userDetails}
-                  />
-                )}
-              </div>
             </div>
           </motion.div>
         </div>

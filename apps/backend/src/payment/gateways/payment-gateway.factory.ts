@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ZaakpayService } from './zaakpay.service';
+import { ZaakpayGatewayService } from './zaakpay/zaakpay-gateway.service';
 import { ZaakpayAdapter } from './adapters/zaakpay.adapter';
 import {
   PaymentGatewayProvider,
@@ -13,9 +13,9 @@ export class PaymentGatewayFactory {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly zaakpayService: ZaakpayService,
+    private readonly zaakpayGateway: ZaakpayGatewayService,
   ) {
-    this.zaakpayAdapter = new ZaakpayAdapter(this.zaakpayService);
+    this.zaakpayAdapter = new ZaakpayAdapter(this.zaakpayGateway);
   }
 
   getProvider(gatewayType?: PaymentGatewayType): PaymentGatewayProvider {

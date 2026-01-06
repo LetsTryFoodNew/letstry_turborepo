@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { PaymentOrder, PaymentStatus } from './payment.schema';
-import { ZaakpayService } from './zaakpay.service';
-import { LedgerService } from './ledger.service';
-import { PaymentLoggerService } from '../common/services/payment-logger.service';
-import { OrderService } from '../order/order.service';
-import { CartService } from '../cart/cart.service';
-import { OrderCartLoggerService } from '../order/order-cart-logger.service';
-import { Identity, IdentityDocument } from '../common/schemas/identity.schema';
+import { PaymentOrder, PaymentStatus } from '../../entities/payment.schema';
+import { ZaakpayGatewayService } from '../../gateways/zaakpay/zaakpay-gateway.service';
+import { LedgerService } from '../core/ledger.service';
+import { PaymentLoggerService } from '../../../common/services/payment-logger.service';
+import { OrderService } from '../../../order/order.service';
+import { CartService } from '../../../cart/cart.service';
+import { OrderCartLoggerService } from '../../../order/order-cart-logger.service';
+import { Identity, IdentityDocument } from '../../../common/schemas/identity.schema';
 
 @Injectable()
 export class PaymentExecutorService {
   constructor(
     @InjectModel(PaymentOrder.name)
     private paymentOrderModel: Model<PaymentOrder>,
-    private zaakpayService: ZaakpayService,
+    private zaakpayGateway: ZaakpayGatewayService,
     private ledgerService: LedgerService,
     private paymentLogger: PaymentLoggerService,
     private orderService: OrderService,
@@ -23,7 +23,7 @@ export class PaymentExecutorService {
     private orderCartLogger: OrderCartLoggerService,
     @InjectModel(Identity.name)
     private identityModel: Model<IdentityDocument>,
-  ) {}
+  ) { }
 
   async executePaymentOrder(params: {
     paymentOrderId: string;
@@ -35,11 +35,8 @@ export class PaymentExecutorService {
     buyerPhone: string;
     productDescription: string;
     returnUrl: string;
-    paymentMode?: string;
   }): Promise<{
-    checkoutUrl: string;
-    zaakpayOrderId: string;
-    checksumData: any;
+    redirectUrl: string;
   }> {
     this.paymentLogger.logPaymentExecution({
       paymentOrderId: params.paymentOrderId,
@@ -55,7 +52,7 @@ export class PaymentExecutorService {
       },
     );
 
-    const paymentData = await this.zaakpayService.initiatePayment({
+    const paymentData = await this.zaakpayGateway.initiatePayment({
       orderId: params.paymentOrderId,
       amount: params.amount,
       buyerEmail: params.buyerEmail,
@@ -63,7 +60,6 @@ export class PaymentExecutorService {
       buyerPhone: params.buyerPhone,
       productDescription: params.productDescription,
       returnUrl: params.returnUrl,
-      paymentMode: params.paymentMode,
     });
 
     await this.paymentOrderModel.findOneAndUpdate(
@@ -74,9 +70,7 @@ export class PaymentExecutorService {
     );
 
     return {
-      checkoutUrl: paymentData.checkoutUrl,
-      zaakpayOrderId: params.paymentOrderId,
-      checksumData: paymentData.checksumData,
+      redirectUrl: paymentData.redirectUrl,
     };
   }
 
@@ -301,7 +295,7 @@ export class PaymentExecutorService {
       };
     }
 
-    const zaakpayStatus = await this.zaakpayService.checkTransactionStatus({
+    const zaakpayStatus = await this.zaakpayGateway.checkTransactionStatus({
       orderId: paymentOrderId,
     });
 

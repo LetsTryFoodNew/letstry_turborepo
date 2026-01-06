@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ZaakpayService } from '../zaakpay.service';
+import { ZaakpayGatewayService } from '../zaakpay/zaakpay-gateway.service';
 import {
   PaymentGatewayProvider,
   InitiatePaymentParams,
@@ -16,12 +16,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ZaakpayAdapter implements PaymentGatewayProvider {
-  constructor(private readonly zaakpayService: ZaakpayService) {}
+  constructor(private readonly zaakpayGateway: ZaakpayGatewayService) { }
 
   async initiatePayment(
     params: InitiatePaymentParams,
   ): Promise<InitiatePaymentResponse> {
-    const result = await this.zaakpayService.initiatePayment({
+    const result = await this.zaakpayGateway.initiatePayment({
       orderId: params.orderId,
       amount: params.amount,
       buyerEmail: params.buyerEmail,
@@ -32,8 +32,7 @@ export class ZaakpayAdapter implements PaymentGatewayProvider {
     });
 
     return {
-      checkoutUrl: result.checkoutUrl,
-      checksumData: result.checksumData,
+      redirectUrl: result.redirectUrl,
       gatewayOrderId: params.orderId,
     };
   }
@@ -41,7 +40,7 @@ export class ZaakpayAdapter implements PaymentGatewayProvider {
   async checkTransactionStatus(
     params: CheckStatusParams,
   ): Promise<TransactionStatusResponse> {
-    const result = await this.zaakpayService.checkTransactionStatus({
+    const result = await this.zaakpayGateway.checkTransactionStatus({
       orderId: params.orderId,
     });
 
@@ -68,7 +67,7 @@ export class ZaakpayAdapter implements PaymentGatewayProvider {
   async initiateRefund(params: InitiateRefundParams): Promise<RefundResponse> {
     const merchantRefId = `MREF_${Date.now()}_${uuidv4().substring(0, 8)}`;
 
-    const result = await this.zaakpayService.initiateRefund({
+    const result = await this.zaakpayGateway.initiateRefund({
       orderId: params.orderId,
       amount: params.refundAmount,
       updateReason: params.reason || 'Customer refund request',
@@ -90,7 +89,7 @@ export class ZaakpayAdapter implements PaymentGatewayProvider {
   }
 
   verifyWebhookChecksum(data: string, checksum: string): boolean {
-    return this.zaakpayService.verifyChecksum(data, checksum);
+    return this.zaakpayGateway.verifyChecksum(data, checksum);
   }
 
   parseWebhookData(webhookBody: any): ParsedWebhookData {
@@ -125,7 +124,7 @@ export class ZaakpayAdapter implements PaymentGatewayProvider {
   async getSettlementReport(
     params: SettlementReportParams,
   ): Promise<SettlementReport> {
-    const result = await this.zaakpayService.getSettlementReport(params.date);
+    const result = await this.zaakpayGateway.getSettlementReport(params.date);
 
     return {
       date: params.date,

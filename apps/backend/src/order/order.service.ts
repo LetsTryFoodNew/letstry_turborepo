@@ -18,7 +18,7 @@ import { OrderRepository } from './services/order.repository';
 import { OrderQueryService } from './services/order.query-service';
 import { OrderCommandService } from './services/order.command-service';
 import { OrderItemService } from './services/order.item-service';
-import { PaymentOrder } from '../payment/payment.schema';
+import { PaymentOrder } from '../payment/entities/payment.schema';
 import { Address, AddressDocument } from '../address/address.schema';
 import {
   Identity,

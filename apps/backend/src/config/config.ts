@@ -81,7 +81,7 @@ export default () => ({
       'http://localhost:3000/payment/callback',
     environment: process.env.ZAAKPAY_ENVIRONMENT || 'staging',
     baseUrl:
-      (process.env.ZAAKPAY_ENVIRONMENT || 'staging') != 'production'
+      (process.env.ZAAKPAY_ENVIRONMENT || 'staging') === 'production'
         ? 'https://api.zaakpay.com'
         : 'https://zaakstaging.zaakpay.com',
     endpoints: {

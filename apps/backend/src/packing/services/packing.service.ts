@@ -3,7 +3,6 @@ import { OrderAssignmentService } from './domain/order-assignment.service';
 import { PackingQueueService } from './domain/packing-queue.service';
 import { ScanValidationService } from './domain/scan-validation.service';
 import { ScanLogCrudService } from './core/scan-log-crud.service';
-import { EvidenceUploadService } from './domain/evidence-upload.service';
 import { EvidenceCrudService } from './core/evidence-crud.service';
 import { PackingLifecycleService } from './domain/packing-lifecycle.service';
 import { PackingOrderCrudService } from './core/packing-order-crud.service';
@@ -21,7 +20,6 @@ export class PackingService {
     private readonly packingQueue: PackingQueueService,
     private readonly scanValidation: ScanValidationService,
     private readonly scanLogCrud: ScanLogCrudService,
-    private readonly evidenceUpload: EvidenceUploadService,
     private readonly evidenceCrud: EvidenceCrudService,
     private readonly packingLifecycle: PackingLifecycleService,
     private readonly packingOrderCrud: PackingOrderCrudService,

@@ -466,39 +466,9 @@ enum PaymentMethod {
   WALLET
 }
 
-type ChecksumDataType {
-  amount: String!
-  merchantIdentifier: String!
-  orderId: String!
-  returnUrl: String!
-  buyerEmail: String!
-  buyerFirstName: String!
-  buyerPhoneNumber: String!
-  currency: String!
-  txnType: String!
-  zpPayOption: String!
-  mode: String!
-  productDescription: String!
-  txnDate: String!
-  checksum: String!
-}
-
 type InitiatePaymentResponse {
   paymentOrderId: String!
-  checkoutUrl: String!
-  checksumData: ChecksumDataType!
-}
-
-type InitiateUpiQrPaymentResponse {
-  paymentOrderId: String!
-  qrCodeData: String!
-  qrCodeUrl: String
-  expiresAt: String
-  zaakpayTxnId: String
-  amount: String!
-  currency: String!
-  responseCode: String
-  responseMessage: String
+  redirectUrl: String!
 }
 
 type PaymentStatusResponse {
@@ -973,7 +943,6 @@ type Mutation {
   createCoupon(input: CreateCouponInput!): Coupon!
   createOrUpdateCharges(input: CreateChargesInput!): Charges!
   initiatePayment(input: InitiatePaymentInput!): InitiatePaymentResponse!
-  initiateUpiQrPayment(input: InitiateUpiQrPaymentInput!): InitiateUpiQrPaymentResponse!
   processRefund(input: ProcessRefundInput!): RefundResponse!
   cancelOrder(input: CancelOrderInput!): OrderType!
   updateOrderStatus(input: UpdateOrderStatusInput!): OrderType!
@@ -1268,15 +1237,6 @@ input CreateChargesInput {
 
 input InitiatePaymentInput {
   cartId: String!
-  amount: String!
-  currency: String!
-}
-
-input InitiateUpiQrPaymentInput {
-  cartId: String!
-  buyerEmail: String!
-  buyerName: String!
-  buyerPhone: String!
 }
 
 input ProcessRefundInput {

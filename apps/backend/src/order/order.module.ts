@@ -10,7 +10,7 @@ import { OrderRepository } from './services/order.repository';
 import { OrderQueryService } from './services/order.query-service';
 import { OrderCommandService } from './services/order.command-service';
 import { OrderItemService } from './services/order.item-service';
-import { PaymentOrder, PaymentOrderSchema } from '../payment/payment.schema';
+import { PaymentOrder, PaymentOrderSchema } from '../payment/entities/payment.schema';
 import { Address, AddressSchema } from '../address/address.schema'; import { PackingModule } from '../packing/packing.module';
 @Module({
   imports: [

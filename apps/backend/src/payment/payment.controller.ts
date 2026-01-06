@@ -1,20 +1,20 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PaymentExecutorService } from './payment-executor.service';
-import { ZaakpayService } from './zaakpay.service';
+import { PaymentExecutorService } from './services/domain/payment-executor.service';
+import { ZaakpayGatewayService } from './gateways/zaakpay/zaakpay-gateway.service';
 import { PaymentLoggerService } from '../common/services/payment-logger.service';
-import { WebhookLoggerService } from './webhook-logger.service';
+import { WebhookLoggerService } from './services/domain/webhook-logger.service';
 import { Public } from '../common/decorators/public.decorator';
 
 @Controller('payment')
 export class PaymentController {
   constructor(
     private readonly paymentExecutorService: PaymentExecutorService,
-    private readonly zaakpayService: ZaakpayService,
+    private readonly zaakpayGateway: ZaakpayGatewayService,
     private readonly paymentLogger: PaymentLoggerService,
     private readonly eventEmitter: EventEmitter2,
     private readonly webhookLogger: WebhookLoggerService,
-  ) {}
+  ) { }
 
   @Post('webhook')
   @Public()
@@ -24,7 +24,7 @@ export class PaymentController {
       this.paymentLogger.logWebhookReceived(body);
       this.webhookLogger.logWebhookReceived(body);
 
-      const checksumValid = this.zaakpayService.verifyChecksum(
+      const checksumValid = this.zaakpayGateway.verifyChecksum(
         body.txnData,
         body.checksum,
       );
