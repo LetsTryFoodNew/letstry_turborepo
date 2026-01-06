@@ -58,7 +58,7 @@ export const MobileMenu = ({
                         Home
                     </Link>
                     <Link
-                        href="/combos"
+                        href={navigationLinks.find(link => link.label === "Combos")?.href || "/category/combo"}
                         className="text-xl font-bold text-black hover:text-yellow-600 transition-colors"
                         onClick={() => setIsOpen(false)}
                     >
@@ -74,7 +74,7 @@ export const MobileMenu = ({
                         Cart
                     </button>
                     <Link
-                        href="/about-us"
+                        href={navigationLinks.find(link => link.label === "About us")?.href || "/about-us"}
                         className="text-xl font-bold text-black hover:text-yellow-600 transition-colors"
                         onClick={() => setIsOpen(false)}
                     >

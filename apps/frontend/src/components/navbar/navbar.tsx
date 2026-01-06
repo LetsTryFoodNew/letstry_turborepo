@@ -9,6 +9,7 @@ import { useCart } from "@/lib/cart/use-cart";
 import { useRouter } from "next/navigation";
 import { DesktopNavbar } from "./components/desktop-navbar";
 import { MobileNavbar } from "./components/mobile-navbar";
+import { useCategoryNavigation } from "@/hooks/use-category-navigation";
 
 type NavbarProps = {
   initialAuth?: {
@@ -21,10 +22,16 @@ type NavbarProps = {
 export const Navbar = ({ initialAuth }: NavbarProps) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const { categories, isLoading } = useCategoryNavigation();
   const { isAuthenticated: clientAuth, user, logout } = useAuth();
-  const { isOpen: showLoginModal, openModal, closeModal } = useLoginModalStore();
+  const {
+    isOpen: showLoginModal,
+    openModal,
+    closeModal,
+  } = useLoginModalStore();
   const { toggleCart } = useCartStore();
   const { data: cartData } = useCart();
+  const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
 
   const cartItemCount = (cartData as any)?.myCart?.items?.length || 0;
   const isAuthenticated = initialAuth?.isAuthenticated ?? clientAuth;
@@ -35,18 +42,21 @@ export const Navbar = ({ initialAuth }: NavbarProps) => {
 
   const handleUserIconClick = useCallback(() => {
     if (isAuthenticated) {
-      router.push('/profile');
+      router.push("/profile");
     } else {
       openModal(`${process.env.NEXT_PUBLIC_API_URL}`);
     }
   }, [isAuthenticated, router, openModal]);
 
-  const navigationLinks = useMemo(() => [
-    { href: "/", label: "Home" },
-    { href: "/snacks", label: "Snacks" },
-    { href: "/combos", label: "Combos" },
-    { href: "/about-us", label: "About us" },
-  ], []);
+  const navigationLinks = useMemo(
+    () => [
+      { href: "/", label: "Home" },
+      { href: "#", label: "Snacks", hasDropdown: true, dropdownItems: categories },
+      { href: "/category/combo", label: "Combos"},
+      { href: "/about-us", label: "About us" },
+    ],
+    [categories]
+  );
 
   return (
     <nav className="sticky top-0 z-40 w-full bg-white">
@@ -56,6 +66,8 @@ export const Navbar = ({ initialAuth }: NavbarProps) => {
           cartItemCount={cartItemCount}
           toggleCart={toggleCart}
           onUserClick={handleUserIconClick}
+          setHoveredMenu={setHoveredMenu}
+          hoveredMenu={hoveredMenu}
         />
 
         <MobileNavbar
@@ -65,7 +77,7 @@ export const Navbar = ({ initialAuth }: NavbarProps) => {
           setIsOpen={setIsOpen}
           navigationLinks={navigationLinks}
           isAuthenticated={isAuthenticated}
-          onProfileClick={() => router.push('/profile')}
+          onProfileClick={() => router.push("/profile")}
         />
       </div>
 
