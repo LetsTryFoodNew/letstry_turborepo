@@ -14,7 +14,7 @@ import { ScanLog } from './types/scan-log.type';
 
 @Resolver()
 export class PackerResolver {
-  constructor(private readonly packerService: PackerService) {}
+  constructor(private readonly packerService: PackerService) { }
 
   @Mutation(() => CreatePackerResponse)
   @Roles(Role.ADMIN)

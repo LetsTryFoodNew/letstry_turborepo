@@ -15,7 +15,7 @@ export class PackerService {
     private readonly retrospectiveError: RetrospectiveErrorService,
     private readonly packingOrderCrud: PackingOrderCrudService,
     private readonly whatsAppService: WhatsAppService,
-  ) {}
+  ) { }
 
   async createPacker(input: any): Promise<any> {
     const password = this.generateRandomPassword();
@@ -87,8 +87,8 @@ export class PackerService {
     );
     if (!packer) throw new Error('Invalid credentials');
 
-    const token = await this.packerAuth.generateToken(packer);
-    return { token, packer };
+    const accessToken = await this.packerAuth.generateToken(packer);
+    return { accessToken, packer };
   }
 
   async getPackerStats(packerId: string, dateRange?: any): Promise<any> {
