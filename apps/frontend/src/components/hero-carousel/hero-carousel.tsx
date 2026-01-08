@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { carouselImages } from "@/config/carousel-config";
+import { carouselImagesDesktop,  carouselImagesPhone} from "@/config/carousel-config";
 import Autoplay from "embla-carousel-autoplay";
 
 export const HeroCarousel = () => {
@@ -24,12 +24,12 @@ export const HeroCarousel = () => {
             delay: 5000,
           }),
         ]}
-        className="w-full"
+        className="w-full block sm:hidden"
       >
         <CarouselContent>
-          {carouselImages.map((image) => (
+          {carouselImagesPhone.map((image) => (
             <CarouselItem key={image.id}>
-              <div className="relative w-full  h-auto sm:h-[400px] lg:h-[500px] aspect-[16/9] sm:aspect-[18/9] md:aspect-[21/9] overflow-hidden rounded-[10px] bg-gray-100">
+              <div className="relative w-full h-auto aspect-[16/9] overflow-hidden rounded-[10px] bg-gray-100">
                 <Image
                   src={image.url}
                   alt={image.alt}
@@ -44,8 +44,40 @@ export const HeroCarousel = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-4" />
-        <CarouselNext className="right-4" />
+      </Carousel>
+
+      <Carousel
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+        plugins={[
+          Autoplay({
+            delay: 5000,
+          }),
+        ]}
+        className="w-full hidden sm:block"
+      >
+        <CarouselContent>
+          {carouselImagesDesktop.map((image) => (
+            <CarouselItem key={image.id}>
+              <div className="relative w-full h-auto sm:h-[400px] lg:h-[500px] sm:aspect-[18/9] md:aspect-[21/9] overflow-hidden rounded-[10px] bg-gray-100">
+                <Image
+                  src={image.url}
+                  alt={image.alt}
+                  fill
+                  className="object-cover"
+                  priority={image.id === 1}
+                  loading={image.id === 1 ? "eager" : "lazy"}
+                  fetchPriority={image.id === 1 ? "high" : "auto"}
+                  unoptimized
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="hidden sm:flex left-4" />
+        <CarouselNext className="hidden sm:flex right-4" />
       </Carousel>
     </section>
   );

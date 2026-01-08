@@ -47,7 +47,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
         onClick={handleAddToCart}
         disabled={isOutOfStock || isLoading}
         className={cn(
-          "w-full py-3 px-6 border-2 border-[#0f3455] text-[#0f3455] text-lg font-bold rounded-lg transition-colors uppercase tracking-wide",
+          "w-full py-1 sm:py-2 px-4 border-1 border-[#0f3455] text-[#0f3455] text-lg font-bold rounded-lg transition-colors uppercase tracking-wide",
           isOutOfStock || isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50"
         )}
       >
@@ -57,7 +57,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
         onClick={handleBuyNow}
         disabled={isOutOfStock}
         className={cn(
-          "w-full py-3 px-6 bg-[#0f3455] text-white text-lg font-bold rounded-lg transition-colors uppercase tracking-wide shadow-md",
+          "w-full py-2 sm:py-3 px-4 bg-[#0f3455] text-white text-lg font-bold rounded-lg transition-colors uppercase tracking-wide shadow-md",
           isOutOfStock ? "opacity-50 cursor-not-allowed" : "hover:bg-[#1a4b75]"
         )}
       >

@@ -10,20 +10,20 @@ export const BestsellerCombo = async () => {
   }
 
   return (
-    <section className="w-full py-12 bg-white">
+    <section className="w-full py-6 sm:py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900">
             Bestselling Combos
           </h2>
           <Link 
             href="/category/combo" 
-            className="text-blue-600 hover:text-blue-800 font-semibold text-lg"
+            className="text-sm sm:text-xl text-[#0C5273] hover:text-blue-800 font-semibold"
           >
             See all
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-10 sm:grid-cols-4 md:grid-cols-6">
           {products.slice(0, 4).map((product: any) => (
             <BestsellerCard key={product._id} product={product} />
           ))}
