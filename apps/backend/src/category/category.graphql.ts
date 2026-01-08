@@ -1,9 +1,10 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { CategorySeo } from './category-seo.schema';
 
 @ObjectType()
 export class Category {
   @Field(() => ID)
-  id: string;
+  _id: string;
 
   @Field()
   name: string;
@@ -39,6 +40,9 @@ export class Category {
     nullable: true,
   })
   products?: any[];
+
+  @Field(() => CategorySeo, { nullable: true })
+  seo?: CategorySeo;
 
   @Field()
   createdAt: Date;

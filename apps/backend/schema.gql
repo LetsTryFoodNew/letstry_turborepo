@@ -320,6 +320,20 @@ type DashboardStats {
   totalUsers: Float!
 }
 
+type PolicySeo {
+  _id: ID!
+  policyId: String!
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]!
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Policy {
   _id: ID!
   title: String!
@@ -327,6 +341,7 @@ type Policy {
   type: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  seo: PolicySeo
 }
 
 type Charges {
@@ -399,8 +414,22 @@ type PriceRange {
   max: Float!
 }
 
+type CategorySeo {
+  _id: ID!
+  categoryId: String!
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]!
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Category {
-  id: ID!
+  _id: ID!
   name: String!
   slug: String!
   description: String
@@ -412,6 +441,7 @@ type Category {
   productCount: Float!
   isArchived: Boolean!
   products: [Product!]!
+  seo: CategorySeo
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -925,6 +955,8 @@ type Mutation {
   unarchiveCategory(id: ID!): Category!
   addProductsToCategory(input: AddProductsToCategoryInput!): Boolean!
   removeProductsFromCategory(input: RemoveProductsFromCategoryInput!): Boolean!
+  updateCategorySeo(categoryId: ID!, input: CategorySeoInput!): CategorySeo!
+  deleteCategorySeo(categoryId: ID!): Boolean!
   adminLogin(email: String!, password: String!): String!
   createAdmin(email: String!, password: String!): String!
   adminLogout: String!
@@ -938,6 +970,8 @@ type Mutation {
   createPolicy(input: CreatePolicyInput!): Policy!
   updatePolicy(id: ID!, input: UpdatePolicyInput!): Policy!
   deletePolicy(id: ID!): Policy!
+  updatePolicySeo(policyId: ID!, input: PolicySeoInput!): PolicySeo!
+  deletePolicySeo(policyId: ID!): Boolean!
   createGuest(input: CreateGuestInput!): Guest!
   updateGuest(id: ID!, input: UpdateGuestInput!): Guest!
   addToCart(input: AddToCartInput!): Cart!
@@ -1111,6 +1145,16 @@ input RemoveProductsFromCategoryInput {
   productIds: [ID!]!
 }
 
+input CategorySeoInput {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+}
+
 input CreateAddressInput {
   addressType: String!
   recipientPhone: String!
@@ -1195,6 +1239,16 @@ input UpdatePolicyInput {
   title: String
   content: String
   type: String
+}
+
+input PolicySeoInput {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
 }
 
 input CreateGuestInput {

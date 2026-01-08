@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { CategorySeo } from './category-seo.schema';
 
 export type CategoryDocument = Category & Document;
 
@@ -38,6 +39,8 @@ export class Category {
 
   @Prop({ default: false })
   isArchived: boolean;
+
+  seo?: CategorySeo;
 
   createdAt: Date;
   updatedAt: Date;

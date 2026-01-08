@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { PolicySeo } from './policy-seo.schema';
 
 export type PolicyDocument = Policy & Document;
 
@@ -27,6 +28,9 @@ export class Policy {
 
   @Field(() => GraphQLISODateTime)
   updatedAt: Date;
+
+  @Field(() => PolicySeo, { nullable: true })
+  seo?: PolicySeo;
 }
 
 export const PolicySchema = SchemaFactory.createForClass(Policy);

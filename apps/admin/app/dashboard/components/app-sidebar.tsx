@@ -66,6 +66,16 @@ const items = [
     icon: Search,
   },
   {
+    title: "Category SEO",
+    url: "/dashboard/sco-category",
+    icon: FolderTree,
+  },
+  {
+    title: "Policy SEO",
+    url: "/dashboard/seo-policy",
+    icon: FileText,
+  },
+  {
     title: "Coupons",
     url: "/dashboard/coupons",
     icon: Tag,
@@ -112,7 +122,7 @@ export function AppSidebar() {
   const { data: policiesData } = usePolicies()
   const { mutate: deletePolicy } = useDeletePolicy()
   const policies = (policiesData as any)?.policies || []
-  
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [policyToDelete, setPolicyToDelete] = useState<any>(null)
 
@@ -126,7 +136,7 @@ export function AppSidebar() {
 
     try {
       await deletePolicy({
-        variables: { id: policyToDelete._id }
+        variables: { id: policyToDelete.id }
       })
       toast.success('Policy deleted successfully')
       setDeleteDialogOpen(false)
@@ -169,7 +179,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {policies.map((policy: any) => (
-                <SidebarMenuItem key={policy._id} className="group/item">
+                <SidebarMenuItem key={policy.id} className="group/item">
                   <SidebarMenuButton asChild>
                     <a href={`/dashboard/policies/${policy.title}`} className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
@@ -178,7 +188,7 @@ export function AppSidebar() {
                       </div>
                     </a>
                   </SidebarMenuButton>
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.preventDefault()
                       handleDeleteClick(policy)
