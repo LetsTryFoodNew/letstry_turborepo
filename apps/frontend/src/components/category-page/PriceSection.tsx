@@ -14,14 +14,14 @@ export const PriceSection: React.FC<PriceSectionProps> = ({
   const discount = mrp ? Math.round(((mrp - price) / mrp) * 100) : 0;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-1 mt-2">
+    <div className="flex flex-col items-center justify-center gap-1">
       <div className="flex items-center gap-2">
-        <span className="text-2xl font-bold text-gray-900">
+        <span className="text-md font-bold text-gray-900">
           {currencySymbol}{price.toFixed(2)}
         </span>
       </div>
       {discount > 0 && (
-        <span className="text-xs font-medium text-blue-600">
+        <span className="text-sm font-medium text-[#16a34a]">
           {discount}% OFF
         </span>
       )}

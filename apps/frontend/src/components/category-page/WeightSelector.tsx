@@ -13,21 +13,40 @@ export const WeightSelector: React.FC<WeightSelectorProps> = ({
   onWeightChange,
 }) => {
   return (
-    <div className="w-full mt-3">
-      <label className="block text-md text-gray-500 mb-1 text-left">Weight :</label>
-      <div className="relative">
+    <div className="w-full">
+      <label className="block text-xs sm:text-sm md:text-md text-gray-500 mb-1 sm:mb-1.5 text-left">Weight :</label>
+      
+      <div className="sm:hidden">
+        <div className="flex flex-wrap gap-1.5">
+          {weights.map((weight) => (
+            <button
+              key={weight}
+              onClick={() => onWeightChange(weight)}
+              className={`px-2 py-1 text-xs font-semibold rounded border transition-colors ${
+                selectedWeight === weight
+                  ? 'bg-[#3f4166] text-white border-[#3f4166]'
+                  : 'bg-white text-gray-700 border-gray-300 hover:border-[#3f4166]'
+              }`}
+            >
+              {weight}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="hidden sm:block relative">
         <select
           value={selectedWeight}
           onChange={(e) => onWeightChange(e.target.value)}
-          className="w-full appearance-none bg-transparent border-none text-xl font-semibold text-gray-900 focus:ring-0 cursor-pointer py-1 pr-6 pl-0"
+          className="w-full appearance-none bg-white border border-gray-300 rounded text-base md:text-lg lg:text-xl font-semibold text-gray-900 focus:ring-2 focus:ring-[#3f4166] focus:border-[#3f4166] cursor-pointer py-1 px-2 pr-8"
         >
           {weights.map((weight) => (
-            <option key={weight} value={weight}>
+            <option key={weight} value={weight} className="py-1 px-2">
               {weight}
             </option>
           ))}
         </select>
-        <ChevronDown className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
       </div>
     </div>
   );

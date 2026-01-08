@@ -14,16 +14,16 @@ export const ProductAccordion: React.FC<ProductAccordionProps> = ({ title, child
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden mt-12">
+    <div className="border border-gray-200 rounded-lg overflow-hidden mt-4 sm:mt-6 md:mt-8 lg:mt-10 xl:mt-12">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between p-3 sm:p-4 md:p-5 lg:p-6 bg-white hover:bg-gray-50 transition-colors"
       >
-        <span className="text-lg font-bold text-gray-900">{title}</span>
+        <span className="text-base sm:text-lg font-bold text-gray-900">{title}</span>
         {isOpen ? (
-          <ChevronUp className="w-5 h-5 text-gray-900" />
+          <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-900" />
         ) : (
-          <ChevronDown className="w-5 h-5 text-gray-900" />
+          <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-900" />
         )}
       </button>
       

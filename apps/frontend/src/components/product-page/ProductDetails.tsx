@@ -26,7 +26,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
   const isOutOfStock = selectedVariant?.stockQuantity === 0 || selectedVariant?.availabilityStatus !== 'in_stock';
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-10 xl:gap-12">
       <div>
         <ProductGallery 
           images={displayImages} 
@@ -44,7 +44,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
           />
         )}
         
-        <div className="p-6 border border-gray-200 rounded-3xl">
+        <div className="p-3 sm:p-4 md:p-5 lg:p-6 border border-gray-200 rounded-2xl sm:rounded-3xl">
            <PriceBlock price={selectedVariant?.price || 0} mrp={selectedVariant?.mrp || undefined} />
            
            <SizeSelector 

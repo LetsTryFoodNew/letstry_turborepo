@@ -52,7 +52,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       toast.success(`${product.name} added to cart`);
     } catch (error) {
-      console.error('Failed to add to cart:', error);
+      
       toast.error('Failed to add to cart');
     } finally {
       setIsLoading(false);
@@ -99,48 +99,49 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
   };
 
   return (
-    <article className="flex flex-col border border-gray-300 rounded-lg p-4 bg-gray-50 hover:shadow-lg transition-shadow">
+    <article className="flex flex-col border border-gray-300 rounded-lg bg-gray-50 hover:shadow-lg transition-shadow">
       <Link href={`/product/${product.slug}`}>
-        <div className="relative w-full aspect-square mb-4 bg-white rounded overflow-hidden">
+        <div className="relative w-full aspect-square mb-4 bg-[#F3EEEA] rounded overflow-hidden">
           <Image
             src={displayImages[0].url}
             alt={displayImages[0].alt || product.name}
             fill
-            className="object-contain p-2"
+            className="object-contain p-4 sm:p-6"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
           />
         </div>
-        <h3 className="text-base font-semibold text-center text-gray-900 line-clamp-2 min-h-[48px] mb-2">
+        <h3 className="text-base font-semibold text-center text-gray-900 line-clamp-2 min-h-[48px] p-2">
           {product.name}
         </h3>
       </Link>
-      <div className="flex items-center justify-center mb-3">
-        <span className="text-lg font-bold text-gray-900">
+      <div className="flex items-center justify-center">
+        <span className="text-sm font-bold text-gray-900">
           Rs {variant.price.toFixed(2)}
         </span>
       </div>
+      <div className="px-4 pb-4 mt-2">
       {quantity === 0 ? (
         <button
-          className="w-full border-2 border-blue-600 text-blue-600 text-sm font-semibold py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full border-2 border-[#0C5273] text-[#0C5273] text-sm font-semibold py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleAddToCart}
           disabled={isLoading}
         >
           {isLoading ? 'Adding...' : 'Add to cart'}
         </button>
       ) : (
-        <div className="w-full flex items-center justify-between border-2 border-blue-600 rounded-md overflow-hidden">
+        <div className="w-full flex items-center justify-between border-2 border-[#0C5273] rounded-md overflow-hidden">
           <button
-            className="flex-1 py-2 text-blue-600 font-bold text-xl hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-2 border-[#0C5273]  font-bold text-xl hover:bg-[#0C5273] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleDecrement}
             disabled={isLoading}
           >
             −
           </button>
-          <span className="flex-1 text-center py-2 text-blue-600 font-semibold text-base border-x-2 border-blue-600">
+          <span className="flex-1 text-center py-2 text-[#0C5273] font-semibold text-base border-x-2 border-[#0C5273]">
             {isLoading ? '...' : quantity}
           </span>
           <button
-            className="flex-1 py-2 text-blue-600 font-bold text-xl hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-2 text-[#0C5273] font-bold text-xl hover:bg-[#0C5273] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleIncrement}
             disabled={isLoading}
           >
@@ -148,6 +149,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
           </button>
         </div>
       )}
+      </div>
     </article>
   );
 };

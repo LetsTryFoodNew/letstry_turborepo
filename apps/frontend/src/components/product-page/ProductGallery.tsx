@@ -28,13 +28,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, isOutOfS
       </div>
 
       {/* Thumbnails */}
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div className="flex gap-2 sm:gap-3 md:gap-4 overflow-x-auto pb-2">
         {images.map((img, idx) => (
           <button
             key={idx}
             onClick={() => setSelectedIndex(idx)}
             className={cn(
-              "relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 bg-white p-1",
+              "relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex-shrink-0 rounded-md sm:rounded-lg overflow-hidden border-2 bg-white p-0.5 sm:p-1",
               selectedIndex === idx ? "border-blue-900" : "border-gray-200"
             )}
           >

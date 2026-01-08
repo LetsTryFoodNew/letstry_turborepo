@@ -19,7 +19,7 @@ export const SizeSelector: React.FC<SizeSelectorProps> = ({ variants, selectedVa
   if (!variants || variants.length === 0) return null;
 
   return (
-    <div className="mb-8">
+    <div className="mb-3 sm:mb-3 md:mb-4 lg:mb-5">
       <p className="text-lg font-medium text-gray-900 mb-3">
         Size:
       </p>

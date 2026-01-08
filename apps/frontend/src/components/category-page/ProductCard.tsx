@@ -65,7 +65,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryType 
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       toast.success(`${product.name} added to cart`);
     } catch (error) {
-      console.error('Failed to add to cart:', error);
       toast.error('Failed to add to cart');
     } finally {
       setIsLoading(false);
@@ -75,11 +74,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryType 
   return (
     <div className="border border-gray-200 rounded-sm overflow-hidden flex flex-col h-full bg-white hover:shadow-md transition-shadow duration-200 relative group">
       <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10" />
-      <div className="relative h-64 w-full bg-[#fdfbf7] flex items-center justify-center p-4">
+      <div className="relative h-40 sm:h-48 md:h-56 lg:h-64 w-full bg-[#fdfbf7] flex items-center justify-center p-2 sm:p-3 md:p-4">
         {product.badge && (
           <Badge label={product.badge.label} variant={product.badge.variant} />
         )}
-        <div className="relative w-40 h-40">
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40">
           <Image
             src={product.image}
             alt={product.name}
@@ -90,8 +89,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryType 
         </div>
       </div>
 
-      <div className="p-4 flex flex-col flex-grow text-center relative z-20 pointer-events-none">
-        <h3 className="text-2xl font-bold text-gray-900 line-clamp-2 min-h-[3rem] flex items-center justify-center pointer-events-auto">
+      <div className="p-2 sm:p-3 md:p-4 flex flex-col flex-grow text-center relative z-20 pointer-events-none">
+        <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center pointer-events-auto">
           <Link href={`/product/${product.slug}`}>
             {product.name}
           </Link>

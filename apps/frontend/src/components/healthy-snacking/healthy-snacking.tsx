@@ -40,13 +40,13 @@ export const HealthySnacking = () => {
 
   return (
     <section
-      className="w-full py-8"
+      className="w-full py-8 md:py-10 lg:py-12"
       style={{
         background: "linear-gradient(180deg, #FFFFFF, #FAEFEB, #FFF0EA, #FFFFFF)",
       }}
     >
-      <div className="container mx-auto px-4">
-        <h2 className="text-xl md:text-2xl lg:text-5xl font-bold text-gray-900 text-center mb-8 lg:mb-12">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        <h2 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 text-center mb-8 md:mb-10 lg:mb-12">
           Healthier ways to Enjoy your everyday Snacking!
         </h2>
 
@@ -62,10 +62,10 @@ export const HealthySnacking = () => {
           <CarouselContent>
             {healthySnackingSlides.map((slide, index) => (
               <CarouselItem key={index}>
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10 lg:gap-16">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 lg:gap-12 xl:gap-16">
                   <Link
                     href={slide.redirectTo}
-                    className="relative group w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[500px] md:h-[450px] flex-shrink-0"
+                    className="relative group w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[360px] md:h-[340px] lg:w-[420px] lg:h-[400px] xl:w-[480px] xl:h-[450px] flex-shrink-0"
                   >
                     <Image
                       src={slide.img}
@@ -78,11 +78,11 @@ export const HealthySnacking = () => {
                     </span>
                   </Link>
 
-                  <div className="w-full md:w-[400px] lg:w-[800px] flex flex-col justify-center text-center md:text-left py-4">
-                    <h3 className="text-lg md:text-2xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-500 via-orange-300 to-orange-500 bg-[length:200%_100%] bg-clip-text text-transparent animate-shine">
+                  <div className="w-full md:w-[340px] lg:w-[480px] xl:w-[600px] flex flex-col justify-center text-center md:text-left py-4">
+                    <h3 className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold mb-3 md:mb-4 lg:mb-5 bg-gradient-to-r from-orange-500 via-orange-300 to-orange-500 bg-[length:200%_100%] bg-clip-text text-transparent animate-shine">
                       {slide.title}
                     </h3>
-                    <p className="text-blackline  text-sm md:text-2xl leading-relaxed whitespace-pre-line line-clamp-6 md:line-clamp-8">
+                    <p className="text-black text-sm md:text-base lg:text-lg xl:text-xl leading-relaxed whitespace-pre-line line-clamp-6 md:line-clamp-8">
                       {slide.description}
                     </p>
                   </div>
@@ -92,8 +92,8 @@ export const HealthySnacking = () => {
           </CarouselContent>
 
           <div className="mt-8 flex flex-col items-center gap-6">
-            <div className="relative w-full max-w-5xl">
-              <div className="absolute top-[5px] md:top-[11px] left-[8%] right-[9%] h-0.5 bg-[#FFD3B3] z-0">
+            <div className="relative w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
+              <div className="absolute top-[5px] md:top-[8px] lg:top-[10px] left-[8%] right-[9%] h-0.5 bg-[#FFD3B3] z-0">
                 <div 
                   className="h-full bg-[#FF5400] absolute top-0 left-0"
                   style={{ 
@@ -116,12 +116,12 @@ export const HealthySnacking = () => {
                 {healthySnackingSlides.map((slide, index) => (
                   <div key={index} className="flex flex-col items-center">
                     <div 
-                      className={`w-3 h-3 md:w-6 md:h-6 rounded-full cursor-pointer ${
+                      className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full cursor-pointer ${
                         index <= currentIndex ? "bg-[#FF5400]" : "bg-gray-300"
                       }`} 
                     />
                     <span 
-                      className={`text-[10px] md:text-sm text-center mt-2 font-normal transition-all duration-200 whitespace-nowrap ${
+                      className={`text-[10px] md:text-xs lg:text-sm text-center mt-2 font-normal transition-all duration-200 whitespace-nowrap ${
                         index === currentIndex ? "text-orange-600 font-bold" : "text-gray-700"
                       }`}
                     >
