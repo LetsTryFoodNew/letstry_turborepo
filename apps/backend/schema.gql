@@ -426,6 +426,7 @@ type PriceRange {
 
 type Category {
   _id: ID!
+  id: ID!
   name: String!
   slug: String!
   description: String

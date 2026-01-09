@@ -8,6 +8,9 @@ export class Category {
   @Field(() => ID)
   _id: string;
 
+  @Field(() => ID)
+  id: string;
+
   @Field()
   name: string;
 
@@ -37,8 +40,6 @@ export class Category {
 
   @Field()
   isArchived: boolean;
-
-
 
   @Field(() => SeoBase, { nullable: true })
   seo?: SeoBase;
