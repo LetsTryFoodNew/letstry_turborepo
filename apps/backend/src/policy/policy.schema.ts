@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { SeoBase, SeoBaseSchema } from '../seo-core/seo-base.schema';
 
 export type PolicyDocument = Policy & Document;
 
@@ -21,6 +22,10 @@ export class Policy {
   @Prop({ required: true, unique: true })
   @Field()
   type: string;
+
+  @Prop({ type: SeoBaseSchema, default: null })
+  @Field(() => SeoBase, { nullable: true })
+  seo?: SeoBase;
 
   @Field(() => GraphQLISODateTime)
   createdAt: Date;

@@ -15,6 +15,15 @@ export const GET_CATEGORIES = gql`
         productCount
         favourite
         isArchived
+        seo {
+          metaTitle
+          metaDescription
+          metaKeywords
+          canonicalUrl
+          ogTitle
+          ogDescription
+          ogImage
+        }
         createdAt
         updatedAt
       }
@@ -45,6 +54,15 @@ export const GET_ROOT_CATEGORIES = gql`
         productCount
         favourite
         isArchived
+        seo {
+          metaTitle
+          metaDescription
+          metaKeywords
+          canonicalUrl
+          ogTitle
+          ogDescription
+          ogImage
+        }
         createdAt
         updatedAt
       }
@@ -75,6 +93,15 @@ export const GET_CATEGORY_CHILDREN = gql`
         productCount
         favourite
         isArchived
+        seo {
+          metaTitle
+          metaDescription
+          metaKeywords
+          canonicalUrl
+          ogTitle
+          ogDescription
+          ogImage
+        }
         createdAt
         updatedAt
       }
@@ -104,6 +131,15 @@ export const GET_CATEGORY = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -124,6 +160,15 @@ export const GET_CATEGORY_BY_SLUG = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -144,6 +189,15 @@ export const CREATE_CATEGORY = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -164,6 +218,15 @@ export const UPDATE_CATEGORY = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }

@@ -66,6 +66,16 @@ const items = [
     icon: Search,
   },
   {
+    title: "Category SEO",
+    url: "/dashboard/sco-category",
+    icon: FolderTree,
+  },
+  {
+    title: "Policy SEO",
+    url: "/dashboard/sco-policy",
+    icon: FileText,
+  },
+  {
     title: "Coupons",
     url: "/dashboard/coupons",
     icon: Tag,
@@ -112,7 +122,7 @@ export function AppSidebar() {
   const { data: policiesData } = usePolicies()
   const { mutate: deletePolicy } = useDeletePolicy()
   const policies = (policiesData as any)?.policies || []
-  
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [policyToDelete, setPolicyToDelete] = useState<any>(null)
 
@@ -178,7 +188,7 @@ export function AppSidebar() {
                       </div>
                     </a>
                   </SidebarMenuButton>
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.preventDefault()
                       handleDeleteClick(policy)

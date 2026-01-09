@@ -1,25 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
+import { SeoBaseInput } from '../seo-core/seo-base.input';
 
 @InputType()
-export class ProductSeoInput {
-  @Field({ nullable: true })
-  metaTitle?: string;
-
-  @Field({ nullable: true })
-  metaDescription?: string;
-
-  @Field(() => [String], { nullable: true })
-  metaKeywords?: string[];
-
-  @Field({ nullable: true })
-  canonicalUrl?: string;
-
-  @Field({ nullable: true })
-  ogTitle?: string;
-
-  @Field({ nullable: true })
-  ogDescription?: string;
-
-  @Field({ nullable: true })
-  ogImage?: string;
-}
+export class ProductSeoInput extends SeoBaseInput { }

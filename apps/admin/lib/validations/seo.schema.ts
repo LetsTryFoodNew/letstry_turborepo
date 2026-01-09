@@ -1,48 +1,43 @@
 import { z } from "zod";
 
-export const seoContentSchema = z.object({
-  pageName: z
-    .string()
-    .min(1, "Page name is required")
-    .max(100, "Page name must be less than 100 characters"),
-  pageSlug: z
-    .string()
-    .min(1, "Page slug is required")
-    .max(100, "Page slug must be less than 100 characters")
-    .regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens"),
+// Base SEO fields used by GenericSeoForm (Entities: Product, Category, Policy)
+// These use array for keywords for better tag management
+export const seoSchema = z.object({
   metaTitle: z
     .string()
     .min(1, "Meta title is required")
-    .max(70, "Meta title should be less than 70 characters for best SEO"),
+    .max(70, "Meta title should be under 70 characters"),
   metaDescription: z
     .string()
     .min(1, "Meta description is required")
-    .max(160, "Meta description should be less than 160 characters for best SEO"),
-  metaKeywords: z
+    .max(160, "Meta description should be under 160 characters"),
+  metaKeywords: z.array(z.string()),
+  canonicalUrl: z.string().optional().or(z.literal("")),
+  ogTitle: z.string().optional().or(z.literal("")),
+  ogDescription: z.string().optional().or(z.literal("")),
+  ogImage: z.string().optional().or(z.literal("")),
+});
+
+export type SeoFormData = z.infer<typeof seoSchema>;
+
+// SEO Content schema for the older seo-content module (Static pages)
+// This module uses string for keywords in its current implementation
+export const seoContentSchema = z.object({
+  pageName: z.string().min(1, "Page name is required"),
+  pageSlug: z.string().min(1, "Page slug is required"),
+  metaTitle: z
     .string()
-    .max(500, "Keywords must be less than 500 characters")
-    .optional()
-    .or(z.literal("")),
-  canonicalUrl: z
+    .min(1, "Meta title is required")
+    .max(70, "Meta title should be under 70 characters"),
+  metaDescription: z
     .string()
-    .url("Must be a valid URL")
-    .optional()
-    .or(z.literal("")),
-  ogTitle: z
-    .string()
-    .max(95, "Social title should be less than 95 characters")
-    .optional()
-    .or(z.literal("")),
-  ogDescription: z
-    .string()
-    .max(200, "Social description should be less than 200 characters")
-    .optional()
-    .or(z.literal("")),
-  ogImage: z
-    .string()
-    .url("Must be a valid URL")
-    .optional()
-    .or(z.literal("")),
+    .min(1, "Meta description is required")
+    .max(160, "Meta description should be under 160 characters"),
+  metaKeywords: z.string().optional().or(z.literal("")),
+  canonicalUrl: z.string().optional().or(z.literal("")),
+  ogTitle: z.string().optional().or(z.literal("")),
+  ogDescription: z.string().optional().or(z.literal("")),
+  ogImage: z.string().optional().or(z.literal("")),
   isActive: z.boolean(),
 });
 

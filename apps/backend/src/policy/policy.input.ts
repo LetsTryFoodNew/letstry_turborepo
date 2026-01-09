@@ -1,4 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
+import { SeoBaseInput } from '../seo-core/seo-base.input';
 
 @InputType()
 export class CreatePolicyInput {
@@ -10,6 +11,9 @@ export class CreatePolicyInput {
 
   @Field()
   type: string;
+
+  @Field(() => SeoBaseInput, { nullable: true })
+  seo?: SeoBaseInput;
 }
 
 @InputType()
@@ -22,4 +26,7 @@ export class UpdatePolicyInput {
 
   @Field({ nullable: true })
   type?: string;
+
+  @Field(() => SeoBaseInput, { nullable: true })
+  seo?: SeoBaseInput;
 }

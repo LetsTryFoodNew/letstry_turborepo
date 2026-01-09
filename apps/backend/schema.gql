@@ -268,16 +268,26 @@ type Banner {
   updatedAt: DateTime!
 }
 
-type ProductSeo {
-  _id: ID!
-  productId: String!
+type SeoBase {
   metaTitle: String
   metaDescription: String
-  metaKeywords: [String!]!
+  metaKeywords: [String!]
   canonicalUrl: String
   ogTitle: String
   ogDescription: String
   ogImage: String
+}
+
+type ProductSeo {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+  _id: ID!
+  productId: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -325,6 +335,7 @@ type Policy {
   title: String!
   content: String!
   type: String!
+  seo: SeoBase
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -411,6 +422,7 @@ type Category {
   inCodeSet: String!
   productCount: Float!
   isArchived: Boolean!
+  seo: SeoBase
   products: [Product!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1087,6 +1099,17 @@ input CreateCategoryInput {
   codeValue: String!
   inCodeSet: String!
   isArchived: Boolean
+  seo: SeoBaseInput
+}
+
+input SeoBaseInput {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
 }
 
 input UpdateCategoryInput {
@@ -1099,6 +1122,7 @@ input UpdateCategoryInput {
   codeValue: String
   inCodeSet: String
   isArchived: Boolean
+  seo: SeoBaseInput
 }
 
 input AddProductsToCategoryInput {
@@ -1189,12 +1213,14 @@ input CreatePolicyInput {
   title: String!
   content: String!
   type: String!
+  seo: SeoBaseInput
 }
 
 input UpdatePolicyInput {
   title: String
   content: String
   type: String
+  seo: SeoBaseInput
 }
 
 input CreateGuestInput {

@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { SeoBase } from '../seo-core/seo-base.schema';
 
 @ObjectType()
 export class Category {
@@ -34,6 +35,9 @@ export class Category {
 
   @Field()
   isArchived: boolean;
+
+  @Field(() => SeoBase, { nullable: true })
+  seo?: SeoBase;
 
   @Field(() => [require('../product/product.graphql').Product], {
     nullable: true,

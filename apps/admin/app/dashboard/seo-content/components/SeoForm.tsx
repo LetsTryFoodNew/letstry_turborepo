@@ -166,7 +166,7 @@ export function SeoForm({ initialData, onSubmit, onCancel, isLoading }: SeoFormP
         {/* Meta Tags */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-green-600">Meta Tags (Search Engines)</h3>
-          
+
           <FormField
             control={form.control}
             name="metaTitle"
@@ -246,7 +246,7 @@ export function SeoForm({ initialData, onSubmit, onCancel, isLoading }: SeoFormP
           <p className="text-sm text-muted-foreground">
             These settings control how your page looks when shared on WhatsApp, Facebook, LinkedIn, etc.
           </p>
-          
+
           <FormField
             control={form.control}
             name="ogTitle"

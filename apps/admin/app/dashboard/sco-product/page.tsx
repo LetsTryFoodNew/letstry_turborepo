@@ -24,33 +24,33 @@ export default function ProductSeoPage() {
     products,
     seoStatusMap,
     stats,
-    
+
     // Loading states
     isLoading,
     deleteLoading,
     error,
-    
+
     // Form dialog state
     isFormOpen,
     selectedProduct,
     selectedSeoData,
-    
+
     // Delete dialog state
     isDeleteDialogOpen,
-    
+
     // Filters
     searchTerm,
     setSearchTerm,
     filterStatus,
     setFilterStatus,
-    
+
     // Handlers
     handleEditSeo,
     handleCloseForm,
     handleCloseDeleteDialog,
     handleFormSuccess,
     handleConfirmDelete,
-    
+
     // Refetch
     refetchProducts,
 
@@ -203,7 +203,7 @@ export default function ProductSeoPage() {
 
       {/* SEO Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={handleCloseForm}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-screen-xl w-[95vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {selectedSeoData ? "Edit" : "Add"} SEO for {selectedProduct?.name}
