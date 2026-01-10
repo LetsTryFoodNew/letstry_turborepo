@@ -195,6 +195,7 @@ export type CartTotals = {
 
 export type Category = {
   __typename?: 'Category';
+  _id: Scalars['ID']['output'];
   codeValue: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -207,9 +208,34 @@ export type Category = {
   parentId?: Maybe<Scalars['String']['output']>;
   productCount: Scalars['Float']['output'];
   products: Array<Product>;
-  seo?: Maybe<SeoBase>;
+  seo?: Maybe<CategorySeo>;
   slug: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CategorySeo = {
+  __typename?: 'CategorySeo';
+  _id: Scalars['ID']['output'];
+  canonicalUrl?: Maybe<Scalars['String']['output']>;
+  categoryId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  metaKeywords?: Maybe<Array<Scalars['String']['output']>>;
+  metaTitle?: Maybe<Scalars['String']['output']>;
+  ogDescription?: Maybe<Scalars['String']['output']>;
+  ogImage?: Maybe<Scalars['String']['output']>;
+  ogTitle?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CategorySeoInput = {
+  canonicalUrl?: InputMaybe<Scalars['String']['input']>;
+  metaDescription?: InputMaybe<Scalars['String']['input']>;
+  metaKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
+  metaTitle?: InputMaybe<Scalars['String']['input']>;
+  ogDescription?: InputMaybe<Scalars['String']['input']>;
+  ogImage?: InputMaybe<Scalars['String']['input']>;
+  ogTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Charges = {
@@ -658,8 +684,10 @@ export type Mutation = {
   deleteAddress: Address;
   deleteBanner: Banner;
   deleteBoxSize: Scalars['Boolean']['output'];
+  deleteCategorySeo: Scalars['Boolean']['output'];
   deletePacker: Scalars['Boolean']['output'];
   deletePolicy: Policy;
+  deletePolicySeo: Scalars['Boolean']['output'];
   deleteProduct: Product;
   flagPackingError: ScanLog;
   initiatePayment: InitiatePaymentResponse;
@@ -683,10 +711,12 @@ export type Mutation = {
   updateBoxSize: BoxSize;
   updateCartItem: Cart;
   updateCategory: Category;
+  updateCategorySeo: CategorySeo;
   updateGuest: Guest;
   updateOrderStatus: OrderType;
   updatePacker: Packer;
   updatePolicy: Policy;
+  updatePolicySeo: PolicySeo;
   updateProduct: Product;
   updateProductStock: Product;
   updateProductVariant: Product;
@@ -821,6 +851,11 @@ export type MutationDeleteBoxSizeArgs = {
 };
 
 
+export type MutationDeleteCategorySeoArgs = {
+  categoryId: Scalars['ID']['input'];
+};
+
+
 export type MutationDeletePackerArgs = {
   packerId: Scalars['String']['input'];
 };
@@ -828,6 +863,11 @@ export type MutationDeletePackerArgs = {
 
 export type MutationDeletePolicyArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeletePolicySeoArgs = {
+  policyId: Scalars['ID']['input'];
 };
 
 
@@ -942,6 +982,12 @@ export type MutationUpdateCategoryArgs = {
 };
 
 
+export type MutationUpdateCategorySeoArgs = {
+  categoryId: Scalars['ID']['input'];
+  input: CategorySeoInput;
+};
+
+
 export type MutationUpdateGuestArgs = {
   id: Scalars['ID']['input'];
   input: UpdateGuestInput;
@@ -962,6 +1008,12 @@ export type MutationUpdatePackerArgs = {
 export type MutationUpdatePolicyArgs = {
   id: Scalars['ID']['input'];
   input: UpdatePolicyInput;
+};
+
+
+export type MutationUpdatePolicySeoArgs = {
+  input: PolicySeoInput;
+  policyId: Scalars['ID']['input'];
 };
 
 
@@ -1365,10 +1417,35 @@ export type Policy = {
   _id: Scalars['ID']['output'];
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
-  seo?: Maybe<SeoBase>;
+  seo?: Maybe<PolicySeo>;
   title: Scalars['String']['output'];
   type: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type PolicySeo = {
+  __typename?: 'PolicySeo';
+  _id: Scalars['ID']['output'];
+  canonicalUrl?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  metaKeywords?: Maybe<Array<Scalars['String']['output']>>;
+  metaTitle?: Maybe<Scalars['String']['output']>;
+  ogDescription?: Maybe<Scalars['String']['output']>;
+  ogImage?: Maybe<Scalars['String']['output']>;
+  ogTitle?: Maybe<Scalars['String']['output']>;
+  policyId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type PolicySeoInput = {
+  canonicalUrl?: InputMaybe<Scalars['String']['input']>;
+  metaDescription?: InputMaybe<Scalars['String']['input']>;
+  metaKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
+  metaTitle?: InputMaybe<Scalars['String']['input']>;
+  ogDescription?: InputMaybe<Scalars['String']['input']>;
+  ogImage?: InputMaybe<Scalars['String']['input']>;
+  ogTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PriceRange = {
@@ -2060,7 +2137,7 @@ export type GetCategoryBySlugQueryVariables = Exact<{
 }>;
 
 
-export type GetCategoryBySlugQuery = { __typename?: 'Query', categoryBySlug?: { __typename?: 'Category', id: string, name: string, slug: string, productCount: number, products: Array<{ __typename?: 'Product', _id: string, name: string, slug: string, tags: Array<string>, defaultVariant?: { __typename?: 'ProductVariant', thumbnailUrl: string, price: number, mrp: number, packageSize: string } | null, availableVariants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, price: number, mrp: number, packageSize: string, weight: number, weightUnit: string }> }> } | null };
+export type GetCategoryBySlugQuery = { __typename?: 'Query', categoryBySlug?: { __typename?: 'Category', id: string, name: string, slug: string, description?: string | null, productCount: number, imageUrl?: string | null, seo?: { __typename?: 'CategorySeo', metaTitle?: string | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, canonicalUrl?: string | null, ogTitle?: string | null, ogDescription?: string | null, ogImage?: string | null } | null, products: Array<{ __typename?: 'Product', _id: string, name: string, slug: string, tags: Array<string>, defaultVariant?: { __typename?: 'ProductVariant', thumbnailUrl: string, price: number, mrp: number, packageSize: string } | null, availableVariants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, price: number, mrp: number, packageSize: string, weight: number, weightUnit: string }> }> } | null };
 
 export type GetActiveCouponsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2100,6 +2177,13 @@ export type InitiatePaymentMutationVariables = Exact<{
 
 
 export type InitiatePaymentMutation = { __typename?: 'Mutation', initiatePayment: { __typename?: 'InitiatePaymentResponse', paymentOrderId: string, redirectUrl: string } };
+
+export type GetPoliciesByTypeQueryVariables = Exact<{
+  type: Scalars['String']['input'];
+}>;
+
+
+export type GetPoliciesByTypeQuery = { __typename?: 'Query', policiesByType: Array<{ __typename?: 'Policy', _id: string, title: string, content: string, type: string, createdAt: any, updatedAt: any, seo?: { __typename?: 'PolicySeo', metaTitle?: string | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, canonicalUrl?: string | null, ogTitle?: string | null, ogDescription?: string | null, ogImage?: string | null } | null }> };
 
 export type GetProductsByCategoryQueryVariables = Exact<{
   categoryId: Scalars['ID']['input'];
@@ -2378,7 +2462,18 @@ export const GetCategoryBySlugDocument = new TypedDocumentString(`
     id
     name
     slug
+    description
     productCount
+    imageUrl
+    seo {
+      metaTitle
+      metaDescription
+      metaKeywords
+      canonicalUrl
+      ogTitle
+      ogDescription
+      ogImage
+    }
     products {
       _id
       name
@@ -2468,6 +2563,27 @@ export const InitiatePaymentDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<InitiatePaymentMutation, InitiatePaymentMutationVariables>;
+export const GetPoliciesByTypeDocument = new TypedDocumentString(`
+    query GetPoliciesByType($type: String!) {
+  policiesByType(type: $type) {
+    _id
+    title
+    content
+    type
+    seo {
+      metaTitle
+      metaDescription
+      metaKeywords
+      canonicalUrl
+      ogTitle
+      ogDescription
+      ogImage
+    }
+    createdAt
+    updatedAt
+  }
+}
+    `) as unknown as TypedDocumentString<GetPoliciesByTypeQuery, GetPoliciesByTypeQueryVariables>;
 export const GetProductsByCategoryDocument = new TypedDocumentString(`
     query GetProductsByCategory($categoryId: ID!, $pagination: PaginationInput!) {
   productsByCategory(categoryId: $categoryId, pagination: $pagination) {

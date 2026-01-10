@@ -71,7 +71,18 @@ export const GET_CATEGORY_BY_SLUG = graphql(`
       id
       name
       slug
+      description
       productCount
+      imageUrl
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       products {
         _id
         name
