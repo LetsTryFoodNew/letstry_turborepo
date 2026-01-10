@@ -1,4 +1,5 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
+import { SeoBaseInput } from '../seo-core/seo-base.input';
 
 @InputType()
 export class CreateCategoryInput {
@@ -28,6 +29,9 @@ export class CreateCategoryInput {
 
   @Field({ nullable: true })
   isArchived?: boolean;
+
+  @Field(() => SeoBaseInput, { nullable: true })
+  seo?: SeoBaseInput;
 }
 
 @InputType()
@@ -58,6 +62,9 @@ export class UpdateCategoryInput {
 
   @Field({ nullable: true })
   isArchived?: boolean;
+
+  @Field(() => SeoBaseInput, { nullable: true })
+  seo?: SeoBaseInput;
 }
 
 @InputType()

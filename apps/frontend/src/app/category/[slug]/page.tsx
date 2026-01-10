@@ -21,7 +21,7 @@ function mapProductData(apiProduct: any): Product {
     mrp: v.mrp,
   })) || [];
 
-  // If no available variants, try to use default variant as a single variant
+
   if (variants.length === 0 && defaultVariant) {
     variants.push({
       id: defaultVariant._id || apiProduct._id, // Fallback ID if defaultVariant doesn't have one (though it should)
@@ -30,10 +30,10 @@ function mapProductData(apiProduct: any): Product {
       mrp: defaultVariant.mrp,
     });
   }
-  
+
   const tags = apiProduct.tags || [];
   let badge = undefined;
-  
+
   if (tags.includes('trending')) {
     badge = { label: 'Trending', variant: 'trending' as const };
   } else if (tags.includes('bestseller')) {

@@ -13,6 +13,7 @@ export interface Policy {
   title: string
   content: string
   type: string
+  seo?: any
   createdAt: string
   updatedAt: string
 }
@@ -21,12 +22,14 @@ export interface CreatePolicyInput {
   title: string
   content: string
   type: string
+  seo?: any
 }
 
 export interface UpdatePolicyInput {
   title?: string
   content?: string
   type?: string
+  seo?: any
 }
 
 export const usePolicies = () => {

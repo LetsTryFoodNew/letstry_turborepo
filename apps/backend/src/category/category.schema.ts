@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { SeoBase, SeoBaseSchema } from '../seo-core/seo-base.schema';
 
 export type CategoryDocument = Category & Document;
 
@@ -36,8 +37,11 @@ export class Category {
   @Prop({ default: 0 })
   productCount: number;
 
-  @Prop({ default: false })
+  @Prop({ type: Boolean, default: false })
   isArchived: boolean;
+
+  @Prop({ type: SeoBaseSchema, default: null })
+  seo?: SeoBase;
 
   createdAt: Date;
   updatedAt: Date;

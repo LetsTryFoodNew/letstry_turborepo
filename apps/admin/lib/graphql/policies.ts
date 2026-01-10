@@ -7,6 +7,15 @@ export const GET_POLICIES = gql`
       title
       content
       type
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -33,6 +42,15 @@ export const GET_POLICY = gql`
       title
       content
       type
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -46,6 +64,15 @@ export const CREATE_POLICY = gql`
       title
       content
       type
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -59,6 +86,15 @@ export const UPDATE_POLICY = gql`
       title
       content
       type
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }

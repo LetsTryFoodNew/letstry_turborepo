@@ -268,16 +268,26 @@ type Banner {
   updatedAt: DateTime!
 }
 
-type ProductSeo {
-  _id: ID!
-  productId: String!
+type SeoBase {
   metaTitle: String
   metaDescription: String
-  metaKeywords: [String!]!
+  metaKeywords: [String!]
   canonicalUrl: String
   ogTitle: String
   ogDescription: String
   ogImage: String
+}
+
+type ProductSeo {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+  _id: ID!
+  productId: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -325,6 +335,21 @@ type Policy {
   title: String!
   content: String!
   type: String!
+  seo: PolicySeo
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PolicySeo {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+  _id: ID!
+  policyId: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -400,6 +425,7 @@ type PriceRange {
 }
 
 type Category {
+  _id: ID!
   id: ID!
   name: String!
   slug: String!
@@ -411,7 +437,22 @@ type Category {
   inCodeSet: String!
   productCount: Float!
   isArchived: Boolean!
+  seo: CategorySeo
   products: [Product!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CategorySeo {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
+  _id: ID!
+  categoryId: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -925,6 +966,8 @@ type Mutation {
   unarchiveCategory(id: ID!): Category!
   addProductsToCategory(input: AddProductsToCategoryInput!): Boolean!
   removeProductsFromCategory(input: RemoveProductsFromCategoryInput!): Boolean!
+  updateCategorySeo(categoryId: ID!, input: CategorySeoInput!): CategorySeo!
+  deleteCategorySeo(categoryId: ID!): Boolean!
   adminLogin(email: String!, password: String!): String!
   createAdmin(email: String!, password: String!): String!
   adminLogout: String!
@@ -938,6 +981,8 @@ type Mutation {
   createPolicy(input: CreatePolicyInput!): Policy!
   updatePolicy(id: ID!, input: UpdatePolicyInput!): Policy!
   deletePolicy(id: ID!): Policy!
+  updatePolicySeo(policyId: ID!, input: PolicySeoInput!): PolicySeo!
+  deletePolicySeo(policyId: ID!): Boolean!
   createGuest(input: CreateGuestInput!): Guest!
   updateGuest(id: ID!, input: UpdateGuestInput!): Guest!
   addToCart(input: AddToCartInput!): Cart!
@@ -1087,6 +1132,17 @@ input CreateCategoryInput {
   codeValue: String!
   inCodeSet: String!
   isArchived: Boolean
+  seo: SeoBaseInput
+}
+
+input SeoBaseInput {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
 }
 
 input UpdateCategoryInput {
@@ -1099,6 +1155,7 @@ input UpdateCategoryInput {
   codeValue: String
   inCodeSet: String
   isArchived: Boolean
+  seo: SeoBaseInput
 }
 
 input AddProductsToCategoryInput {
@@ -1109,6 +1166,16 @@ input AddProductsToCategoryInput {
 input RemoveProductsFromCategoryInput {
   categoryId: ID!
   productIds: [ID!]!
+}
+
+input CategorySeoInput {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
 }
 
 input CreateAddressInput {
@@ -1189,12 +1256,24 @@ input CreatePolicyInput {
   title: String!
   content: String!
   type: String!
+  seo: SeoBaseInput
 }
 
 input UpdatePolicyInput {
   title: String
   content: String
   type: String
+  seo: SeoBaseInput
+}
+
+input PolicySeoInput {
+  metaTitle: String
+  metaDescription: String
+  metaKeywords: [String!]
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: String
 }
 
 input CreateGuestInput {

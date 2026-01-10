@@ -207,6 +207,7 @@ export type Category = {
   parentId?: Maybe<Scalars['String']['output']>;
   productCount: Scalars['Float']['output'];
   products: Array<Product>;
+  seo?: Maybe<SeoBase>;
   slug: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -295,6 +296,7 @@ export type CreateCategoryInput = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
   parentId?: InputMaybe<Scalars['String']['input']>;
+  seo?: InputMaybe<SeoBaseInput>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -341,6 +343,7 @@ export type CreatePackerResponse = {
 
 export type CreatePolicyInput = {
   content: Scalars['String']['input'];
+  seo?: InputMaybe<SeoBaseInput>;
   title: Scalars['String']['input'];
   type: Scalars['String']['input'];
 };
@@ -1362,6 +1365,7 @@ export type Policy = {
   _id: Scalars['ID']['output'];
   content: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  seo?: Maybe<SeoBase>;
   title: Scalars['String']['output'];
   type: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -1429,7 +1433,7 @@ export type ProductSeo = {
   canonicalUrl?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   metaDescription?: Maybe<Scalars['String']['output']>;
-  metaKeywords: Array<Scalars['String']['output']>;
+  metaKeywords?: Maybe<Array<Scalars['String']['output']>>;
   metaTitle?: Maybe<Scalars['String']['output']>;
   ogDescription?: Maybe<Scalars['String']['output']>;
   ogImage?: Maybe<Scalars['String']['output']>;
@@ -1776,6 +1780,27 @@ export type SearchPlacesInput = {
   sessionToken?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type SeoBase = {
+  __typename?: 'SeoBase';
+  canonicalUrl?: Maybe<Scalars['String']['output']>;
+  metaDescription?: Maybe<Scalars['String']['output']>;
+  metaKeywords?: Maybe<Array<Scalars['String']['output']>>;
+  metaTitle?: Maybe<Scalars['String']['output']>;
+  ogDescription?: Maybe<Scalars['String']['output']>;
+  ogImage?: Maybe<Scalars['String']['output']>;
+  ogTitle?: Maybe<Scalars['String']['output']>;
+};
+
+export type SeoBaseInput = {
+  canonicalUrl?: InputMaybe<Scalars['String']['input']>;
+  metaDescription?: InputMaybe<Scalars['String']['input']>;
+  metaKeywords?: InputMaybe<Array<Scalars['String']['input']>>;
+  metaTitle?: InputMaybe<Scalars['String']['input']>;
+  ogDescription?: InputMaybe<Scalars['String']['input']>;
+  ogImage?: InputMaybe<Scalars['String']['input']>;
+  ogTitle?: InputMaybe<Scalars['String']['input']>;
+};
+
 export enum SortOrder {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -1861,6 +1886,7 @@ export type UpdateCategoryInput = {
   isArchived?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
+  seo?: InputMaybe<SeoBaseInput>;
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1884,6 +1910,7 @@ export type UpdatePackerInput = {
 
 export type UpdatePolicyInput = {
   content?: InputMaybe<Scalars['String']['input']>;
+  seo?: InputMaybe<SeoBaseInput>;
   title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2087,7 +2114,7 @@ export type GetProductBySlugQueryVariables = Exact<{
 }>;
 
 
-export type GetProductBySlugQuery = { __typename?: 'Query', productBySlug?: { __typename?: 'Product', _id: string, name: string, slug: string, description: string, shelfLife: string, isVegetarian: boolean, ingredients: string, category?: { __typename?: 'Category', name: string, imageUrl?: string | null } | null, seo?: { __typename?: 'ProductSeo', metaTitle?: string | null, metaDescription?: string | null, metaKeywords: Array<string>, canonicalUrl?: string | null, ogTitle?: string | null, ogDescription?: string | null, ogImage?: string | null } | null, variants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, weight: number, weightUnit: string, packageSize: string, stockQuantity: number, availabilityStatus: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> }>, defaultVariant?: { __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, weight: number, weightUnit: string, packageSize: string, stockQuantity: number, availabilityStatus: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> } | null, priceRange: { __typename?: 'PriceRange', min: number, max: number }, availableVariants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, weight: number, weightUnit: string, packageSize: string, stockQuantity: number, availabilityStatus: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> }> } | null };
+export type GetProductBySlugQuery = { __typename?: 'Query', productBySlug?: { __typename?: 'Product', _id: string, name: string, slug: string, description: string, shelfLife: string, isVegetarian: boolean, ingredients: string, category?: { __typename?: 'Category', name: string, imageUrl?: string | null } | null, seo?: { __typename?: 'ProductSeo', metaTitle?: string | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, canonicalUrl?: string | null, ogTitle?: string | null, ogDescription?: string | null, ogImage?: string | null } | null, variants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, weight: number, weightUnit: string, packageSize: string, stockQuantity: number, availabilityStatus: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> }>, defaultVariant?: { __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, weight: number, weightUnit: string, packageSize: string, stockQuantity: number, availabilityStatus: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> } | null, priceRange: { __typename?: 'PriceRange', min: number, max: number }, availableVariants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, weight: number, weightUnit: string, packageSize: string, stockQuantity: number, availabilityStatus: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> }> } | null };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String

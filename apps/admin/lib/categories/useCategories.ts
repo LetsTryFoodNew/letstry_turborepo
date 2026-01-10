@@ -12,7 +12,7 @@ import {
 } from '@/lib/graphql/categories'
 
 export interface Category {
-  id: string
+  _id: string
   name: string
   slug: string
   description?: string
@@ -23,8 +23,15 @@ export interface Category {
   productCount: number
   favourite: boolean
   isArchived: boolean
+  seo?: any // Using any for simplicity here or I can define SeoBase
   createdAt: string
   updatedAt: string
+}
+
+export interface BreadcrumbCategory {
+  id: string
+  name: string
+  slug: string
 }
 
 export interface PaginationMeta {
@@ -56,6 +63,7 @@ export interface CreateCategoryInput {
   inCodeSet: string
   favourite?: boolean
   isArchived?: boolean
+  seo?: any
 }
 
 export interface UpdateCategoryInput {
@@ -68,6 +76,7 @@ export interface UpdateCategoryInput {
   inCodeSet?: string
   favourite?: boolean
   isArchived?: boolean
+  seo?: any
 }
 
 export const useCategories = (pagination: PaginationInput = { page: 1, limit: 100 }, includeArchived: boolean = false) => {
@@ -94,7 +103,7 @@ export const useCategoryChildren = (parentId: string, pagination: PaginationInpu
 
 export const useCategory = (id: string, includeArchived: boolean = false) => {
   return useQuery(GET_CATEGORY, {
-    variables: { id, includeArchived },
+    variables: { _id: id, includeArchived },
     skip: !id,
     fetchPolicy: 'cache-and-network',
   })

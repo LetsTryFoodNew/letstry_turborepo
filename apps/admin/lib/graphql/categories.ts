@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client'
 
 export const GET_CATEGORIES = gql`
-  query GetCategories($pagination: PaginationInput!, $includeArchived: Boolean!) {
+  query GetCategories($pagination: PaginationInput, $includeArchived: Boolean) {
     categories(pagination: $pagination, includeArchived: $includeArchived) {
       items {
-        id
+        _id
         name
         slug
         description
@@ -15,6 +15,15 @@ export const GET_CATEGORIES = gql`
         productCount
         favourite
         isArchived
+        seo {
+          metaTitle
+          metaDescription
+          metaKeywords
+          canonicalUrl
+          ogTitle
+          ogDescription
+          ogImage
+        }
         createdAt
         updatedAt
       }
@@ -31,10 +40,10 @@ export const GET_CATEGORIES = gql`
 `
 
 export const GET_ROOT_CATEGORIES = gql`
-  query GetRootCategories($pagination: PaginationInput!, $includeArchived: Boolean!) {
+  query GetRootCategories($pagination: PaginationInput, $includeArchived: Boolean) {
     rootCategories(pagination: $pagination, includeArchived: $includeArchived) {
       items {
-        id
+        _id
         name
         slug
         description
@@ -45,6 +54,15 @@ export const GET_ROOT_CATEGORIES = gql`
         productCount
         favourite
         isArchived
+        seo {
+          metaTitle
+          metaDescription
+          metaKeywords
+          canonicalUrl
+          ogTitle
+          ogDescription
+          ogImage
+        }
         createdAt
         updatedAt
       }
@@ -61,10 +79,10 @@ export const GET_ROOT_CATEGORIES = gql`
 `
 
 export const GET_CATEGORY_CHILDREN = gql`
-  query GetCategoryChildren($parentId: ID!, $pagination: PaginationInput!, $includeArchived: Boolean!) {
+  query GetCategoryChildren($parentId: ID!, $pagination: PaginationInput, $includeArchived: Boolean) {
     categoryChildren(parentId: $parentId, pagination: $pagination, includeArchived: $includeArchived) {
       items {
-        id
+        _id
         name
         slug
         description
@@ -75,6 +93,15 @@ export const GET_CATEGORY_CHILDREN = gql`
         productCount
         favourite
         isArchived
+        seo {
+          metaTitle
+          metaDescription
+          metaKeywords
+          canonicalUrl
+          ogTitle
+          ogDescription
+          ogImage
+        }
         createdAt
         updatedAt
       }
@@ -91,9 +118,9 @@ export const GET_CATEGORY_CHILDREN = gql`
 `
 
 export const GET_CATEGORY = gql`
-  query GetCategory($id: ID!, $includeArchived: Boolean!) {
-    category(id: $id, includeArchived: $includeArchived) {
-      id
+  query GetCategory($_id: ID!, $includeArchived: Boolean) {
+    category(_id: $_id, includeArchived: $includeArchived) {
+      _id
       name
       slug
       description
@@ -104,6 +131,15 @@ export const GET_CATEGORY = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -111,9 +147,9 @@ export const GET_CATEGORY = gql`
 `
 
 export const GET_CATEGORY_BY_SLUG = gql`
-  query GetCategoryBySlug($slug: String!, $includeArchived: Boolean!) {
+  query GetCategoryBySlug($slug: String!, $includeArchived: Boolean) {
     categoryBySlug(slug: $slug, includeArchived: $includeArchived) {
-      id
+      _id
       name
       slug
       description
@@ -124,6 +160,15 @@ export const GET_CATEGORY_BY_SLUG = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -133,7 +178,7 @@ export const GET_CATEGORY_BY_SLUG = gql`
 export const CREATE_CATEGORY = gql`
   mutation CreateCategory($input: CreateCategoryInput!) {
     createCategory(input: $input) {
-      id
+      _id
       name
       slug
       description
@@ -144,6 +189,15 @@ export const CREATE_CATEGORY = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -151,9 +205,9 @@ export const CREATE_CATEGORY = gql`
 `
 
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($id: ID!, $input: UpdateCategoryInput!) {
-    updateCategory(id: $id, input: $input) {
-      id
+  mutation UpdateCategory($_id: ID!, $input: UpdateCategoryInput!) {
+    updateCategory(_id: $_id, input: $input) {
+      _id
       name
       slug
       description
@@ -164,6 +218,15 @@ export const UPDATE_CATEGORY = gql`
       productCount
       favourite
       isArchived
+      seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
       createdAt
       updatedAt
     }
@@ -171,9 +234,9 @@ export const UPDATE_CATEGORY = gql`
 `
 
 export const ARCHIVE_CATEGORY = gql`
-  mutation ArchiveCategory($id: ID!) {
-    archiveCategory(id: $id) {
-      id
+  mutation ArchiveCategory($_id: ID!) {
+    archiveCategory(_id: $_id) {
+      _id
       name
       isArchived
     }
@@ -181,9 +244,9 @@ export const ARCHIVE_CATEGORY = gql`
 `
 
 export const UNARCHIVE_CATEGORY = gql`
-  mutation UnarchiveCategory($id: ID!) {
-    unarchiveCategory(id: $id) {
-      id
+  mutation UnarchiveCategory($_id: ID!) {
+    unarchiveCategory(_id: $_id) {
+      _id
       name
       isArchived
     }
