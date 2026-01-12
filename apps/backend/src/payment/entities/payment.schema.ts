@@ -12,6 +12,7 @@ export enum PaymentStatus {
 }
 
 export enum PaymentMethod {
+  CARD = 'CARD',
   CREDIT_CARD = 'CREDIT_CARD',
   DEBIT_CARD = 'DEBIT_CARD',
   NET_BANKING = 'NET_BANKING',
@@ -116,6 +117,12 @@ export class PaymentOrder extends Document {
 
   @Prop({ type: Date })
   pspTxnTime: Date;
+
+  @Prop()
+  idempotencyKey: string;
+
+  @Prop({ type: Date })
+  idempotencyKeyExpiresAt: Date;
 
   @Prop({ default: false })
   ledgerUpdated: boolean;

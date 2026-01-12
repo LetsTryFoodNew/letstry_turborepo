@@ -314,7 +314,7 @@ export class PaymentExecutorService {
       if (order.txnStatus === '0') {
         await this.handlePaymentSuccess({
           paymentOrderId,
-          zaakpayTxnId: order.orderDetail.txnId,
+          pspTxnId: order.orderDetail.txnId,
           paymentMethod: order.paymentInstrument?.paymentMode || 'UNKNOWN',
           bankTxnId: order.paymentInstrument?.card?.bank,
           cardType: order.paymentInstrument?.card?.cardType,
