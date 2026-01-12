@@ -4,12 +4,58 @@ import { CategoryHeader } from '@/components/category-page/CategoryHeader';
 import { ProductGrid } from '@/components/category-page/ProductGrid';
 import { Product } from '@/components/category-page/ProductCard';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
 export const revalidate = 1800;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  try {
+    const category = await getCategoryBySlug(slug);
+
+    if (!category) {
+      return {
+        title: 'Category Not Found | Letstry',
+        description: 'The requested category could not be found.',
+      };
+    }
+
+    const seo = category.seo;
+    const defaultTitle = `${category.name} | Letstry`;
+    const defaultDescription = category.description || `Shop ${category.name} products at Letstry. Browse our collection of premium quality items.`;
+
+    return {
+      title: seo?.metaTitle || defaultTitle,
+      description: seo?.metaDescription || defaultDescription,
+      keywords: seo?.metaKeywords || [],
+      alternates: {
+        canonical: seo?.canonicalUrl || undefined,
+      },
+      openGraph: {
+        title: seo?.ogTitle || seo?.metaTitle || defaultTitle,
+        description: seo?.ogDescription || seo?.metaDescription || defaultDescription,
+        images: seo?.ogImage ? [{ url: seo.ogImage }] : category.imageUrl ? [{ url: category.imageUrl }] : [],
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: seo?.ogTitle || seo?.metaTitle || defaultTitle,
+        description: seo?.ogDescription || seo?.metaDescription || defaultDescription,
+        images: seo?.ogImage ? [seo.ogImage] : category.imageUrl ? [category.imageUrl] : [],
+      },
+    };
+  } catch {
+    return {
+      title: 'Category | Letstry',
+      description: 'Browse our collection of premium quality products.',
+    };
+  }
 }
 
 function mapProductData(apiProduct: any): Product {

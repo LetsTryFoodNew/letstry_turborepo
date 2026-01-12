@@ -9,7 +9,7 @@ import CustomerTestimonials from "@/components/customer-testimonials/CustomerTes
 import BrandSlider from "@/components/brand-slider/BrandSlider";
 
 
-export const revalidate = 86400;
+// export const revalidate = 86400;
 
 
 export default function Home() {
@@ -21,9 +21,9 @@ export default function Home() {
       <BestsellerCarousel />
       <WhyChooseUs />
       <HealthySnacking />
-      {/* <div className="container mx-auto px-4 py-8 text-center">
+      <div className="container mx-auto px-4 py-8 text-center">
         <h1 className="text-4xl font-bold">Coming soon!!!!</h1>
-      </div> */}
+      </div>
       <JourneyVideos />
       <CustomerTestimonials/>
       <BrandSlider/>
