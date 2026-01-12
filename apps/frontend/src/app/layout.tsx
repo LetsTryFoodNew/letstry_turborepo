@@ -11,6 +11,7 @@ import { Footer } from "@/components/footer";
 import { GuestSessionManager } from "@/components/guest/GuestSessionManager";
 import { CartContainer } from "@/components/cart-drawer/CartContainer";
 import { SearchOverlay } from "@/components/search-overlay";
+import { GoogleTagManager, GoogleTagManagerNoscript } from "@/components/analytics/google-tag-manager";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,11 +39,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+  
   return (
     <html lang="en">
+      <head>
+        {gtmId && <GoogleTagManager gtmId={gtmId} />}
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${agbalumo.variable} antialiased`}
       >
+        {gtmId && <GoogleTagManagerNoscript gtmId={gtmId} />}
         <QueryProvider>
           <RecaptchaProvider>
             <AuthProvider>
