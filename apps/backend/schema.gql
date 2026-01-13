@@ -1056,7 +1056,7 @@ input BoxDimensionsInput {
 
 type Query {
   hello: String!
-  products(pagination: PaginationInput! = {page: 1, limit: 10}, includeOutOfStock: Boolean! = false): PaginatedProducts!
+  products(pagination: PaginationInput! = {page: 1, limit: 10}, includeOutOfStock: Boolean! = false, includeArchived: Boolean! = false): PaginatedProducts!
   product(id: ID!): Product
   productBySlug(slug: String!): Product
   productsByCategory(categoryId: ID!, pagination: PaginationInput! = {page: 1, limit: 10}): PaginatedProducts!
