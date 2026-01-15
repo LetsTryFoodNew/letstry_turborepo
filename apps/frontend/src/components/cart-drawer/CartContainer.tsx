@@ -26,11 +26,6 @@ export const CartContainer = () => {
   const queryClient = useQueryClient();
   const { trackRemoveFromCart, trackBeginCheckout, trackAddToCart } = useAnalytics();
   
-  React.useEffect(() => {
-    console.log('CartContainer - user:', user);
-    console.log('CartContainer - isAuthenticated:', isAuthenticated);
-  }, [user, isAuthenticated]);
-  
   const [showPriceDetails, setShowPriceDetails] = useState(false);
   const [showCoupons, setShowCoupons] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
