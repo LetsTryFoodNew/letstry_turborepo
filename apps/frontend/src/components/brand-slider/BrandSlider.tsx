@@ -5,7 +5,7 @@ interface Brand {
   img: string;
 }
 
-const VITE_API_IMAGE_URL = process.env.NEXT_PUBLIC_API_IMAGE_URL || "";
+const VITE_API_IMAGE_URL = process.env.NEXT_PUBLIC_API_IMAGE_URL_OLD || "";
 
 const brands: Brand[] = [
   { name: "Amazon", img: `${VITE_API_IMAGE_URL}/images/amazon.webp` },
