@@ -240,6 +240,11 @@ export class PaymentExecutorService {
         newOrderId: order._id,
       });
 
+      await this.paymentOrderModel.findOneAndUpdate(
+        { paymentOrderId: paymentOrder.paymentOrderId },
+        { orderId: order._id },
+      );
+
       this.orderCartLogger.logOrderCreated(
         order.orderId,
         paymentOrder.paymentOrderId,
