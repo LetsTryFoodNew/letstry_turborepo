@@ -163,46 +163,58 @@ export class OrderService {
   async resolveShippingAddress(
     order: any,
   ): Promise<OrderShippingAddressType | null> {
-    if (!order.shippingAddressId) {
-      return null;
+    let address: any = null;
+    if (order.shippingAddressId) {
+      address = await this.addressModel
+        .findById(order.shippingAddressId)
+        .exec();
     }
-    const address = await this.addressModel
-      .findById(order.shippingAddressId)
-      .exec();
-    if (!address) {
-      return null;
+
+    if (address) {
+      return {
+        fullName: address.recipientName,
+        phone: address.recipientPhone,
+        addressLine1: address.buildingName,
+        addressLine2: address.streetArea || address.floor,
+        city: address.addressLocality,
+        state: address.addressRegion,
+        pincode: address.postalCode,
+        landmark: address.landmark,
+      };
     }
-    return {
-      fullName: address.recipientName,
-      phone: address.recipientPhone,
-      addressLine1: address.buildingName,
-      addressLine2: address.streetArea || address.floor,
-      city: address.addressLocality,
-      state: address.addressRegion,
-      pincode: address.postalCode,
-      landmark: address.landmark,
-    };
+
+    if (order.recipientContact) {
+      return {
+        fullName: 'Customer',
+        phone: order.recipientContact.phone || 'N/A',
+        addressLine1: 'N/A',
+        addressLine2: 'N/A',
+        city: 'N/A',
+        state: 'N/A',
+        pincode: 'N/A',
+        landmark: 'N/A',
+      };
+    }
+
+    return null;
   }
 
   async resolveCustomer(order: any): Promise<OrderCustomerType | null> {
-    if (!order.identityId) {
-      return null;
+    let identity: any = null;
+    if (order.identityId) {
+      identity = await this.identityModel.findById(order.identityId).exec();
     }
-    const identity = await this.identityModel
-      .findById(order.identityId)
-      .exec();
-    if (!identity) {
-      return null;
-    }
-    const name =
-      identity.firstName && identity.lastName
+
+    const customerName =
+      identity?.firstName && identity?.lastName
         ? `${identity.firstName} ${identity.lastName}`
-        : identity.firstName || identity.lastName || 'Customer';
+        : identity?.firstName || identity?.lastName || 'Customer';
+
     return {
-      _id: identity._id.toString(),
-      name,
-      email: identity.email,
-      phone: identity.phoneNumber,
+      _id: identity?._id?.toString() || order.identityId?.toString() || 'N/A',
+      name: customerName,
+      email: identity?.email || order.placerContact?.email,
+      phone: identity?.phoneNumber || order.placerContact?.phone,
     };
   }
 

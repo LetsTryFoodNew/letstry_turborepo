@@ -197,7 +197,7 @@ export class PaymentExecutorService {
           phone: cart.recipientPhone || paymentOrder.phone || 'N/A',
         }, // Assume cart has recipientPhone, fallback to payment phone
         items: cart.items.map((item: any) => ({
-          itemId: item.productId?.toString() || item.productId,
+          variantId: item.productId?.toString() || item.productId,
           quantity: item.quantity || 0,
         })),
       });
