@@ -114,7 +114,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
           OFF
         </span>
       )}
-      <Link href={`/product/${product.slug}`}>
+      <Link href={`/${product.slug}`}>
         <figure className="flex items-center justify-center h-32 sm:h-40 md:h-44 lg:h-48 mb-2 sm:mb-3 md:mb-4">
           <Image
             src={variant.thumbnailUrl}

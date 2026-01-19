@@ -7,7 +7,7 @@ export const NavbarWrapper = async () => {
   try {
     const categoryData = await getHomeCategories(10);
     categories = categoryData.items.map((c) => ({
-      href: `/category/${c.slug}`,
+      href: `/${c.slug}`,
       label: c.name,
     }));
   } catch (error) {

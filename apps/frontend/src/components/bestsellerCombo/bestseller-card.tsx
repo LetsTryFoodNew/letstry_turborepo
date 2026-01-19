@@ -100,7 +100,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
 
   return (
     <article className="flex flex-col border border-gray-300 rounded-lg bg-gray-50 hover:shadow-lg transition-shadow">
-      <Link href={`/product/${product.slug}`}>
+      <Link href={`/${product.slug}`}>
         <div className="relative w-full aspect-square mb-4 bg-[#F3EEEA] rounded overflow-hidden">
           <Image
             src={displayImages[0].url}

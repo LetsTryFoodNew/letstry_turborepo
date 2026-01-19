@@ -51,7 +51,7 @@ export const Navbar = ({ initialAuth, categories = [] }: NavbarProps) => {
     () => [
       { href: "/", label: "Home" },
       { href: "#", label: "Snacks", hasDropdown: true, dropdownItems: categories },
-      { href: "/category/combo", label: "Combos"},
+      { href: "/combo", label: "Combos"},
       { href: "/about-us", label: "About us" },
     ],
     [categories]
@@ -67,6 +67,8 @@ export const Navbar = ({ initialAuth, categories = [] }: NavbarProps) => {
           onUserClick={handleUserIconClick}
           setHoveredMenu={setHoveredMenu}
           hoveredMenu={hoveredMenu}
+          isAuthenticated={isAuthenticated}
+          onLoginClick={() => openModal(`${process.env.NEXT_PUBLIC_API_URL}`)}
         />
 
         <MobileNavbar

@@ -5,5 +5,6 @@ const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhos
 export const createServerGraphQLClient = (headers?: HeadersInit): GraphQLClient => {
   return new GraphQLClient(GRAPHQL_ENDPOINT, {
     headers: headers || {},
+    fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' }),
   });
 };

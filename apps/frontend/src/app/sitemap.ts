@@ -58,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     
     if (data?.products?.items) {
       productRoutes = data.products.items.map((product) => ({
-        url: `${baseUrl}/product/${product.slug}`,
+        url: `${baseUrl}/${product.slug}`,
         lastModified: new Date(product.updatedAt),
         changeFrequency: 'weekly' as const,
         priority: 0.8,
@@ -73,7 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     
     if (data?.categories?.items) {
       categoryRoutes = data.categories.items.map((category) => ({
-        url: `${baseUrl}/category/${category.slug}`,
+        url: `${baseUrl}/${category.slug}`,
         lastModified: new Date(category.updatedAt),
         changeFrequency: 'weekly' as const,
         priority: 0.7,

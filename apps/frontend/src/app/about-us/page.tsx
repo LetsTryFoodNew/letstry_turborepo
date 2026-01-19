@@ -246,7 +246,7 @@ export default function AboutUsPage() {
                 mindful munch.
               </p>
               <Link
-                href="/category/Cookies"
+                href="/Cookies"
                 className="text-[12px] text-[#0C5273] no-underline font-medium flex items-center gap-2 lg:hover:underline"
               >
                 Explore <GoArrowRight />
@@ -275,7 +275,7 @@ export default function AboutUsPage() {
                 <br /> junk.
               </p>
               <Link
-                href="/category/Munchies"
+                href="/Munchies"
                 className="text-[12px] text-[#0C5273] no-underline font-medium flex items-center gap-2 lg:hover:underline"
               >
                 Explore <GoArrowRight />
@@ -335,7 +335,7 @@ export default function AboutUsPage() {
                 <br /> mindful munch.
               </p>
               <Link
-                href="/category/Cookies"
+                href="/Cookies"
                 className="text-xl text-[#0C5273] font-medium no-underline flex items-center gap-2 lg:hover:underline"
               >
                 Explore <GoArrowRight />
@@ -365,7 +365,7 @@ export default function AboutUsPage() {
                 junk.
               </p>
               <Link
-                href="/category/Munchies"
+                href="/Munchies"
                 className="text-xl text-[#0C5273] font-medium no-underline flex items-center gap-2 lg:hover:underline"
               >
                 Explore <GoArrowRight />

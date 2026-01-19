@@ -1,4 +1,4 @@
-import Script from 'next/script';
+import Script from "next/script";
 
 interface GoogleTagManagerProps {
   gtmId: string;
@@ -9,7 +9,8 @@ export function GoogleTagManager({ gtmId }: GoogleTagManagerProps) {
     <>
       <Script
         id="gtm-script"
-        strategy="worker"
+        // strategy="worker"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -31,7 +32,7 @@ export function GoogleTagManagerNoscript({ gtmId }: GoogleTagManagerProps) {
         src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
         height="0"
         width="0"
-        style={{ display: 'none', visibility: 'hidden' }}
+        style={{ display: "none", visibility: "hidden" }}
       />
     </noscript>
   );

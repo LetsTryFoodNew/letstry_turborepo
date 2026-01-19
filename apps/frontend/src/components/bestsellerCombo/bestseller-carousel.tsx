@@ -17,7 +17,7 @@ export const BestsellerCombo = async () => {
             Bestselling Combos
           </h2>
           <Link 
-            href="/category/combo" 
+            href="/combo" 
             className="text-sm sm:text-xl text-[#0C5273] hover:text-blue-800 font-semibold"
           >
             See all

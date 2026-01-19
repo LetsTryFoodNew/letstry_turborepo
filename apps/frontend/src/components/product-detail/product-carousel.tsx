@@ -61,7 +61,7 @@ export function ProductCarousel({ title, products, viewAllLink }: ProductCarouse
           {products.map((product) => (
             <div key={product.id} className="flex-shrink-0 w-48">
               <article className="bg-white border border-gray-200 rounded-lg overflow-hidden h-full flex flex-col">
-                <Link href={`/product/${product.id}`} className="block">
+                <Link href={`/${product.id}`} className="block">
                   <div className="relative w-full h-40 bg-gray-50 p-4">
                     <Image
                       src={product.imageUrl}

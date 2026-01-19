@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script
+        {/* <Script
           data-partytown-config
           dangerouslySetInnerHTML={{
             __html: `
@@ -57,7 +57,7 @@ export default function RootLayout({
             `,
           }}
         />
-        <Script src="/~partytown/partytown.js" />
+        <Script src="/~partytown/partytown.js" /> */}
         {gtmId && <GoogleTagManager gtmId={gtmId} />}
       </head>
       <body

@@ -10,7 +10,7 @@ export const useCategoryNavigation = () => {
       try {
         const categoryData = await getHomeCategories(20);
         const mappedCategories = categoryData.items.map((c) => ({
-          href: `/category/${c.slug}`,
+          href: `/${c.slug}`,
           label: c.name,
         }));
         setCategories(mappedCategories);

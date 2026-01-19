@@ -58,7 +58,7 @@ export const MobileMenu = ({
                         Home
                     </Link>
                     <Link
-                        href={navigationLinks.find(link => link.label === "Combos")?.href || "/category/combo"}
+                        href={navigationLinks.find(link => link.label === "Combos")?.href || "/combo"}
                         className="text-xl font-bold text-black hover:text-yellow-600 transition-colors"
                         onClick={() => setIsOpen(false)}
                     >
