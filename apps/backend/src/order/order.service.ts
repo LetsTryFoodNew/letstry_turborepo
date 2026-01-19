@@ -242,6 +242,12 @@ export class OrderService {
   }
 
   async resolveItems(order: any): Promise<any[]> {
+    this.logger.log('Resolving Order Items', {
+      orderId: order.orderId,
+      itemCount: order.items?.length || 0,
+      hasItemNames: order.items?.[0]?.name ? true : false,
+    });
+
     if (order.items && order.items.length > 0 && order.items[0].name) {
       return order.items;
     }

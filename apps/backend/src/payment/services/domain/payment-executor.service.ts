@@ -223,6 +223,14 @@ export class PaymentExecutorService {
       this.paymentLogger.log('Constructed Order Payload', {
         step: 'PAYLOAD_CONSRUCTED',
         payload: createOrderPayload,
+        itemsDetails: createOrderPayload.items.map(item => ({
+          productId: item.productId,
+          variantId: item.variantId,
+          name: item.name,
+          sku: item.sku,
+          hasName: !!item.name,
+          hasSku: !!item.sku,
+        })),
       });
 
       const order = await this.orderService.createOrder(createOrderPayload);
