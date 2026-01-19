@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Order, OrderStatus } from './order.schema';
 import { GetAllOrdersInput } from './order.input';
 import {
@@ -51,6 +51,7 @@ export class OrderService {
   async createOrder(params: {
     identityId: string;
     paymentOrderId: string;
+    paymentOrder?: string;
     cartId: string;
     totalAmount: string;
     currency: string;
@@ -129,12 +130,23 @@ export class OrderService {
   }
 
   async resolvePayment(order: any): Promise<OrderPaymentType | null> {
-    if (!order.paymentOrderId) {
+    const paymentOrderId = order.paymentOrder || order.paymentOrderId;
+    if (!paymentOrderId) {
       return null;
     }
-    const payment = await this.paymentOrderModel
-      .findById(order.paymentOrderId)
-      .exec();
+
+    // Try finding by internal ID if it looks like one, otherwise fallback to string lookup
+    let payment;
+    if (Types.ObjectId.isValid(paymentOrderId.toString())) {
+      payment = await this.paymentOrderModel.findById(paymentOrderId).exec();
+    }
+
+    if (!payment) {
+      payment = await this.paymentOrderModel
+        .findOne({ paymentOrderId: paymentOrderId.toString() })
+        .exec();
+    }
+
     if (!payment) {
       return null;
     }

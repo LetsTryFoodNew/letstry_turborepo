@@ -185,6 +185,7 @@ export class PaymentExecutorService {
           ? paymentOrder.identityId.toString()
           : undefined,
         paymentOrderId: paymentOrder.paymentOrderId,
+        paymentOrder: paymentOrder._id.toString(),
         cartId: paymentEvent.cartId.toString(),
         totalAmount: paymentOrder.amount,
         currency: paymentOrder.currency,

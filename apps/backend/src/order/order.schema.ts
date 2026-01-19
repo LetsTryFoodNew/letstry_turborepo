@@ -29,8 +29,11 @@ export class Order extends Document {
     email?: string;
   };
 
-  @Prop({ required: true, type: Types.ObjectId, ref: 'PaymentOrder' })
-  paymentOrderId: Types.ObjectId;
+  @Prop({ required: true, type: String })
+  paymentOrderId: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'PaymentOrder' })
+  paymentOrder: Types.ObjectId;
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'Cart' })
   cartId: Types.ObjectId;

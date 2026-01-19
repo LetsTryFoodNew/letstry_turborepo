@@ -14,11 +14,12 @@ export class OrderCommandService {
     private paymentLogger: PaymentLoggerService,
     @Inject(forwardRef(() => PackingService))
     private packingService: PackingService,
-  ) {}
+  ) { }
 
   async createOrder(params: {
     identityId: string;
     paymentOrderId: string;
+    paymentOrder?: string;
     cartId: string;
     totalAmount: string;
     subtotal?: string;
@@ -46,7 +47,10 @@ export class OrderCommandService {
       identityId: params.identityId
         ? new Types.ObjectId(params.identityId)
         : undefined,
-      paymentOrderId: new Types.ObjectId(params.paymentOrderId),
+      paymentOrderId: params.paymentOrderId,
+      paymentOrder: params.paymentOrder
+        ? new Types.ObjectId(params.paymentOrder)
+        : undefined,
       cartId: new Types.ObjectId(params.cartId),
       totalAmount: params.totalAmount,
       subtotal: params.subtotal || params.totalAmount,
