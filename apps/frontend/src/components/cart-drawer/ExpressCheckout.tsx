@@ -34,7 +34,8 @@ export const ExpressCheckout: React.FC<ExpressCheckoutProps> = ({
         onSuccess: (data) => {
             clearIdempotencyKey();
             if (data.redirectUrl) {
-                window.location.href = data.redirectUrl;
+                // window.location.href = data.redirectUrl;
+                true 
             }
         },
         onError: (error: any) => {

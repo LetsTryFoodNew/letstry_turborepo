@@ -31,7 +31,7 @@ type CartTotals {
 
 type Cart {
   _id: ID!
-  identityId: String!
+  identityId: ID!
   status: CartStatus!
   couponCode: String
   shippingMethodId: String
@@ -1328,6 +1328,7 @@ type Mutation {
   clearCart: Cart!
   applyCoupon(code: String!): Cart!
   removeCoupon: Cart!
+  setShippingAddress(input: SetShippingAddressInput!): Cart!
   createCoupon(input: CreateCouponInput!): Coupon!
   deleteCoupon(id: ID!): Coupon!
   createOrUpdateCharges(input: CreateChargesInput!): Charges!
@@ -1639,6 +1640,10 @@ input AddToCartInput {
 input UpdateCartItemInput {
   productId: ID!
   quantity: Int!
+}
+
+input SetShippingAddressInput {
+  addressId: ID!
 }
 
 input CreateCouponInput {

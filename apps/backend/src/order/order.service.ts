@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Order, OrderStatus } from './order.schema';
@@ -30,6 +30,7 @@ export class OrderService {
   private readonly queryService: OrderQueryService;
   private readonly commandService: OrderCommandService;
   private readonly itemService: OrderItemService;
+  private readonly logger = new Logger(OrderService.name);
 
   constructor(
     orderRepository: OrderRepository,
@@ -170,6 +171,12 @@ export class OrderService {
   async resolveShippingAddress(
     order: any,
   ): Promise<OrderShippingAddressType | null> {
+    this.logger.log('Resolving Shipping Address', {
+      orderId: order.orderId,
+      shippingAddressId: order.shippingAddressId,
+      hasRecipientContact: !!order.recipientContact,
+    });
+
     let address: any = null;
     if (order.shippingAddressId) {
       address = await this.addressModel
@@ -191,6 +198,10 @@ export class OrderService {
     }
 
     if (order.recipientContact) {
+      this.logger.log('Using Fallback Shipping Address', {
+        orderId: order.orderId,
+        reason: 'No shippingAddressId, using recipientContact fallback',
+      });
       return {
         fullName: 'Customer',
         phone: order.recipientContact.phone || 'N/A',

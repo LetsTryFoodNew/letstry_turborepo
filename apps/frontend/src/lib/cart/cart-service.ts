@@ -1,5 +1,5 @@
 import { graphqlClient } from '@/lib/graphql/client-factory';
-import { ADD_TO_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART } from '@/lib/queries/cart';
+import { ADD_TO_CART, UPDATE_CART_ITEM, REMOVE_FROM_CART, SET_SHIPPING_ADDRESS } from '@/lib/queries/cart';
 
 export const CartService = {
   addToCart: async (productId: string, quantity: number, attributes?: Record<string, any>) => {
@@ -24,6 +24,14 @@ export const CartService = {
   removeFromCart: async (productId: string) => {
     return await graphqlClient.request(REMOVE_FROM_CART.toString(), {
       productId,
+    });
+  },
+
+  setShippingAddress: async (addressId: string) => {
+    return await graphqlClient.request(SET_SHIPPING_ADDRESS, {
+      input: {
+        addressId,
+      },
     });
   },
 };

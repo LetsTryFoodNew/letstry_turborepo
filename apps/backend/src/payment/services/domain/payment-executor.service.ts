@@ -186,6 +186,13 @@ export class PaymentExecutorService {
         itemCount: cart.items.length,
       });
 
+      this.paymentLogger.log('Cart Shipping Address Check', {
+        cartId: cart._id,
+        shippingAddressId: cart.shippingAddressId,
+        shippingMethodId: cart.shippingMethodId,
+        hasShippingAddress: !!cart.shippingAddressId,
+      });
+
       const createOrderPayload = {
         identityId: new Types.ObjectId(cart.identityId),
         paymentOrderId: paymentOrder.paymentOrderId,

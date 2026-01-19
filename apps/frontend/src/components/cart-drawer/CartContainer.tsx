@@ -157,11 +157,17 @@ export const CartContainer = () => {
     }
   };
 
-  const handleSelectAddress = (addressId: string) => {
+  const handleSelectAddress = async (addressId: string) => {
     const address = addresses.find((addr: any) => addr._id === addressId);
     if (address) {
-      setSelectedAddress(address);
-      setShowAddressModal(false);
+      try {
+        await CartService.setShippingAddress(addressId);
+        
+        setSelectedAddress(address);
+        setShowAddressModal(false);
+      } catch (error) {
+        console.error('Failed to set shipping address:', error);
+      }
     }
   };
 
