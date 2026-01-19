@@ -39,6 +39,28 @@ export class PaymentEvent extends Document {
 
   @Prop({ type: Object })
   metadata: Record<string, any>;
+
+  @Prop({ type: Object })
+  cartSnapshot: {
+    items: Array<{
+      productId: string;
+      sku: string;
+      name: string;
+      quantity: number;
+      unitPrice: number;
+      totalPrice: number;
+      mrp: number;
+      imageUrl?: string;
+    }>;
+    totals: {
+      subtotal: number;
+      discountAmount: number;
+      shippingCost: number;
+      estimatedTax: number;
+      handlingCharge: number;
+      grandTotal: number;
+    };
+  };
 }
 
 export const PaymentEventSchema = SchemaFactory.createForClass(PaymentEvent);
