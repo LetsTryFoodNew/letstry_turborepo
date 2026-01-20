@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useRouter } from "next/navigation";
 
 interface Banner {
   _id: string;
@@ -17,6 +18,8 @@ interface Banner {
   imageUrl: string;
   mobileImageUrl: string;
   position: number;
+  url: string;
+  ctaText: string;
 }
 
 interface HeroCarouselClientProps {
@@ -24,6 +27,14 @@ interface HeroCarouselClientProps {
 }
 
 export const HeroCarouselClient = ({ banners }: HeroCarouselClientProps) => {
+  const router = useRouter();
+
+  const handleBannerClick = (url: string) => {
+    if (url) {
+      router.push(url);
+    }
+  };
+
   return (
     <section className="mx-auto px-2 py-2 sm:py-4 sm:px-6 lg:px-8  md:py-6">
       <Carousel
@@ -41,7 +52,10 @@ export const HeroCarouselClient = ({ banners }: HeroCarouselClientProps) => {
         <CarouselContent>
           {banners.map((banner) => (
             <CarouselItem key={banner._id}>
-              <div className="relative w-full h-auto aspect-[16/9] overflow-hidden rounded-[10px] bg-gray-100">
+              <div 
+                className="relative w-full h-auto aspect-[16/9] overflow-hidden rounded-[10px] bg-gray-100 cursor-pointer"
+                onClick={() => handleBannerClick(banner.url)}
+              >
                 <Image
                   src={banner.mobileImageUrl}
                   alt={banner.headline}
@@ -73,7 +87,10 @@ export const HeroCarouselClient = ({ banners }: HeroCarouselClientProps) => {
         <CarouselContent>
           {banners.map((banner) => (
             <CarouselItem key={banner._id}>
-              <div className="relative w-full h-auto sm:h-[400px] lg:h-[500px] sm:aspect-[18/9] md:aspect-[21/9] overflow-hidden rounded-[10px] bg-gray-100">
+              <div 
+                className="relative w-full h-auto sm:h-[400px] lg:h-[500px] sm:aspect-[18/9] md:aspect-[21/9] overflow-hidden rounded-[10px] bg-gray-100 cursor-pointer"
+                onClick={() => handleBannerClick(banner.url)}
+              >
                 <Image
                   src={banner.imageUrl}
                   alt={banner.headline}
