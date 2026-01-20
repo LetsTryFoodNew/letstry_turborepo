@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 interface WholesomeCardProps {
   title: string;
@@ -10,6 +10,7 @@ interface WholesomeCardProps {
   img: string;
   hasRange: boolean;
   gradient: string;
+  slug: string;
 }
 
 export function WholesomeCard({
@@ -18,16 +19,17 @@ export function WholesomeCard({
   img,
   hasRange,
   gradient,
+  slug,
 }: WholesomeCardProps) {
   const content = (
     <div
       className={`group rounded-2xl overflow-hidden flex flex-col h-[220px] md:h-[280px] lg:h-[400px] w-full transition-transform duration-300 ${
-        hasRange ? 'hover:scale-105 cursor-pointer' : 'opacity-70'
+        hasRange ? "hover:scale-105 cursor-pointer" : "opacity-70"
       }`}
       style={{
         background: gradient,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {!hasRange && (
@@ -44,9 +46,9 @@ export function WholesomeCard({
             width={280}
             height={260}
             className={`transition-transform duration-300 ${
-              ['Muffins & Cakes', 'No Maida Range'].includes(title)
-                ? 'object-contain w-auto max-w-[120px] sm:max-w-[120px] md:max-w-[200px] lg:max-w-[280px]'
-                : 'w-full h-full object-contain'
+              ["Muffins & Cakes", "No Maida Range"].includes(title)
+                ? "object-contain w-auto max-w-[120px] sm:max-w-[120px] md:max-w-[200px] lg:max-w-[280px]"
+                : "w-full h-full object-contain"
             }`}
             priority={false}
             loading="lazy"
@@ -71,7 +73,7 @@ export function WholesomeCard({
 
   return (
     <Link
-      href={`/range/${encodeURIComponent(title)}`}
+      href={`/${encodeURIComponent(slug)}`}
       className="block focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-2xl"
     >
       {content}

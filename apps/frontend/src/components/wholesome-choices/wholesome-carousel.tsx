@@ -9,6 +9,7 @@ interface WholesomeItem {
   name: string;
   img: string;
   hasRange: boolean;
+  slug: string;
 }
 
 interface WholesomeCarouselProps {
@@ -64,6 +65,7 @@ export function WholesomeCarousel({ items }: WholesomeCarouselProps) {
                     name={item.name}
                     img={item.img}
                     hasRange={item.hasRange}
+                    slug={item.slug}
                     gradient={getGradient(item.title)}
                   />
                 </div>

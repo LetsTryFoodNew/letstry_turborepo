@@ -16,7 +16,7 @@ type NavbarProps = {
     isGuest: boolean;
     user: any;
   };
-  categories?: Array<{ href: string; label: string }>;
+  categories?: Array<{ href: string; label: string, favourite: boolean }>;
 };
 
 export const Navbar = ({ initialAuth, categories = [] }: NavbarProps) => {
@@ -50,8 +50,8 @@ export const Navbar = ({ initialAuth, categories = [] }: NavbarProps) => {
   const navigationLinks = useMemo(
     () => [
       { href: "/", label: "Home" },
-      { href: "#", label: "Snacks", hasDropdown: true, dropdownItems: categories },
-      { href: "/combo", label: "Combos"},
+      { href: "#", label: "Snacks", hasDropdown: true, dropdownItems: categories.filter((c)=>c.favourite===true).map((c)=>({ href: `/${c.href}`, label: c.label })) },
+      // { href: "/combo", label: "Combos"},
       // {href: "/blog", label: "Blog"},
       { href: "/about-us", label: "About us" },
     ],

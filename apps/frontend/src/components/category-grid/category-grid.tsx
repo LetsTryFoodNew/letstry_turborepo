@@ -3,7 +3,9 @@ import { CategoryCard } from './category-card';
 import type { Category } from '@/types/category.types';
 
 export const CategoryGrid = async () => {
-  const data = await getHomeCategories(20);
+  const data = await getHomeCategories(100);
+
+  console.log('Home Categories:', data);
 
   const mappedCategories: Category[] = data.items
     .filter((c) => c.favourite === true)
@@ -11,7 +13,7 @@ export const CategoryGrid = async () => {
       id: c.id,
       name: c.name,
       imageUrl: c.imageUrl || '/placeholder-image.svg',
-      href: `/category/${c.slug}`,
+      href: `/${c.slug}`,
     }));
 
   return (

@@ -25,9 +25,6 @@ export default async function Home() {
       <BestsellerCarousel />
       <WhyChooseUs />
       <HealthySnacking />
-      {/* <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-4xl font-bold">Coming soon!!!!</h1>
-      </div> */}
       <WholesomeChoices categories={wholesomeChoicesData?.children || []} />
       <JourneyVideos />
       <CustomerTestimonials />
