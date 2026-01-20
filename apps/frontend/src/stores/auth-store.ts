@@ -40,23 +40,32 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   otpProvider: null,
 
   initialize: async () => {
-    if (get().isInitialized) return;
+    if (get().isInitialized) {
+      return;
+    }
 
     try {
       set({ isLoading: true });
-      const currentUser = await getCurrentUser();
-      if (currentUser) {
-        set({
-          user: {
-            uid: currentUser.uid,
-            phoneNumber: currentUser.phoneNumber,
-            idToken: '',
+      try {
+        const { ME_QUERY } = await import('@/lib/queries/auth');
+        const data = await graphqlClient.request(ME_QUERY) as { me: any };
+
+
+        if (data.me) {
+          set({
+            user: {
+              uid: data.me._id,
+              phoneNumber: data.me.phoneNumber,
+              idToken: '',
+              isGuest: false,
+            },
+            isAuthenticated: true,
             isGuest: false,
-          },
-          isAuthenticated: true,
-          isGuest: false,
-        });
+          });
+        }
+      } catch (error) {
       }
+
       onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
         if (firebaseUser) {
           try {
@@ -75,21 +84,34 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
               });
             }
           } catch (error) {
-            console.error('Auth state change error:', error);
+            console.error('[AUTH] Firebase auth state change error:', error);
           }
         } else {
-          // Only clear if we had a user before
+
           const currentState = get();
           if (currentState.user && !currentState.isGuest) {
-            set({
-              user: null,
-              isAuthenticated: false,
-            });
+            try {
+              const { ME_QUERY } = await import('@/lib/queries/auth');
+              const data = await graphqlClient.request(ME_QUERY) as { me: any };
+
+              if (!data.me) {
+                set({
+                  user: null,
+                  isAuthenticated: false,
+                });
+              }
+            } catch (error) {
+              set({
+                user: null,
+                isAuthenticated: false,
+              });
+            }
           }
         }
       });
 
       set({ isInitialized: true });
+
     } catch (error) {
       console.error('Auth initialization error:', error);
     } finally {
@@ -211,10 +233,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         console.error('Backend logout failed:', e);
         // Continue with client cleanup even if backend fails
       }
-
-      // We don't call logoutAction() anymore as it tries to delete cookies manually
-      // which fails for HttpOnly cookies set by backend.
-      // await logoutAction(); 
 
       authService.clearRecaptcha();
 

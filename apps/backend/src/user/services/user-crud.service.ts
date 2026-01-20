@@ -25,7 +25,7 @@ export interface CreateUserData {
 export class UserCrudService {
   constructor(
     @InjectModel(Identity.name) private identityModel: Model<IdentityDocument>,
-  ) {}
+  ) { }
 
   async createUser(data: CreateUserData): Promise<User> {
     const identityId = uuidv4();
@@ -83,6 +83,25 @@ export class UserCrudService {
       .exec();
   }
 
+  async updateUser(userId: string, input: any): Promise<User> {
+    const updateData: any = {};
+    if (input.firstName !== undefined) updateData.firstName = input.firstName;
+    if (input.lastName !== undefined) updateData.lastName = input.lastName;
+    if (input.email !== undefined) updateData.email = input.email;
+    if (input.phoneNumber !== undefined) updateData.phoneNumber = input.phoneNumber;
+    if (input.dateOfBirth !== undefined) updateData.dateOfBirth = input.dateOfBirth;
+
+    const identity = await this.identityModel
+      .findByIdAndUpdate(userId, updateData, { new: true })
+      .exec();
+
+    if (!identity) {
+      throw new Error('User not found');
+    }
+
+    return this.mapToUser(identity);
+  }
+
   private mapToUser(identity: IdentityDocument): User {
     return {
       _id: identity._id.toString(),
@@ -90,6 +109,7 @@ export class UserCrudService {
       firstName: identity.firstName || '',
       lastName: identity.lastName || '',
       email: identity.email,
+      dateOfBirth: identity.dateOfBirth,
       createdAt: identity.createdAt,
       updatedAt: identity.updatedAt,
       lastLoginAt: identity.lastLoginAt,

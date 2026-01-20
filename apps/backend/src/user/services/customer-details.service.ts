@@ -79,7 +79,9 @@ export class CustomerDetailsService {
   async calculateOrderStats(
     identityIds: string[],
   ): Promise<{ totalOrders: number; totalSpent: number }> {
-    const objectIds = identityIds.map((id) => new Types.ObjectId(id));
+    const objectIds = identityIds
+      .filter((id) => Types.ObjectId.isValid(id))
+      .map((id) => new Types.ObjectId(id));
     const stats = await this.orderModel.aggregate([
       { $match: { identityId: { $in: objectIds } } },
       {

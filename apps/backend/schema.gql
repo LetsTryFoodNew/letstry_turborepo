@@ -166,6 +166,7 @@ type EnrichedCustomer {
   firstName: String
   lastName: String
   email: String
+  dateOfBirth: DateTime
   isPhoneVerified: Boolean!
   isEmailVerified: Boolean!
   firebaseUid: String
@@ -221,6 +222,7 @@ type CustomerDetails {
   firstName: String
   lastName: String
   email: String
+  dateOfBirth: DateTime
   isPhoneVerified: Boolean!
   isEmailVerified: Boolean!
   firebaseUid: String
@@ -247,6 +249,27 @@ type CustomerDetails {
   orders: JSON!
   activeCart: JSON
   addresses: [Address!]!
+}
+
+type User {
+  _id: ID!
+  phoneNumber: String!
+  firstName: String!
+  lastName: String!
+  email: String
+  dateOfBirth: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  lastLoginAt: DateTime
+  lifetimeValue: Float
+  marketingSmsOptIn: Boolean
+  signupSource: JSON
+  lastIp: String
+  role: String!
+  isPhoneVerified: Boolean!
+  firstAuthMethod: String
+  lastAuthMethod: String
+  mergedGuestIds: [String!]!
 }
 
 type Banner {
@@ -1135,6 +1158,7 @@ type Query {
   categoryChildren(parentId: ID!, pagination: PaginationInput! = {page: 1, limit: 10}, includeArchived: Boolean! = false): PaginatedCategories!
   category(id: ID!, includeArchived: Boolean! = false): Category
   categoryBySlug(slug: String!, includeArchived: Boolean! = false): Category
+  me: User
   getAllCustomers(input: GetCustomersInput!): PaginatedCustomersResponse!
   getCustomerDetails(id: ID!): CustomerDetails!
   myAddresses: [Address!]!
@@ -1315,6 +1339,7 @@ type Mutation {
   createAdmin(email: String!, password: String!): String!
   adminLogout: String!
   updateUserActivity: Boolean!
+  updateUser(input: UpdateUserInput!): User!
   createAddress(input: CreateAddressInput!): Address!
   updateAddress(id: ID!, input: UpdateAddressInput!): Address!
   deleteAddress(id: ID!): Address!
@@ -1527,6 +1552,14 @@ input CategorySeoInput {
   ogTitle: String
   ogDescription: String
   ogImage: String
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  dateOfBirth: JSON
 }
 
 input CreateAddressInput {

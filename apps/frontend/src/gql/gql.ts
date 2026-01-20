@@ -23,6 +23,7 @@ type Documents = {
     "\n  mutation CreateAddress($input: CreateAddressInput!) {\n    createAddress(input: $input) {\n      _id\n      addressType\n      formattedAddress\n      isDefault\n    }\n  }\n": typeof types.CreateAddressDocument,
     "\n  query CheckPhoneExists($phoneNumber: String!) {\n    checkPhoneExists(phoneNumber: $phoneNumber) {\n      exists\n      requiresLogin\n      message\n    }\n  }\n": typeof types.CheckPhoneExistsDocument,
     "\n  mutation AdminLogout {\n    adminLogout\n  }\n": typeof types.AdminLogoutDocument,
+    "\n  mutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n      _id\n      firstName\n      lastName\n      email\n      phoneNumber\n    }\n  }\n": typeof types.UpdateUserDocument,
     "\n  query GetActiveBanners {\n    activeBanners {\n      _id\n      name\n      headline\n      subheadline\n      description\n      imageUrl\n      mobileImageUrl\n      thumbnailUrl\n      url\n      ctaText\n      position\n      isActive\n      startDate\n      endDate\n      backgroundColor\n      textColor\n    }\n  }\n": typeof types.GetActiveBannersDocument,
     "\n  query GetMyCart {\n    myCart {\n      _id\n      status\n      couponCode\n      items {\n        productId\n        variantId\n        sku\n        name\n        quantity\n        unitPrice\n        totalPrice\n        mrp\n        imageUrl\n        attributes\n      }\n      totalsSummary {\n        subtotal\n        discountAmount\n        shippingCost\n        estimatedTax\n        handlingCharge\n        grandTotal\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetMyCartDocument,
     "\n  mutation AddToCart($input: AddToCartInput!) {\n    addToCart(input: $input) {\n      _id\n      items {\n        productId\n        name\n        quantity\n        unitPrice\n        totalPrice\n        attributes\n      }\n      totalsSummary {\n        subtotal\n        discountAmount\n        grandTotal\n      }\n    }\n  }\n": typeof types.AddToCartDocument,
@@ -53,6 +54,7 @@ const documents: Documents = {
     "\n  mutation CreateAddress($input: CreateAddressInput!) {\n    createAddress(input: $input) {\n      _id\n      addressType\n      formattedAddress\n      isDefault\n    }\n  }\n": types.CreateAddressDocument,
     "\n  query CheckPhoneExists($phoneNumber: String!) {\n    checkPhoneExists(phoneNumber: $phoneNumber) {\n      exists\n      requiresLogin\n      message\n    }\n  }\n": types.CheckPhoneExistsDocument,
     "\n  mutation AdminLogout {\n    adminLogout\n  }\n": types.AdminLogoutDocument,
+    "\n  mutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n      _id\n      firstName\n      lastName\n      email\n      phoneNumber\n    }\n  }\n": types.UpdateUserDocument,
     "\n  query GetActiveBanners {\n    activeBanners {\n      _id\n      name\n      headline\n      subheadline\n      description\n      imageUrl\n      mobileImageUrl\n      thumbnailUrl\n      url\n      ctaText\n      position\n      isActive\n      startDate\n      endDate\n      backgroundColor\n      textColor\n    }\n  }\n": types.GetActiveBannersDocument,
     "\n  query GetMyCart {\n    myCart {\n      _id\n      status\n      couponCode\n      items {\n        productId\n        variantId\n        sku\n        name\n        quantity\n        unitPrice\n        totalPrice\n        mrp\n        imageUrl\n        attributes\n      }\n      totalsSummary {\n        subtotal\n        discountAmount\n        shippingCost\n        estimatedTax\n        handlingCharge\n        grandTotal\n      }\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetMyCartDocument,
     "\n  mutation AddToCart($input: AddToCartInput!) {\n    addToCart(input: $input) {\n      _id\n      items {\n        productId\n        name\n        quantity\n        unitPrice\n        totalPrice\n        attributes\n      }\n      totalsSummary {\n        subtotal\n        discountAmount\n        grandTotal\n      }\n    }\n  }\n": types.AddToCartDocument,
@@ -107,6 +109,10 @@ export function graphql(source: "\n  query CheckPhoneExists($phoneNumber: String
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation AdminLogout {\n    adminLogout\n  }\n"): typeof import('./graphql').AdminLogoutDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n      _id\n      firstName\n      lastName\n      email\n      phoneNumber\n    }\n  }\n"): typeof import('./graphql').UpdateUserDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
