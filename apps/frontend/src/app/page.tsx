@@ -8,11 +8,15 @@ import { WholesomeChoices } from "@/components/wholesome-choices";
 import JourneyVideos from "@/components/journey-videos/journeyVideos";
 import CustomerTestimonials from "@/components/customer-testimonials/CustomerTestimonials";
 import BrandSlider from "@/components/brand-slider/BrandSlider";
+import { getWholesomeChoices } from "@/lib/category/get-wholesome-choices";
+
 
 // export const revalidate = 86400;
 
 // export const revalidate = 60;
-export default function Home() {
+export default async function Home() {
+  const wholesomeChoicesData = await getWholesomeChoices();
+
   return (
     <main>
       <HeroCarousel />
@@ -21,7 +25,10 @@ export default function Home() {
       <BestsellerCarousel />
       <WhyChooseUs />
       <HealthySnacking />
-      <WholesomeChoices />
+      {/* <div className="container mx-auto px-4 py-8 text-center">
+        <h1 className="text-4xl font-bold">Coming soon!!!!</h1>
+      </div> */}
+      <WholesomeChoices categories={wholesomeChoicesData?.children || []} />
       <JourneyVideos />
       <CustomerTestimonials />
       <BrandSlider />
