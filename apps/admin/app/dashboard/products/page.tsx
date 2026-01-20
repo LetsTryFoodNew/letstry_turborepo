@@ -99,7 +99,7 @@ function ProductsPageContent() {
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
-  const { data: fullProductData, loading: loadingFullProduct } = useProduct(editingProductId || '');
+  const { data: fullProductData, loading: loadingFullProduct } = useProduct(editingProductId || '') as { data: any; loading: boolean };
   const [productToAction, setProductToAction] = useState<{
     _id: string;
     action: "archive" | "unarchive" | "delete";
