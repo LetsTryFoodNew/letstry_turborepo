@@ -1,7 +1,26 @@
 import { WholesomeCarousel } from './wholesome-carousel';
-import { wholesomeItems } from './wholesome-data';
 
-export function WholesomeChoices() {
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  imageUrl?: string | null;
+  productCount: number;
+}
+
+interface WholesomeChoicesProps {
+  categories: Category[];
+}
+
+export function WholesomeChoices({ categories }: WholesomeChoicesProps) {
+  const items = categories.map(cat => ({
+    title: cat.name,
+    name: cat.name,
+    img: cat.imageUrl || 'https://d2tmwt8yl5m7qh.cloudfront.net/eaffe2ce9255d74a4ee81d3a20bdace9.webp',
+    slug: cat.slug,
+    hasRange: true,
+  }));
+
   return (
     <section
       className="py-8"
@@ -13,7 +32,7 @@ export function WholesomeChoices() {
       <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-black mb-6 mx-4">
         Wholesome Choices
       </h2>
-      <WholesomeCarousel items={wholesomeItems} />
+      <WholesomeCarousel items={items} />
     </section>
   );
 }

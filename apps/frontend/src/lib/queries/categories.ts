@@ -108,3 +108,21 @@ export const GET_CATEGORY_BY_SLUG = graphql(`
   }
 `);
 
+export const GET_CATEGORY_WITH_CHILDREN = graphql(`
+  query GetCategoryWithChildren($slug: String!, $includeArchived: Boolean) {
+    categoryBySlug(slug: $slug, includeArchived: $includeArchived) {
+      id
+      name
+      slug
+      imageUrl
+      children {
+        id
+        name
+        slug
+        imageUrl
+        productCount
+      }
+    }
+  }
+`);
+

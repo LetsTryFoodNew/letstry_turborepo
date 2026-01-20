@@ -259,6 +259,7 @@ export type CartTotals = {
 export type Category = {
   __typename?: 'Category';
   _id: Scalars['ID']['output'];
+  children?: Maybe<Array<Category>>;
   codeValue?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -2705,6 +2706,14 @@ export type GetCategoryBySlugQueryVariables = Exact<{
 
 export type GetCategoryBySlugQuery = { __typename?: 'Query', categoryBySlug?: { __typename?: 'Category', id: string, name: string, slug: string, description?: string | null, productCount: number, imageUrl?: string | null, seo?: { __typename?: 'CategorySeo', metaTitle?: string | null, metaDescription?: string | null, metaKeywords?: Array<string> | null, canonicalUrl?: string | null, ogTitle?: string | null, ogDescription?: string | null, ogImage?: string | null } | null, products: Array<{ __typename?: 'Product', _id: string, name: string, slug: string, tags: Array<string>, defaultVariant?: { __typename?: 'ProductVariant', thumbnailUrl: string, price: number, mrp: number, packageSize: string } | null, availableVariants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, price: number, mrp: number, packageSize: string, weight: number, weightUnit: string }> }> } | null };
 
+export type GetCategoryWithChildrenQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+  includeArchived?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
+
+
+export type GetCategoryWithChildrenQuery = { __typename?: 'Query', categoryBySlug?: { __typename?: 'Category', id: string, name: string, slug: string, imageUrl?: string | null, children?: Array<{ __typename?: 'Category', id: string, name: string, slug: string, imageUrl?: string | null, productCount: number }> | null } | null };
+
 export type GetActiveCouponsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3100,6 +3109,23 @@ export const GetCategoryBySlugDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetCategoryBySlugQuery, GetCategoryBySlugQueryVariables>;
+export const GetCategoryWithChildrenDocument = new TypedDocumentString(`
+    query GetCategoryWithChildren($slug: String!, $includeArchived: Boolean) {
+  categoryBySlug(slug: $slug, includeArchived: $includeArchived) {
+    id
+    name
+    slug
+    imageUrl
+    children {
+      id
+      name
+      slug
+      imageUrl
+      productCount
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetCategoryWithChildrenQuery, GetCategoryWithChildrenQueryVariables>;
 export const GetActiveCouponsDocument = new TypedDocumentString(`
     query GetActiveCoupons {
   activeCoupons {
