@@ -19,6 +19,9 @@ export class User {
   @Field({ nullable: true })
   email?: string;
 
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  dateOfBirth?: Date;
+
   @Field(() => GraphQLISODateTime)
   createdAt: Date;
 

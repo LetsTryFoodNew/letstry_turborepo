@@ -8,8 +8,8 @@ const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 30;
 export async function setAuthCookie(token: string, maxAge: number = TOKEN_MAX_AGE) {
   const cookieStore = await cookies();
   const domain = process.env.NEXT_PUBLIC_COOKIE_DOMAIN;
-  
-  cookieStore.set("auth_token", token, {
+
+  cookieStore.set("access_token", token, {
     httpOnly: false, // Changed to false so client can read it for GraphQL headers
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax", // Changed to lax for better cross-site behavior
@@ -57,7 +57,7 @@ export async function setGuestCookie() {
 
 export async function getAuthCookie() {
   const cookieStore = await cookies();
-  return cookieStore.get("auth_token")?.value;
+  return cookieStore.get("access_token")?.value;
 }
 
 export async function getRefreshCookie() {
@@ -78,7 +78,7 @@ export async function isGuestMode() {
 
 export async function clearAuthCookies() {
   const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
+  cookieStore.delete("access_token");
   cookieStore.delete("refresh_token");
   cookieStore.delete("user_data");
   cookieStore.delete("guest");

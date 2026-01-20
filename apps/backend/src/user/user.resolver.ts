@@ -1,8 +1,9 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GetCustomersInput } from './user.input';
+import { GetCustomersInput, UpdateUserInput } from './user.input';
 import { PaginatedCustomersResponse, CustomerDetails } from './user.graphql';
+import { User } from './user.schema';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../common/enums/role.enum';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -11,7 +12,22 @@ import { OptionalUser } from '../common/decorators/optional-user.decorator';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
+
+  @Query(() => User, { nullable: true })
+  @Roles(Role.USER)
+  @UseGuards(DualAuthGuard, RolesGuard)
+  async me(@OptionalUser() user: any): Promise<any> {
+    if (!user?._id) {
+      return null;
+    }
+
+    if (user.isGuest || user.role === Role.GUEST) {
+      return null;
+    }
+
+    return this.userService.findById(user._id);
+  }
 
   @Query(() => PaginatedCustomersResponse)
   @Roles(Role.ADMIN)
@@ -44,5 +60,23 @@ export class UserResolver {
     }
 
     return this.userService.updateUserActivity(user._id);
+  }
+
+  @Mutation(() => User)
+  @Roles(Role.USER)
+  @UseGuards(DualAuthGuard, RolesGuard)
+  async updateUser(
+    @Args('input') input: UpdateUserInput,
+    @OptionalUser() user: any,
+  ): Promise<any> {
+    if (!user?._id) {
+      throw new Error('User identification required');
+    }
+
+    if (user.isGuest || user.role === Role.GUEST) {
+      throw new Error('Guest users should use updateGuest mutation');
+    }
+
+    return this.userService.updateUser(user._id, input);
   }
 }

@@ -84,4 +84,8 @@ export class UserService {
   async updateUserActivity(userId: string): Promise<boolean> {
     return this.userActivityService.updateUserActivity(userId);
   }
+
+  async updateUser(userId: string, input: any): Promise<User> {
+    return this.userCrudService.updateUser(userId, input);
+  }
 }

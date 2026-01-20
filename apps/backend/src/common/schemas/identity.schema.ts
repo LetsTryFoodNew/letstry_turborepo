@@ -63,6 +63,10 @@ export class Identity {
   @Field({ nullable: true })
   email?: string;
 
+  @Prop({ type: Date })
+  @Field(() => GraphQLISODateTime, { nullable: true })
+  dateOfBirth?: Date;
+
   @Prop({ default: false })
   @Field()
   isPhoneVerified: boolean;

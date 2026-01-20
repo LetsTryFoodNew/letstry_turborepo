@@ -860,6 +860,7 @@ export type Mutation = {
   updateProductVariant: Product;
   updateProductVariantStock: Product;
   updateRedirect: RedirectType;
+  updateUser: User;
   updateUserActivity: Scalars['Boolean']['output'];
   uploadEvidence: PackingOrder;
   verifyOtpAndLogin: Scalars['String']['output'];
@@ -1220,6 +1221,11 @@ export type MutationUpdateProductVariantStockArgs = {
 export type MutationUpdateRedirectArgs = {
   id: Scalars['String']['input'];
   input: UpdateRedirectInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 
@@ -2587,11 +2593,39 @@ export type UpdateRedirectInput = {
   toPath?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateUserInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UploadEvidenceInput = {
   actualBoxCode?: InputMaybe<Scalars['String']['input']>;
   packingOrderId: Scalars['String']['input'];
   postPackImages?: InputMaybe<Array<Scalars['String']['input']>>;
   prePackImages?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['ID']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  firstAuthMethod?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  isPhoneVerified: Scalars['Boolean']['output'];
+  lastAuthMethod?: Maybe<Scalars['String']['output']>;
+  lastIp?: Maybe<Scalars['String']['output']>;
+  lastLoginAt?: Maybe<Scalars['DateTime']['output']>;
+  lastName: Scalars['String']['output'];
+  lifetimeValue?: Maybe<Scalars['Float']['output']>;
+  marketingSmsOptIn?: Maybe<Scalars['Boolean']['output']>;
+  mergedGuestIds: Array<Scalars['String']['output']>;
+  phoneNumber: Scalars['String']['output'];
+  role: Scalars['String']['output'];
+  signupSource?: Maybe<Scalars['JSON']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type GetAllProductsForSitemapQueryVariables = Exact<{ [key: string]: never; }>;
@@ -2644,6 +2678,13 @@ export type AdminLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type AdminLogoutMutation = { __typename?: 'Mutation', adminLogout: string };
 
+export type UpdateUserMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', _id: string, firstName: string, lastName: string, email?: string | null, phoneNumber: string } };
+
 export type GetActiveBannersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2652,7 +2693,7 @@ export type GetActiveBannersQuery = { __typename?: 'Query', activeBanners: Array
 export type GetMyCartQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMyCartQuery = { __typename?: 'Query', myCart?: { __typename?: 'Cart', _id: string, status: CartStatus, couponCode?: string | null, createdAt: any, updatedAt: any, items: Array<{ __typename?: 'CartItem', productId: string, sku: string, name: string, quantity: number, unitPrice: number, totalPrice: number, mrp: number, imageUrl?: string | null, attributes?: any | null }>, totalsSummary: { __typename?: 'CartTotals', subtotal: number, discountAmount: number, shippingCost: number, estimatedTax: number, handlingCharge: number, grandTotal: number } } | null };
+export type GetMyCartQuery = { __typename?: 'Query', myCart?: { __typename?: 'Cart', _id: string, status: CartStatus, couponCode?: string | null, createdAt: any, updatedAt: any, items: Array<{ __typename?: 'CartItem', productId: string, variantId?: string | null, sku: string, name: string, quantity: number, unitPrice: number, totalPrice: number, mrp: number, imageUrl?: string | null, attributes?: any | null }>, totalsSummary: { __typename?: 'CartTotals', subtotal: number, discountAmount: number, shippingCost: number, estimatedTax: number, handlingCharge: number, grandTotal: number } } | null };
 
 export type AddToCartMutationVariables = Exact<{
   input: AddToCartInput;
@@ -2894,6 +2935,17 @@ export const AdminLogoutDocument = new TypedDocumentString(`
   adminLogout
 }
     `) as unknown as TypedDocumentString<AdminLogoutMutation, AdminLogoutMutationVariables>;
+export const UpdateUserDocument = new TypedDocumentString(`
+    mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    _id
+    firstName
+    lastName
+    email
+    phoneNumber
+  }
+}
+    `) as unknown as TypedDocumentString<UpdateUserMutation, UpdateUserMutationVariables>;
 export const GetActiveBannersDocument = new TypedDocumentString(`
     query GetActiveBanners {
   activeBanners {
@@ -2924,6 +2976,7 @@ export const GetMyCartDocument = new TypedDocumentString(`
     couponCode
     items {
       productId
+      variantId
       sku
       name
       quantity
