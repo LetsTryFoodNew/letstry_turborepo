@@ -22,7 +22,7 @@ export const BestsellerCarousel = async () => {
       <div className="container mx-auto px-4">
         <header className="py-8">
           <h2
-            className="text-4xl md:text-9xl text-center text-amber-100"
+            className="text-4xl md:text-8xl text-center text-amber-100"
             style={{ fontFamily: "var(--font-agbalumo)" }}
           >
             Bestseller

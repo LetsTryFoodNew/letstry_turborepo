@@ -40,19 +40,19 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
   const queryClient = useQueryClient();
   const { trackAddToCart } = useAnalytics();
   const { data: cartData } = useCart();
-  
+
   const cart = cartData?.myCart;
   const cartItem = cart?.items?.find((item: any) => item.productId === product._id);
   const quantityInCart = cartItem?.quantity || 0;
-  
+
 
   const handleAddToCart = async () => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
     try {
       await CartService.addToCart(product._id, 1);
-      
+
       trackAddToCart({
         id: product._id,
         name: product.name,
@@ -60,7 +60,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
         quantity: 1,
         variant: variant.packageSize,
       });
-      
+
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       toast.success(`${product.name} added to cart`);
     } catch (error) {
@@ -72,7 +72,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
 
   const handleIncrement = async () => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
     try {
       await CartService.updateCartItem(product._id, quantityInCart + 1);
@@ -86,7 +86,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
 
   const handleDecrement = async () => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
     try {
       if (quantityInCart > 1) {
@@ -105,10 +105,14 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
   return (
     <article className="relative flex flex-col rounded-xl bg-[#FCEFC0] p-3 sm:p-4 md:p-5 lg:p-6 h-full">
       {hasDiscount && (
-        <span className="absolute top-0 left-2 sm:left-4 z-10 bg-blue-600 text-white text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-b-md">
-          {variant.discountPercent}%
-          <br />
-          OFF
+        <span
+          className="absolute top-0 left-4 z-10 bg-blue-600 text-white font-bold flex flex-col items-center justify-center w-12 pt-2 pb-4 shadow-sm leading-none"
+          style={{
+            clipPath: 'polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)'
+          }}
+        >
+          <span className="text-xl tracking-tighter">{variant.discountPercent}%</span>
+          <span className="text-[10px] mt-0.5">OFF</span>
         </span>
       )}
       <Link href={`/${product.slug}`}>
