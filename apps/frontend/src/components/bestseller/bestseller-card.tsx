@@ -149,14 +149,14 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
           }}
           onMouseEnter={(e) => (e.currentTarget.style.backgroundPosition = '150% 100%')}
           onMouseLeave={(e) => (e.currentTarget.style.backgroundPosition = '0 -100%')}
-          className="mt-2 sm:mt-3 md:mt-4 w-full border-2 border-[#0C5273] text-[#0C5273] text-xs sm:text-sm md:text-base font-semibold py-1.5 sm:py-2 rounded-lg hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-2 cursor-pointer sm:mt-3 md:mt-4 w-full bg-[#0C5273] border-2 border-[#0C5273] text-white text-xs sm:text-sm md:text-base font-semibold py-1.5 sm:py-2 rounded-lg hover:text-[#9ecce4] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleAddToCart}
           disabled={isLoading}
         >
           {isLoading ? 'Adding...' : 'Add to cart'}
         </button>
       ) : (
-        <div className="mt-2 sm:mt-3 md:mt-4 w-full flex items-center justify-between border-2 border-[#0C5273] rounded-lg overflow-hidden">
+        <div className="mt-2 sm:mt-3 md:mt-4 w-full flex items-center justify-between border-2 border-[#0C5273] rounded-sm overflow-hidden">
           <button
             className="flex-1 py-1.5 sm:py-2 text-[#0C5273] font-bold text-lg sm:text-xl hover:bg-[#0C5273] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleDecrement}
@@ -168,7 +168,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
             {isLoading ? '...' : quantityInCart}
           </span>
           <button
-            className="flex-1 py-1.5 sm:py-2 text-[#0C5273] font-bold text-lg sm:text-xl hover:bg-[#0C5273] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-1.5 sm:py-2 text-[#0C5273] font-bold text-lg sm:text-xl hover:bg-[#0C5273]  hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleIncrement}
             disabled={isLoading}
           >
