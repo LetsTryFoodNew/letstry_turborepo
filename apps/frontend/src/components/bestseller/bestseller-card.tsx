@@ -25,6 +25,7 @@ type BestsellerProduct = {
   name: string;
   slug: string;
   defaultVariant: ProductVariant | null;
+  categorySlug?: string;
 };
 
 type BestsellerCardProps = {
@@ -106,16 +107,16 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
     <article className="relative flex flex-col rounded-xl bg-[#FCEFC0] p-3 sm:p-4 md:p-5 lg:p-6 h-full">
       {hasDiscount && (
         <span
-          className="absolute top-0 left-4 z-10 bg-blue-600 text-white font-bold flex flex-col items-center justify-center w-12 pt-2 pb-4 shadow-sm leading-none"
+          className="absolute top-0 left-2 sm:left-3 md:left-4 z-10 bg-blue-600 text-white font-bold flex flex-col items-center justify-center w-8 sm:w-10 md:w-12 pt-1 pb-3 sm:pt-2 sm:pb-4 shadow-sm leading-none"
           style={{
             clipPath: 'polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)'
           }}
         >
-          <span className="text-xl tracking-tighter">{variant.discountPercent}%</span>
-          <span className="text-[10px] mt-0.5">OFF</span>
+          <span className="text-sm sm:text-lg md:text-xl tracking-tighter">{variant.discountPercent}%</span>
+          <span className="text-[8px] sm:text-[10px] mt-0.5">OFF</span>
         </span>
       )}
-      <Link href={`/${product.slug}`}>
+      <Link href={`/best-selling/${product.slug}`}>
         <figure className="flex items-center justify-center h-32 sm:h-40 md:h-44 lg:h-48 mb-2 sm:mb-3 md:mb-4">
           <Image
             src={variant.thumbnailUrl}

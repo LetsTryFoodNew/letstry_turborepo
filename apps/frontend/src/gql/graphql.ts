@@ -1956,6 +1956,7 @@ export type Query = {
   redirects: PaginatedRedirects;
   reverseGeocode: GoogleMapsAddressOutput;
   rootCategories: PaginatedCategories;
+  searchCategories: PaginatedCategories;
   searchPlaces: Array<PlacePredictionOutput>;
   searchProducts: PaginatedProducts;
 };
@@ -2208,6 +2209,13 @@ export type QueryReverseGeocodeArgs = {
 export type QueryRootCategoriesArgs = {
   includeArchived?: Scalars['Boolean']['input'];
   pagination?: PaginationInput;
+};
+
+
+export type QuerySearchCategoriesArgs = {
+  includeArchived?: Scalars['Boolean']['input'];
+  pagination?: PaginationInput;
+  searchTerm: Scalars['String']['input'];
 };
 
 
@@ -2573,7 +2581,7 @@ export type UpdateProductInput = {
 };
 
 export type UpdateProductVariantInput = {
-  _id: Scalars['String']['input'];
+  _id?: InputMaybe<Scalars['String']['input']>;
   availabilityStatus?: InputMaybe<Scalars['String']['input']>;
   breadth?: InputMaybe<Scalars['Float']['input']>;
   discountPercent?: InputMaybe<Scalars['Float']['input']>;
@@ -2639,6 +2647,14 @@ export type User = {
   signupSource?: Maybe<Scalars['JSON']['output']>;
   updatedAt: Scalars['DateTime']['output'];
 };
+
+export type SearchCategoriesQueryVariables = Exact<{
+  searchTerm: Scalars['String']['input'];
+  pagination?: InputMaybe<PaginationInput>;
+}>;
+
+
+export type SearchCategoriesQuery = { __typename?: 'Query', searchCategories: { __typename?: 'PaginatedCategories', items: Array<{ __typename?: 'Category', _id: string, id: string, name: string, slug: string, imageUrl?: string | null, productCount: number, isArchived: boolean }>, meta: { __typename?: 'PaginationMeta', totalCount: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPreviousPage: boolean } } };
 
 export type GetAllProductsForSitemapQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2874,6 +2890,29 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const SearchCategoriesDocument = new TypedDocumentString(`
+    query SearchCategories($searchTerm: String!, $pagination: PaginationInput) {
+  searchCategories(searchTerm: $searchTerm, pagination: $pagination) {
+    items {
+      _id
+      id
+      name
+      slug
+      imageUrl
+      productCount
+      isArchived
+    }
+    meta {
+      totalCount
+      page
+      limit
+      totalPages
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<SearchCategoriesQuery, SearchCategoriesQueryVariables>;
 export const GetAllProductsForSitemapDocument = new TypedDocumentString(`
     query GetAllProductsForSitemap {
   products(pagination: {page: 1, limit: 1000}) {
