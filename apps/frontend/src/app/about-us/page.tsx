@@ -217,7 +217,7 @@ export default function AboutUsPage() {
   ];
 
   const handleClick = () => {
-    window.location.href = "/snacks";
+    window.location.href = "/";
   };
 
   return (

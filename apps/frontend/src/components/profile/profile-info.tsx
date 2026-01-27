@@ -123,6 +123,7 @@ export const ProfileInfo = () => {
       phoneNumber: data.phoneNumber,
       dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
     });
+    window.location.reload();
   };
 
   if (isLoading) {
