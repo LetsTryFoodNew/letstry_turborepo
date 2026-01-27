@@ -111,7 +111,7 @@ export const CategoryProductCard: React.FC<CategoryProductCardProps> = ({
       <div className="px-4 pb-4 mt-2">
         {quantityInCart === 0 ? (
           <button
-            className="w-full border-2 border-brand-hover text-brand-hover text-sm font-semibold py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full border-2 border-brand-hover text-brand-hover text-sm font-semibold py-2 rounded-md hover:bg-brand-hover hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleAddToCart}
             disabled={isLoading}
           >

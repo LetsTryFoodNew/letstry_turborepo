@@ -37,9 +37,12 @@ export const CategoryProductSection: React.FC<CategoryProductSectionProps> = ({
         </h2>
         <Link
           href={`/category/${categorySlug}`}
-          className="text-sm sm:text-base text-brand-hover hover:underline font-medium"
+          className="text-sm sm:text-base text-brand-hover font-medium flex items-center gap-1"
         >
-          View All →
+          <span className="hover:underline">View All</span>{" "}
+          <span className="flex justify-center items-center mb-2 font-extrabold">
+            →
+          </span>
         </Link>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
