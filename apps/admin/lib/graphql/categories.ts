@@ -252,3 +252,41 @@ export const UNARCHIVE_CATEGORY = gql`
     }
   }
 `
+export const SEARCH_CATEGORIES = gql`
+  query SearchCategories($searchTerm: String!, $pagination: PaginationInput, $includeArchived: Boolean) {
+  searchCategories(searchTerm: $searchTerm, pagination: $pagination, includeArchived: $includeArchived) {
+      items {
+      _id
+      name
+      slug
+      description
+      parentId
+      imageUrl
+      codeValue
+      inCodeSet
+      productCount
+      favourite
+      isArchived
+        seo {
+        metaTitle
+        metaDescription
+        metaKeywords
+        canonicalUrl
+        ogTitle
+        ogDescription
+        ogImage
+      }
+      createdAt
+      updatedAt
+    }
+      meta {
+      totalCount
+      page
+      limit
+      totalPages
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+`

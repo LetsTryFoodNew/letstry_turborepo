@@ -1161,6 +1161,7 @@ type Query {
   categories(pagination: PaginationInput! = {page: 1, limit: 10}, includeArchived: Boolean! = false): PaginatedCategories!
   rootCategories(pagination: PaginationInput! = {page: 1, limit: 10}, includeArchived: Boolean! = false): PaginatedCategories!
   categoryChildren(parentId: ID!, pagination: PaginationInput! = {page: 1, limit: 10}, includeArchived: Boolean! = false): PaginatedCategories!
+  searchCategories(searchTerm: String!, pagination: PaginationInput! = {page: 1, limit: 10}, includeArchived: Boolean! = false): PaginatedCategories!
   category(id: ID!, includeArchived: Boolean! = false): Category
   categoryBySlug(slug: String!, includeArchived: Boolean! = false): Category
   me: User

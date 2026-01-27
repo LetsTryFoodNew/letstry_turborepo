@@ -4,7 +4,9 @@ import { Suspense, useCallback, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeft, Search } from 'lucide-react';
 import { useSearchProducts } from '@/lib/search/use-search';
+import { useSearchCategories } from '@/lib/category/use-search-categories';
 import { ProductCard, type Product } from '@/components/category-page/ProductCard';
+import { CategoryCard } from '@/components/category-grid/category-card';
 import { useDebounce } from '@/hooks/use-debounce';
 
 const POPULAR_SEARCHES = ['Bhujia', 'Murukku'];
@@ -56,6 +58,7 @@ function SearchContent() {
   const [isScrolled, setIsScrolled] = useState(false);
   const debouncedSearchTerm = useDebounce(searchInput, 500);
   const { data, isLoading } = useSearchProducts(debouncedSearchTerm);
+  const { data: categoryData, isLoading: isCategoryLoading } = useSearchCategories(debouncedSearchTerm);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,9 +79,8 @@ function SearchContent() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className={`md:hidden sticky top-0 z-10 border-b transition-all duration-200 ${
-        isScrolled ? 'bg-gray-50/95 backdrop-blur-sm border-gray-200 shadow-sm' : 'bg-white border-gray-100'
-      }`}>
+      <div className={`md:hidden sticky top-0 z-10 border-b transition-all duration-200 ${isScrolled ? 'bg-gray-50/95 backdrop-blur-sm border-gray-200 shadow-sm' : 'bg-white border-gray-100'
+        }`}>
         <div className="flex items-center gap-3 p-4">
           <button onClick={() => router.back()} className="p-1" aria-label="Go back">
             <ChevronLeft size={24} className="text-black" />
@@ -127,11 +129,37 @@ function SearchContent() {
           </div>
         )}
 
-        {!isLoading && products.length === 0 && hasSearched && (
+        {!isLoading && products.length === 0 && !isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) === 0 && hasSearched && (
           <div className="text-center py-12">
             <p className="text-lg text-gray-600">
-              No products found for &quot;{debouncedSearchTerm}&quot;
+              No results found for &quot;{debouncedSearchTerm}&quot;
             </p>
+          </div>
+        )}
+
+        {!isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) > 0 && (
+          <div className="mb-12">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-black">
+                Categories
+              </h3>
+              <p className="text-sm md:text-base text-gray-600">
+                {categoryData?.searchCategories?.meta?.totalCount || 0} {categoryData?.searchCategories?.meta?.totalCount === 1 ? 'category' : 'categories'}
+              </p>
+            </div>
+            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              {categoryData?.searchCategories?.items?.map((category: any) => (
+                <CategoryCard
+                  key={category._id}
+                  category={{
+                    id: category._id,
+                    name: category.name,
+                    imageUrl: category.imageUrl || '/placeholder-image.svg',
+                    href: `/${category.slug}`,
+                  }}
+                />
+              ))}
+            </div>
           </div>
         )}
 

@@ -1,5 +1,12 @@
-import { useState } from "react"
-import { useCategories, useCreateCategory, useUpdateCategory, useArchiveCategory, useUnarchiveCategory } from "@/lib/categories/useCategories"
+import { useState, useEffect } from "react"
+import {
+  useCategories,
+  useCreateCategory,
+  useUpdateCategory,
+  useArchiveCategory,
+  useUnarchiveCategory,
+  useSearchCategories
+} from "@/lib/categories/useCategories"
 
 export function useCategoryPage() {
   // UI State
@@ -14,24 +21,52 @@ export function useCategoryPage() {
   const [categoryToArchive, setCategoryToArchive] = useState<{ _id: string; isArchived: boolean } | null>(null)
   const [imagePreview, setImagePreview] = useState<{ url: string; title: string } | null>(null)
   const [includeArchived, setIncludeArchived] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("")
+
+  // Update debounced search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm)
+      setCurrentPage(1)
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [searchTerm])
 
   // API Hooks
-  const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useCategories({ page: currentPage, limit: pageSize }, includeArchived)
+  const allCategoriesQuery = useCategories({ page: currentPage, limit: pageSize }, includeArchived)
+  const searchCategoriesQuery = useSearchCategories(debouncedSearchTerm, { page: currentPage, limit: pageSize }, includeArchived)
+
+  const categoriesQuery = debouncedSearchTerm ? searchCategoriesQuery : allCategoriesQuery
+  const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = categoriesQuery as { data: any, loading: boolean, error: any }
+
   const { mutate: createCategory, loading: createLoading } = useCreateCategory()
   const { mutate: updateCategory, loading: updateLoading } = useUpdateCategory()
   const { mutate: archiveCategory, loading: archiveLoading } = useArchiveCategory()
   const { mutate: unarchiveCategory, loading: unarchiveLoading } = useUnarchiveCategory()
 
   // Derived Data
-  const categories = (categoriesData as any)?.categories?.items || []
-  const meta = (categoriesData as any)?.categories?.meta || {
-    totalCount: 0,
-    page: 1,
-    limit: pageSize,
-    totalPages: 1,
-    hasNextPage: false,
-    hasPreviousPage: false
-  }
+  const categories = debouncedSearchTerm
+    ? (categoriesData as any)?.searchCategories?.items || []
+    : (categoriesData as any)?.categories?.items || []
+
+  const meta = debouncedSearchTerm
+    ? (categoriesData as any)?.searchCategories?.meta || {
+      totalCount: 0,
+      page: 1,
+      limit: pageSize,
+      totalPages: 1,
+      hasNextPage: false,
+      hasPreviousPage: false
+    }
+    : (categoriesData as any)?.categories?.meta || {
+      totalCount: 0,
+      page: 1,
+      limit: pageSize,
+      totalPages: 1,
+      hasNextPage: false,
+      hasPreviousPage: false
+    }
 
   // Handlers
   const handleColumnToggle = (columnKey: string) => {
@@ -119,6 +154,7 @@ export function useCategoryPage() {
       categoryToArchive,
       imagePreview,
       includeArchived,
+      searchTerm,
       categories,
       meta,
       categoriesLoading,
@@ -131,6 +167,7 @@ export function useCategoryPage() {
     actions: {
       setSelectedColumns,
       setIncludeArchived,
+      setSearchTerm,
       setIsDialogOpen,
       setDeleteAlertOpen,
       setImagePreview,

@@ -1,8 +1,10 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Search } from "lucide-react"
 import { ColumnSelector, ColumnDefinition } from "../components/column-selector"
 import { ImagePreviewDialog } from "../components/image-preview-dialog"
 import { useCategoryPage } from "@/hooks/useCategoryPage"
@@ -34,6 +36,16 @@ export default function CategoriesPage() {
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
         <div className="flex items-center space-x-2">
+          <div className="relative w-64 md:w-80">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search categories..."
+              className="pl-8"
+              value={state.searchTerm}
+              onChange={(e) => actions.setSearchTerm(e.target.value)}
+            />
+          </div>
           <div className="flex items-center space-x-2">
             <Checkbox
               id="include-archived"
@@ -55,8 +67,8 @@ export default function CategoriesPage() {
               <DialogHeader>
                 <DialogTitle>{state.editingCategory ? 'Edit Category' : 'Add New Category'}</DialogTitle>
               </DialogHeader>
-              <CategoryForm 
-                onClose={actions.handleCloseDialog} 
+              <CategoryForm
+                onClose={actions.handleCloseDialog}
                 initialData={state.editingCategory}
                 createCategory={actions.createCategory}
                 updateCategory={actions.updateCategory}

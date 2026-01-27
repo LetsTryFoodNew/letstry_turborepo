@@ -101,6 +101,30 @@ export class CategoryResolver {
     };
   }
 
+  @Query(() => PaginatedCategories, { name: 'searchCategories' })
+  @Public()
+  async searchCategories(
+    @Args('searchTerm') searchTerm: string,
+    @Args('pagination', {
+      type: () => PaginationInput,
+      defaultValue: { page: 1, limit: 10 },
+    })
+    pagination: PaginationInput,
+    @Args('includeArchived', { type: () => Boolean, defaultValue: false })
+    includeArchived: boolean,
+  ): Promise<PaginatedCategories> {
+    const result = await this.categoryService.searchCategoriesPaginated(
+      searchTerm,
+      pagination.page,
+      pagination.limit,
+      includeArchived,
+    );
+    return {
+      items: result.items as any,
+      meta: result.meta,
+    };
+  }
+
   @Query(() => Category, { name: 'category', nullable: true })
   @Public()
   async getCategory(
@@ -213,7 +237,7 @@ export class CategoryResolver {
       if (seoFromCollection) return seoFromCollection;
       return null;
     }
-    
+
     return {
       _id: category._id,
       categoryId: category._id,

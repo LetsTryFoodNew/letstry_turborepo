@@ -8,7 +8,8 @@ import {
   CREATE_CATEGORY,
   UPDATE_CATEGORY,
   ARCHIVE_CATEGORY,
-  UNARCHIVE_CATEGORY
+  UNARCHIVE_CATEGORY,
+  SEARCH_CATEGORIES
 } from '@/lib/graphql/categories'
 
 export interface Category {
@@ -159,4 +160,12 @@ export const useUnarchiveCategory = () => {
   })
 
   return { mutate, loading, error }
+}
+
+export const useSearchCategories = (searchTerm: string, pagination: PaginationInput = { page: 1, limit: 10 }, includeArchived: boolean = false) => {
+  return useQuery(SEARCH_CATEGORIES, {
+    variables: { searchTerm, pagination, includeArchived },
+    fetchPolicy: 'cache-and-network',
+    skip: !searchTerm.trim()
+  })
 }

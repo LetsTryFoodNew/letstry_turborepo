@@ -53,6 +53,18 @@ export class CategoryQueryBuilder {
     return this;
   }
 
+  withSearch(searchTerm: string): this {
+    if (!searchTerm) return this;
+
+    const regex = new RegExp(searchTerm, 'i');
+    this.filter.$or = [
+      { name: regex },
+      { description: regex },
+    ];
+
+    return this;
+  }
+
   build(): any {
     return this.filter;
   }
@@ -66,7 +78,7 @@ export class CategoryCacheDecorator {
     private readonly cacheService: CacheService,
     private readonly cacheKeyFactory: CacheKeyFactory,
     private readonly ttl: number = CATEGORY_CACHE_TTL,
-  ) {}
+  ) { }
 
   async withCache<T>(
     versionKey: string,
@@ -147,7 +159,7 @@ export class PaginationHelper {
 // 5. CATEGORY REPOSITORY (Data Access Layer)
 // ============================================================================
 export class CategoryRepository {
-  constructor(private readonly categoryModel: Model<CategoryDocument>) {}
+  constructor(private readonly categoryModel: Model<CategoryDocument>) { }
 
   async countDocuments(filter: any): Promise<number> {
     return this.categoryModel.countDocuments(filter).exec();
@@ -208,7 +220,7 @@ export class CategoryQueryService {
     private readonly repository: CategoryRepository,
     private readonly cacheDecorator: CategoryCacheDecorator,
     private readonly cacheKeyFactory: CacheKeyFactory,
-  ) {}
+  ) { }
 
   async findAll(includeArchived: boolean): Promise<Category[]> {
     const filter = new CategoryQueryBuilder()
@@ -386,6 +398,28 @@ export class CategoryQueryService {
     );
   }
 
+  async searchCategoriesPaginated(
+    searchTerm: string,
+    page: number,
+    limit: number,
+    includeArchived: boolean,
+  ): Promise<PaginationResult<Category>> {
+    const filter = new CategoryQueryBuilder()
+      .withSearch(searchTerm)
+      .withArchived(includeArchived)
+      .build();
+
+    return this.executePaginatedQuery(
+      filter,
+      page,
+      limit,
+      includeArchived,
+      this.cacheKeyFactory.getCategoryListVersionKey(),
+      (version) =>
+        `search_categories:${searchTerm}:${page}:${limit}:${includeArchived}:${version}`,
+    );
+  }
+
   private async executePaginatedQuery(
     filter: any,
     page: number,
@@ -435,7 +469,7 @@ export class CategoryCommandService {
     private readonly slugService: SlugService,
     private readonly cacheInvalidator: CacheInvalidatorService,
     private readonly productModel?: Model<any>,
-  ) {}
+  ) { }
 
   async create(input: CreateCategoryInput): Promise<Category> {
     const slug = await this.resolveSlug(input.name, input.slug);
@@ -814,6 +848,20 @@ export class CategoryService {
     includeArchived = false,
   ): Promise<PaginationResult<Category>> {
     return this.queryService.findRootCategoriesPaginated(
+      page,
+      limit,
+      includeArchived,
+    );
+  }
+
+  async searchCategoriesPaginated(
+    searchTerm: string,
+    page: number = DEFAULT_PAGE,
+    limit: number = DEFAULT_LIMIT,
+    includeArchived = false,
+  ): Promise<PaginationResult<Category>> {
+    return this.queryService.searchCategoriesPaginated(
+      searchTerm,
       page,
       limit,
       includeArchived,
