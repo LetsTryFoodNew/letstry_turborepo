@@ -58,7 +58,7 @@ function SearchContent() {
   const [isScrolled, setIsScrolled] = useState(false);
   const debouncedSearchTerm = useDebounce(searchInput, 500);
   const { data, isLoading } = useSearchProducts(debouncedSearchTerm);
-  const { data: categoryData, isLoading: isCategoryLoading } = useSearchCategories(debouncedSearchTerm);
+  // const { data: categoryData, isLoading: isCategoryLoading } = useSearchCategories(debouncedSearchTerm);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,14 +102,19 @@ function SearchContent() {
       <div className="max-w-7xl mx-auto p-4 md:p-6">
         {!hasSearched && (
           <div className="mb-8">
-            <h3 className="text-xl md:text-2xl font-bold text-black mb-4">
-              Popular Searches
-            </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex items-center gap-2 mb-4">
+              <button onClick={() => router.back()} className="p-1" aria-label="Go back">
+                <ChevronLeft size={24} className="text-black cursor-pointer" />
+              </button>
+              <h3 className="text-xl md:text-2xl font-bold text-black">
+                Popular Searches
+              </h3>
+            </div>
+            <div className="flex flex-wrap gap-3 sm:px-4 md:px-6">
               {POPULAR_SEARCHES.map((item) => (
                 <button
                   key={item}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
                   onClick={() => handlePopularSearch(item)}
                 >
                   <Search size={16} className="text-gray-400" />
@@ -129,15 +134,15 @@ function SearchContent() {
           </div>
         )}
 
-        {!isLoading && products.length === 0 && !isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) === 0 && hasSearched && (
+        {/* {!isLoading && products.length === 0 && !isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) === 0 && hasSearched && (
           <div className="text-center py-12">
             <p className="text-lg text-gray-600">
               No results found for &quot;{debouncedSearchTerm}&quot;
             </p>
           </div>
-        )}
+        )} */}
 
-        {!isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) > 0 && (
+        {/* {!isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) > 0 && (
           <div className="mb-12">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-black">
@@ -161,7 +166,7 @@ function SearchContent() {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
         {!isLoading && products.length > 0 && (
           <div>
