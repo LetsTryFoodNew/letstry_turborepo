@@ -4,9 +4,7 @@ import { Suspense, useCallback, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeft, Search } from 'lucide-react';
 import { useSearchProducts } from '@/lib/search/use-search';
-import { useSearchCategories } from '@/lib/category/use-search-categories';
 import { ProductCard, type Product } from '@/components/category-page/ProductCard';
-import { CategoryCard } from '@/components/category-grid/category-card';
 import { useDebounce } from '@/hooks/use-debounce';
 
 const POPULAR_SEARCHES = ['Bhujia', 'Murukku'];
@@ -78,8 +76,9 @@ function SearchContent() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className={`md:hidden sticky top-0 z-10 border-b transition-all duration-200 ${isScrolled ? 'bg-gray-50/95 backdrop-blur-sm border-gray-200 shadow-sm' : 'bg-white border-gray-100'
-        }`}>
+      <div className={`md:hidden sticky top-0 z-10 border-b transition-all duration-200 ${
+        isScrolled ? 'bg-gray-50/95 backdrop-blur-sm border-gray-200 shadow-sm' : 'bg-white border-gray-100'
+      }`}>
         <div className="flex items-center gap-3 p-4">
           <button onClick={() => router.back()} className="p-1" aria-label="Go back">
             <ChevronLeft size={24} className="text-black" />
@@ -101,19 +100,14 @@ function SearchContent() {
       <div className="max-w-7xl mx-auto p-4 md:p-6">
         {!hasSearched && (
           <div className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <button onClick={() => router.back()} className="p-1" aria-label="Go back">
-                <ChevronLeft size={24} className="text-black cursor-pointer" />
-              </button>
-              <h3 className="text-xl md:text-2xl font-bold text-black">
-                Popular Searches
-              </h3>
-            </div>
-            <div className="flex flex-wrap gap-3 sm:px-4 md:px-6">
+            <h3 className="text-xl md:text-2xl font-bold text-black mb-4">
+              Popular Searches
+            </h3>
+            <div className="flex flex-wrap gap-3">
               {POPULAR_SEARCHES.map((item) => (
                 <button
                   key={item}
-                  className="flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
                   onClick={() => handlePopularSearch(item)}
                 >
                   <Search size={16} className="text-gray-400" />
@@ -133,7 +127,13 @@ function SearchContent() {
           </div>
         )}
 
-
+        {!isLoading && products.length === 0 && hasSearched && (
+          <div className="text-center py-12">
+            <p className="text-lg text-gray-600">
+              No products found for &quot;{debouncedSearchTerm}&quot;
+            </p>
+          </div>
+        )}
 
         {!isLoading && products.length > 0 && (
           <div>
