@@ -123,7 +123,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryType 
 
   return (
     <div className="border border-gray-200 rounded-sm overflow-hidden flex flex-col h-full bg-white hover:shadow-md transition-shadow duration-200 relative group">
-      <Link href={`/${slug}/${product.slug}`} className="absolute inset-0 z-10" aria-label={product.name} />
+      <Link href={`/product/${product.slug}`} className="absolute inset-0 z-10" aria-label={product.name} />
       <div className="relative h-40 sm:h-48 md:h-56 lg:h-64 w-full bg-[#fdfbf7] flex items-center justify-center p-2 sm:p-3 md:p-4">
         {product.badge && (
           <Badge label={product.badge.label} variant={product.badge.variant} />
@@ -141,7 +141,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryType 
 
       <div className="p-2 sm:p-3 md:p-4 flex flex-col flex-grow text-center relative z-20 pointer-events-none">
         <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] md:min-h-[3rem] flex items-center justify-center pointer-events-auto">
-          <Link href={`/${slug}/${product.slug}`}>
+          <Link href={`/product/${product.slug}`}>
             {product.name}
           </Link>
         </h3>
