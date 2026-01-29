@@ -4,16 +4,14 @@ import { Suspense, useCallback, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronLeft, Search } from 'lucide-react';
 import { useSearchProducts } from '@/lib/search/use-search';
-import { useSearchCategories } from '@/lib/category/use-search-categories';
 import { ProductCard, type Product } from '@/components/category-page/ProductCard';
-import { CategoryCard } from '@/components/category-grid/category-card';
 import { useDebounce } from '@/hooks/use-debounce';
 
 const POPULAR_SEARCHES = ['Bhujia', 'Murukku'];
 
 function mapProductData(apiProduct: any): Product {
-  const defaultVariant = apiProduct.defaultVariant;
-  const variants = apiProduct.availableVariants?.map((v: any) => ({
+  const defaultVariant = apiProduct?.defaultVariant;
+  const variants = apiProduct?.availableVariants?.map((v: any) => ({
     id: v._id,
     weight: v.packageSize || `${v.weight}${v.weightUnit}`,
     price: v.price,
@@ -22,14 +20,14 @@ function mapProductData(apiProduct: any): Product {
 
   if (variants.length === 0 && defaultVariant) {
     variants.push({
-      id: defaultVariant._id || apiProduct._id,
+      id: defaultVariant._id || apiProduct?._id,
       weight: defaultVariant.packageSize || 'Standard',
       price: defaultVariant.price,
       mrp: defaultVariant.mrp,
     });
   }
 
-  const tags = apiProduct.tags || [];
+  const tags = apiProduct?.tags || [];
   let badge = undefined;
 
   if (tags.includes('trending')) {
@@ -39,10 +37,10 @@ function mapProductData(apiProduct: any): Product {
   }
 
   return {
-    id: apiProduct._id,
-    name: apiProduct.name,
-    slug: apiProduct.slug,
-    image: defaultVariant?.thumbnailUrl || apiProduct.thumbnailUrl,
+    id: apiProduct?._id,
+    name: apiProduct?.name || 'Unknown Product',
+    slug: apiProduct?.slug || '',
+    image: defaultVariant?.thumbnailUrl || apiProduct?.thumbnailUrl || '/placeholder-image.svg',
     price: defaultVariant?.price || 0,
     mrp: defaultVariant?.mrp,
     variants,
@@ -58,7 +56,6 @@ function SearchContent() {
   const [isScrolled, setIsScrolled] = useState(false);
   const debouncedSearchTerm = useDebounce(searchInput, 500);
   const { data, isLoading } = useSearchProducts(debouncedSearchTerm);
-  const { data: categoryData, isLoading: isCategoryLoading } = useSearchCategories(debouncedSearchTerm);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,9 +66,30 @@ function SearchContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const urlSearchTerm = searchParams.get('q') || '';
+    if (urlSearchTerm !== searchInput) {
+      setSearchInput(urlSearchTerm);
+    }
+  }, [searchParams]);
+
   const handlePopularSearch = useCallback((term: string) => {
     setSearchInput(term);
   }, []);
+
+  useEffect(() => {
+    if (debouncedSearchTerm === searchParams.get('q')) {
+      return;
+    }
+    const currentParams = new URLSearchParams(window.location.search);
+    if (debouncedSearchTerm) {
+      currentParams.set('q', debouncedSearchTerm);
+    } else {
+      currentParams.delete('q');
+    }
+    const newUrl = `${window.location.pathname}?${currentParams.toString()}`;
+    router.replace(newUrl, { scroll: false });
+  }, [debouncedSearchTerm, router]);
 
   const products = data?.searchProducts?.items?.map(mapProductData) || [];
   const meta = data?.searchProducts?.meta;
@@ -129,40 +147,13 @@ function SearchContent() {
           </div>
         )}
 
-        {!isLoading && products.length === 0 && !isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) === 0 && hasSearched && (
+        {!isLoading && products.length === 0 && hasSearched && (
           <div className="text-center py-12">
             <p className="text-lg text-gray-600">
               No results found for &quot;{debouncedSearchTerm}&quot;
             </p>
           </div>
         )}
-
-        {!isCategoryLoading && (categoryData?.searchCategories?.items?.length || 0) > 0 && (
-          <div className="mb-12">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-black">
-                Categories
-              </h3>
-              <p className="text-sm md:text-base text-gray-600">
-                {categoryData?.searchCategories?.meta?.totalCount || 0} {categoryData?.searchCategories?.meta?.totalCount === 1 ? 'category' : 'categories'}
-              </p>
-            </div>
-            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-4">
-              {categoryData?.searchCategories?.items?.map((category: any) => (
-                <CategoryCard
-                  key={category._id}
-                  category={{
-                    id: category._id,
-                    name: category.name,
-                    imageUrl: category.imageUrl || '/placeholder-image.svg',
-                    href: `/${category.slug}`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
         {!isLoading && products.length > 0 && (
           <div>
             <div className="mb-4 flex items-center justify-between">

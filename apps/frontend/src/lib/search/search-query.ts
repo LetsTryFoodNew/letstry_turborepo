@@ -13,9 +13,34 @@ export const SEARCH_PRODUCTS = graphql(`
         currency
         isArchived
         favourite
+        tags
         createdAt
         updatedAt
         defaultVariant {
+          _id
+          sku
+          name
+          price
+          mrp
+          discountPercent
+          discountSource
+          weight
+          weightUnit
+          packageSize
+          length
+          height
+          breadth
+          stockQuantity
+          availabilityStatus
+          images {
+            url
+            alt
+          }
+          thumbnailUrl
+          isDefault
+          isActive
+        }
+        availableVariants {
           _id
           sku
           name
