@@ -10,10 +10,13 @@ export function useGraphQLQuery<TResult, TVariables extends object = object>(
   variables?: TVariables,
   options?: Omit<UseQueryOptions<TResult, Error>, 'queryKey' | 'queryFn'>
 ): UseQueryResult<TResult, Error> {
+  const fullQueryKey = [...queryKey, variables];
+
   return useQuery<TResult, Error>({
-    queryKey,
-    queryFn: async () => {
-      return await graphqlClient.request(document as any, variables);
+    queryKey: fullQueryKey,
+    queryFn: async ({ queryKey }) => {
+      const vars = queryKey[queryKey.length - 1] as TVariables;
+      return await graphqlClient.request(document as any, vars);
     },
     ...options,
   });

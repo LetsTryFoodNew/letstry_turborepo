@@ -2869,7 +2869,7 @@ export type SearchProductsQueryVariables = Exact<{
 }>;
 
 
-export type SearchProductsQuery = { __typename?: 'Query', searchProducts: { __typename?: 'PaginatedProducts', items: Array<{ __typename?: 'Product', _id: string, name: string, slug: string, description?: string | null, categoryIds: Array<string>, brand: string, currency: string, isArchived: boolean, favourite?: boolean | null, createdAt: any, updatedAt: any, defaultVariant?: { __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, discountSource: string, weight: number, weightUnit: string, packageSize: string, length: number, height: number, breadth: number, stockQuantity: number, availabilityStatus: string, thumbnailUrl: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> } | null, priceRange: { __typename?: 'PriceRange', min: number, max: number } }>, meta: { __typename?: 'PaginationMeta', totalCount: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPreviousPage: boolean } } };
+export type SearchProductsQuery = { __typename?: 'Query', searchProducts: { __typename?: 'PaginatedProducts', items: Array<{ __typename?: 'Product', _id: string, name: string, slug: string, description?: string | null, categoryIds: Array<string>, brand: string, currency: string, isArchived: boolean, favourite?: boolean | null, tags: Array<string>, createdAt: any, updatedAt: any, defaultVariant?: { __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, discountSource: string, weight: number, weightUnit: string, packageSize: string, length: number, height: number, breadth: number, stockQuantity: number, availabilityStatus: string, thumbnailUrl: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> } | null, availableVariants: Array<{ __typename?: 'ProductVariant', _id: string, sku: string, name: string, price: number, mrp: number, discountPercent: number, discountSource: string, weight: number, weightUnit: string, packageSize: string, length: number, height: number, breadth: number, stockQuantity: number, availabilityStatus: string, thumbnailUrl: string, isDefault: boolean, isActive: boolean, images: Array<{ __typename?: 'ProductImage', url: string, alt: string }> }>, priceRange: { __typename?: 'PriceRange', min: number, max: number } }>, meta: { __typename?: 'PaginationMeta', totalCount: number, page: number, limit: number, totalPages: number, hasNextPage: boolean, hasPreviousPage: boolean } } };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -3579,9 +3579,34 @@ export const SearchProductsDocument = new TypedDocumentString(`
       currency
       isArchived
       favourite
+      tags
       createdAt
       updatedAt
       defaultVariant {
+        _id
+        sku
+        name
+        price
+        mrp
+        discountPercent
+        discountSource
+        weight
+        weightUnit
+        packageSize
+        length
+        height
+        breadth
+        stockQuantity
+        availabilityStatus
+        images {
+          url
+          alt
+        }
+        thumbnailUrl
+        isDefault
+        isActive
+      }
+      availableVariants {
         _id
         sku
         name
