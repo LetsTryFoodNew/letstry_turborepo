@@ -31,15 +31,15 @@ const Logo = ({ name, img, i }: LogoProps) => (
 );
 
 const BrandSlider = () => (
-  <div className="bg-white py-2 lg:py-4">
-    <div className="container px-4 sm:px-2 sm:mb-3 md:mb-4 lg:mb-6">
-      <h2 className="text-lg  md:text-2xl lg:text-3xl font-bold text-black mb-2 sm:mb-3 md:mb-4 lg:mb-6">
+  <div className="bg-white  sm:py-3 md:py-4 lg:py-6">
+    <div className="container mx-auto px-4">
+      <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-black mb-2 sm:mb-3 md:mb-4 lg:mb-6 text-left">
         Also available on
       </h2>
     </div>
 
     {/* Control speed here; smaller = faster */}
-    <div className="marquee-outer" style={{ "--speed": "12s" } as React.CSSProperties}>
+    <div className="marquee-outer mb-4 sm:mb-0" style={{ "--speed": "12s" } as React.CSSProperties}>
       {/* Lane A */}
       <div className="lane-wrap">
         <div className="lane-mover lane-a">
