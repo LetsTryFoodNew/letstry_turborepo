@@ -62,7 +62,7 @@ export class CustomerEnrichmentService {
 
     return new Map(
       stats.map((stat) => [
-        stat._id,
+        stat._id.toString(),
         { totalOrders: stat.totalOrders, totalSpent: stat.totalSpent },
       ]),
     );

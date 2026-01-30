@@ -6,6 +6,8 @@ export enum CustomerPlatform {
   ANDROID = 'android',
   IOS = 'ios',
   WEB = 'web',
+  MACOS = 'macos',
+  DESKTOP = 'desktop',
 }
 
 export enum CustomerSortField {

@@ -16,7 +16,7 @@ export class CustomerStatsService {
   constructor(
     @InjectModel(Identity.name) private identityModel: Model<IdentityDocument>,
     @InjectModel(Order.name) private orderModel: Model<Order>,
-  ) {}
+  ) { }
 
   async getCustomerSummary(): Promise<CustomerSummary> {
     const [platformStats, statusStats, totalCounts, revenue, newUsers] =
@@ -42,13 +42,15 @@ export class CustomerStatsService {
   async getPlatformStats(): Promise<PlatformStats> {
     const baseFilter = { role: { $in: [Role.USER, Role.GUEST] } };
 
-    const [android, ios, web] = await Promise.all([
+    const [android, ios, web, macos, desktop] = await Promise.all([
       this.countByPlatform(baseFilter, CustomerPlatform.ANDROID),
       this.countByPlatform(baseFilter, CustomerPlatform.IOS),
       this.countByPlatform(baseFilter, CustomerPlatform.WEB),
+      this.countByPlatform(baseFilter, CustomerPlatform.MACOS),
+      this.countByPlatform(baseFilter, CustomerPlatform.DESKTOP),
     ]);
 
-    return { android, ios, web };
+    return { android, ios, web, macos, desktop };
   }
 
   async countByPlatform(

@@ -14,6 +14,12 @@ export class PlatformStats {
 
   @Field(() => Int)
   web: number;
+
+  @Field(() => Int)
+  macos: number;
+
+  @Field(() => Int)
+  desktop: number;
 }
 
 @ObjectType()
