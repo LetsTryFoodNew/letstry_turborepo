@@ -3,7 +3,7 @@ import { BestsellerCard } from "./bestseller-card";
 import Link from "next/link";
 
 export const BestsellerCombo = async () => {
-  const products = await getBestsellerProducts("combo", 20);
+  const products = await getBestsellerProducts("bestselling-combos", 20);
 
   if (products.length === 0) {
     return null;
@@ -13,11 +13,11 @@ export const BestsellerCombo = async () => {
     <section className="w-full py-6 sm:py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900">
+          <h2 className="text-md sm:text-xl md:text-3xl font-bold text-gray-900">
             Bestselling Combos
           </h2>
           <Link 
-            href="/combo" 
+            href="/bestselling-combos" 
             className="text-sm sm:text-xl text-[#0C5273] hover:text-blue-800 font-semibold"
           >
             See all

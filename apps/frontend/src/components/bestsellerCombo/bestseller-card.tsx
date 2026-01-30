@@ -121,7 +121,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
       <div className="px-4 pb-4 mt-2">
       {quantityInCart === 0 ? (
         <button
-          className="w-full border-2 border-[#0C5273] text-[#0C5273] text-sm font-semibold py-2 rounded-md hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="cursor-pointer w-full border-2 border-[#0C5273] text-[#0C5273] text-sm font-semibold py-2 rounded-md hover:bg-[#0C5273] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleAddToCart}
           disabled={isLoading}
         >
