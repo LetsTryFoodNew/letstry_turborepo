@@ -169,17 +169,31 @@ export class PaymentController {
     this.webhookLogger.logEventEmission(paymentOrderId, status);
   }
 
-  @Post('callback')
+  @Get('callback')
   @Get('callback')
   @Public()
-  async handleCallback(
+  async handleCallbackGet(
     @Query() query: any,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.handleCallbackCommon(query, res);
+  }
+
+  @Post('callback')
+  @Public()
+  async handleCallbackPost(
     @Body() body: any,
     @Res() res: Response,
   ): Promise<void> {
+    await this.handleCallbackCommon(body, res);
+  }
+
+  private async handleCallbackCommon(
+    data: any,
+    res: Response,
+  ): Promise<void> {
     try {
-      const data = Object.keys(body || {}).length > 0 ? body : query;
-      this.paymentLogger.log('Payment callback received', { query, body, data });
+      this.paymentLogger.log('Payment callback received', data);
 
       const responseCode = data.responseCode || data.status;
       const orderId = data.orderId || data.orderid;
@@ -196,7 +210,7 @@ export class PaymentController {
         return res.redirect(`${failureUrl}?paymentOrderId=${paymentOrderId || ''}&code=${responseCode || ''}`);
       }
     } catch (error) {
-      this.paymentLogger.error('Callback processing error', error.stack, { query, body });
+      this.paymentLogger.error('Callback processing error', error.stack, data);
       const failureUrl = process.env.ZAAKPAY_FAILURE_URL || 'https://frontend.krsna.site/payment-failed';
       return res.redirect(`${failureUrl}?error=callback_error`);
     }
