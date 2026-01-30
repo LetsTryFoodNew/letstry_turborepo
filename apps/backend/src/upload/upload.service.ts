@@ -54,11 +54,11 @@ export class UploadService {
     const cloudfrontDomain = this.configService.get<string>(
       'aws.cloudfrontDomain',
     );
-    
+
     if (!cloudfrontDomain) {
       throw new Error('AWS_CLOUDFRONT_DOMAIN environment variable is not set');
     }
-    
+
     const baseUrl = cloudfrontDomain.replace(/\/$/, '');
     return `${baseUrl}/${key}`;
   }
@@ -101,11 +101,12 @@ export class UploadService {
     const uploadUrl = await this.getPresignedUploadUrl(key, contentType);
     const finalKey =
       this.isImageFile(contentType || '') &&
-      !filename.toLowerCase().endsWith('.webp')
+        contentType !== 'image/gif' &&
+        !filename.toLowerCase().endsWith('.webp')
         ? key.replace(/\.[^.]+$/, '.webp')
         : key;
     const finalUrl = this.getCloudFrontUrl(finalKey);
- 
+
     return {
       uploadUrl,
       key: finalKey,
@@ -126,7 +127,7 @@ export class UploadService {
     const bucketName = this.getBucketName();
     const contentType = this.getContentTypeFromExtension(originalName);
 
-    if (this.isImageFile(contentType)) {
+    if (this.isImageFile(contentType) && contentType !== 'image/gif') {
       const webpBuffer = await sharp(buffer).webp({ quality: 10 }).toBuffer();
       const webpKey = key.replace(/\.[^.]+$/, '.webp');
       await this.s3Client.send(

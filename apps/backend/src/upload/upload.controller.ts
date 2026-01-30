@@ -13,7 +13,7 @@ import * as crypto from 'crypto';
 
 @Controller('files')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) { }
 
   @Get('url/:key')
   async getPresignedUrl(@Param('key') key: string) {
@@ -40,7 +40,8 @@ export class UploadController {
         await this.uploadService.uploadFile(key, file.buffer, filename);
         const finalKey =
           this.uploadService.isImageFile(file.mimetype) &&
-          !filename.toLowerCase().endsWith('.webp')
+            file.mimetype !== 'image/gif' &&
+            !filename.toLowerCase().endsWith('.webp')
             ? key.replace(/\.[^.]+$/, '.webp')
             : key;
 
