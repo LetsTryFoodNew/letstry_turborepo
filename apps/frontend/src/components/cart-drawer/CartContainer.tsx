@@ -41,7 +41,7 @@ export const CartContainer = () => {
     id: item.productId,
     image: item.imageUrl || 'https://placehold.co/100x100/png',
     title: item.name,
-    size: item.attributes?.size || item.attributes?.weight || '',
+    size: item.packageSize || item.attributes?.size || item.attributes?.weight || '',
     price: item.unitPrice,
     quantity: item.quantity,
     isUpdating: updatingItems.has(item.productId),

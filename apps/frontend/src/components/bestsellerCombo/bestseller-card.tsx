@@ -112,13 +112,14 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
         <h3 className="text-base font-semibold text-center text-gray-900 line-clamp-2 min-h-[48px] p-2">
           {product.name}
         </h3>
+        <h4 className="text-sm pb-1 text-center text-gray-600">{variant.packageSize}</h4>
       </Link>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mb-2">
         <span className="text-sm font-bold text-gray-900">
           Rs {variant.price.toFixed(2)}
         </span>
       </div>
-      <div className="px-4 pb-4 mt-2">
+      <div className="px-4 pb-4 mt-auto">
       {quantityInCart === 0 ? (
         <button
           className="cursor-pointer w-full border-2 border-[#0C5273] text-[#0C5273] text-sm font-semibold py-2 rounded-md hover:bg-[#0C5273] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
