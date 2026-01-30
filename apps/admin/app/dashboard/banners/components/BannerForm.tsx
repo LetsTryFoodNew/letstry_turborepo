@@ -166,7 +166,8 @@ export function BannerForm({ onClose, initialData, createBanner, updateBanner }:
               onImagesChange={handleImagesChange}
               initialImages={initialData?.imageUrl ? [{ url: initialData.imageUrl, alt: initialData.name }] : []}
               maxFiles={1}
-              allowedFileTypes={['image/webp']}
+              allowedFileTypes={['image/webp', 'image/gif']}
+              disableCompression={true}
             />
             <input type="hidden" {...form.register('imageUrl')} />
           </div>
@@ -176,7 +177,8 @@ export function BannerForm({ onClose, initialData, createBanner, updateBanner }:
               onImagesChange={handleMobileImagesChange}
               initialImages={initialData?.mobileImageUrl ? [{ url: initialData.mobileImageUrl, alt: initialData.name }] : []}
               maxFiles={1}
-              allowedFileTypes={['image/webp']}
+              allowedFileTypes={['image/webp', 'image/gif']}
+              disableCompression={true}
             />
             <input type="hidden" {...form.register('mobileImageUrl')} />
           </div>

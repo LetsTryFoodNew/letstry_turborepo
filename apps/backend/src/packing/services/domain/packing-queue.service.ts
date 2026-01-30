@@ -180,22 +180,19 @@ export class PackingQueueService {
 
   private async getNextPacker(): Promise<any> {
     const activePackers = await this.packerCrud.findAll({ isActive: true });
-    const onlinePackers = activePackers.filter(
-      (p: any) => p.status !== 'offline',
-    );
 
-    if (onlinePackers.length === 0) {
+    if (activePackers.length === 0) {
       return null;
     }
 
     const currentIndex = await this.getCurrentPackerIndex();
-    const nextIndex = (currentIndex + 1) % onlinePackers.length;
+    const nextIndex = (currentIndex + 1) % activePackers.length;
 
     await this.setCurrentPackerIndex(nextIndex);
 
-    this.packingLogger.logRoundRobinState(nextIndex, onlinePackers.length);
+    this.packingLogger.logRoundRobinState(nextIndex, activePackers.length);
 
-    return onlinePackers[nextIndex];
+    return activePackers[nextIndex];
   }
 
   private async getCurrentPackerIndex(): Promise<number> {
