@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 import { CartService } from '@/lib/cart/cart-service';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useCart } from '@/lib/cart/use-cart';
-import { AddToCartButton } from '@/components/category-page/AddToCartButton';
 
 
 interface ActionButtonsProps {
