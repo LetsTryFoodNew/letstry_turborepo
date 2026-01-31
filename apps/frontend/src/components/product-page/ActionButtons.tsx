@@ -111,7 +111,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
       ) : (
         <div className="mt-2 w-full flex items-center justify-between border-2 border-brand-hover rounded-lg overflow-hidden">
           <button
-            className="flex-1 py-2 text-brand-hover font-bold text-xl hover:bg-brand-hover hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer flex-1 py-2 text-brand-hover font-bold text-xl hover:bg-brand-hover hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleDecrement}
             disabled={isLoading}
           >
@@ -121,7 +121,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
             {isLoading ? '...' : quantityInCart}
           </span>
           <button
-            className="flex-1 py-2 text-brand-hover font-bold text-xl hover:bg-brand-hover hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer flex-1 py-2 text-brand-hover font-bold text-xl hover:bg-brand-hover hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleIncrement}
             disabled={isLoading}
           >
