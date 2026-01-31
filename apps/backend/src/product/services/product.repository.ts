@@ -42,6 +42,8 @@ export class ProductRepository {
         { $match: filter },
         {
           $addFields: {
+            tags: { $ifNull: ['$tags', []] },
+            keywords: { $ifNull: ['$keywords', []] },
             nameMatchScore: {
               $cond: [{ $regexMatch: { input: '$name', regex } }, 2, 0],
             },
