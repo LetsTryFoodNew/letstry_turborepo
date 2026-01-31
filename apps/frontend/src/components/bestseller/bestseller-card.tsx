@@ -109,7 +109,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
   return (
     <article className="relative flex flex-col h-full p-3 sm:p-4 md:p-5 lg:p-6 text-center rounded-xl sm:rounded-2xl lg:rounded-3xl transition-shadow duration-800"
       style={{
-        backgroundColor: "#FCEFC0",
+        backgroundColor: "#FFFFFF",
         boxShadow: "8px 8px 16px rgba(0, 0, 0, 0.40)",
       }}
     >
