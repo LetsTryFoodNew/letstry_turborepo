@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CartService } from '@/lib/cart/cart-service';
 import { useCart } from '@/lib/cart/use-cart';
+import { DiscountBadge } from '@/components/ui/discount-badge';
 
 type ProductVariant = {
   _id: string;
@@ -98,7 +99,8 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
   };
 
   return (
-    <article className="flex flex-col border border-gray-300 rounded-lg bg-gray-50 hover:shadow-lg transition-shadow">
+    <article className="relative flex flex-col border border-gray-300 rounded-lg bg-gray-50 hover:shadow-lg transition-shadow">
+      {variant.discountPercent > 0 && <DiscountBadge discountPercent={variant.discountPercent} />}
       <Link href={`/product/${product.slug}`}>
         <div className="relative w-full aspect-square mb-4 bg-[#F3EEEA] rounded overflow-hidden">
           <Image

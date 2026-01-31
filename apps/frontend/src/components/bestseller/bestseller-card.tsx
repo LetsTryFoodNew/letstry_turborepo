@@ -8,6 +8,7 @@ import { CartService } from '@/lib/cart/cart-service';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useCart } from '@/lib/cart/use-cart';
 import { useClickSpark } from '@/hooks/use-click-spark';
+import { DiscountBadge } from '@/components/ui/discount-badge';
 
 type ProductVariant = {
   _id: string;
@@ -112,36 +113,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
         boxShadow: "8px 8px 16px rgba(0, 0, 0, 0.40)",
       }}
     >
-      {hasDiscount && (
-        <>
-          <div className="absolute top-0 left-[23px] z-10">
-            <div
-              className="bg-[#00000020] text-[#00000020] font-bold text-[8px] md:text-[10px] lg:text-[13px] 
-                w-[30px] md:w-[45px] lg:w-[55px] pt-1 pb-[9.5px] px-[4.5px] md:px-[8px] lg:px-[10px]
-                leading-tight flex flex-col backdrop-blur-sm"
-              style={{
-                clipPath: "polygon(0 -1%, 80% -1%, 80% 100%, 40% 80%, 0 100%)",
-              }}
-            >
-              <div>{variant.discountPercent}%</div>
-              <div className="pb-[6px]">OFF</div>
-            </div>
-          </div>
-          <div className="absolute top-0 left-5 z-10">
-            <div
-              className="bg-[#3149A6] text-white font-bold text-[8px] md:text-[10px] lg:text-[13px] 
-                w-[30px] md:w-[45px] lg:w-[55px] pt-1 pb-2 px-[4.5px] md:px-[8px] lg:px-[10px]
-                leading-tight flex flex-col"
-              style={{
-                clipPath: "polygon(0 -1%, 80% -1%, 80% 100%, 40% 80%, 0 100%)",
-              }}
-            >
-              <div>{variant.discountPercent}%</div>
-              <div className="pb-[6px]">OFF</div>
-            </div>
-          </div>
-        </>
-      )}
+      {hasDiscount && <DiscountBadge discountPercent={variant.discountPercent} />}
       <Link href={`/product/${product.slug}`}>
         <div className="relative w-full lg:h-40 md:h-[100px] h-[70px] lg:mb-[10px] md:mb-[10px] mb-[5px]">
           <Image
