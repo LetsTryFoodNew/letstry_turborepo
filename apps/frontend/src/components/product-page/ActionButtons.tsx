@@ -24,12 +24,12 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
 
   const handleAddToCart = async () => {
     if (isOutOfStock || isLoading) return;
-    
+
     setIsLoading(true);
     try {
       await CartService.addToCart(product.id, 1);
       queryClient.invalidateQueries({ queryKey: ['cart'] });
-      
+
       trackAddToCart({
         id: product.id,
         name: product.name,
@@ -37,7 +37,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
         quantity: 1,
         variant: product.variantName,
       });
-      
+
       toast.success(`${product.name} added to cart`);
     } catch (error) {
       console.error('Failed to add to cart:', error);
@@ -64,6 +64,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
       >
         {isLoading ? 'Adding...' : isOutOfStock ? 'Out of Stock' : 'Add to cart'}
       </button>
+      {/* Buy Now button - temporarily disabled
       <button
         onClick={handleBuyNow}
         disabled={isOutOfStock}
@@ -74,6 +75,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ product, isOutOfSt
       >
         Buy Now
       </button>
+      */}
     </div>
   );
 };
