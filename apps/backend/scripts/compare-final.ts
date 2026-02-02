@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import path from 'path';
 import fs from 'fs';
 import csv from 'csv-parser';
+import * as ExcelJS from 'exceljs';
 
 // Paths
 const SWIGGY_CSV_PATH = path.resolve('/Users/apple/Desktop/Swiggy Master File - New File.csv');
@@ -137,11 +138,74 @@ async function main() {
                 totalCount: data.length
             };
             fs.writeFileSync(outPath, JSON.stringify(output, null, 2));
-            console.log(`📄 Saved: ${name} (${data.length} items)`);
+            console.log(`📄 Saved JSON: ${name} (${data.length} items)`);
+        };
+
+        const saveCsv = (name: string, data: CSVProduct[]) => {
+            const outPath = path.resolve(__dirname, name);
+            const headers = [
+                'Sku Code', 'Sku Name', 'Campaign', 'Remarks', 'PO Received',
+                'Old GST %', 'New GST%', 'GST Change', 'Old MRP', 'New MRP',
+                'Old EAN', 'New EAN', 'Old HSN', 'New HSN', 'Old Grammage',
+                'New Grammage', 'Drive Link', 'NPI status'
+            ];
+
+            const rows = data.map(p => [
+                p.sku, p.name, p.campaign, p.remarks, p.poReceived,
+                p.oldGst, p.newGst, p.gstChange, p.oldMrp, p.newMrp,
+                p.oldEan, p.newEan, p.oldHsn, p.newHsn, p.oldGrammage,
+                p.newGrammage, p.driveLink, p.npiStatus
+            ].map(val => `"${(val || '').replace(/"/g, '""')}"`).join(','));
+
+            const csvContent = [headers.join(','), ...rows].join('\n');
+            fs.writeFileSync(outPath, csvContent);
+            console.log(`📊 Saved CSV: ${name} (${data.length} items)`);
+        };
+
+        const saveExcel = async (name: string, data: CSVProduct[]) => {
+            const outPath = path.resolve(__dirname, name);
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Missing Products');
+
+            worksheet.columns = [
+                { header: 'Sku Code', key: 'sku', width: 15 },
+                { header: 'Sku Name', key: 'name', width: 30 },
+                { header: 'Campaign', key: 'campaign', width: 20 },
+                { header: 'Remarks', key: 'remarks', width: 25 },
+                { header: 'PO Received', key: 'poReceived', width: 15 },
+                { header: 'Old GST %', key: 'oldGst', width: 12 },
+                { header: 'New GST%', key: 'newGst', width: 12 },
+                { header: 'GST Change', key: 'gstChange', width: 15 },
+                { header: 'Old MRP', key: 'oldMrp', width: 10 },
+                { header: 'New MRP', key: 'newMrp', width: 10 },
+                { header: 'Old EAN', key: 'oldEan', width: 15 },
+                { header: 'New EAN', key: 'newEan', width: 15 },
+                { header: 'Old HSN', key: 'oldHsn', width: 12 },
+                { header: 'New HSN', key: 'newHsn', width: 12 },
+                { header: 'Old Grammage', key: 'oldGrammage', width: 15 },
+                { header: 'New Grammage', key: 'newGrammage', width: 15 },
+                { header: 'Drive Link', key: 'driveLink', width: 20 },
+                { header: 'NPI status', key: 'npiStatus', width: 15 }
+            ];
+
+            worksheet.addRows(data);
+
+            // Format headers
+            worksheet.getRow(1).font = { bold: true };
+            worksheet.getRow(1).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFE0E0E0' }
+            };
+
+            await workbook.xlsx.writeFile(outPath);
+            console.log(`📗 Saved Excel: ${name} (${data.length} items)`);
         };
 
         console.log('\n--- Results Try ---');
         saveJson('file_a_swiggy_not_in_db.json', fileA);
+        saveCsv('file_a_swiggy_not_in_db.csv', fileA);
+        await saveExcel('file_a_swiggy_not_in_db.xlsx', fileA);
         saveJson('file_b_swiggy_not_in_older.json', fileB);
         saveJson('file_c_swiggy_not_in_db_not_in_older.json', fileC);
 
