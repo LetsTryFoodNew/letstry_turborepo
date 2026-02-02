@@ -114,9 +114,9 @@ export default async function ProductDetailPage({
 
   const breadcrumbItems = primaryCategory
     ? [
-        { label: primaryCategory.name, href: `/${primaryCategory.slug}` },
-        { label: product.name },
-      ]
+      { label: primaryCategory.name, href: `/${primaryCategory.slug}` },
+      { label: product.name },
+    ]
     : [{ label: product.name }];
 
   return (
