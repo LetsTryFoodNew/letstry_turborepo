@@ -36,6 +36,24 @@ export const CouponsModal: React.FC<CouponsModalProps> = ({
   const [couponCode, setCouponCode] = useState('');
   const [applying, setApplying] = useState<string | null>(null);
 
+  const ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=com.letstryapp";
+  const IOS_APP_URL = "https://apps.apple.com/in/app/lets-try/id6749929023";
+
+  const redirectToAppStore = () => {
+    const userAgent = navigator.userAgent || navigator.vendor;
+
+    if (/android/i.test(userAgent)) {
+      window.open(ANDROID_APP_URL, '_blank');
+      return;
+    }
+
+    if (/iPad|iPhone|iPod/.test(userAgent)) {
+      window.open(IOS_APP_URL, '_blank');
+      return;
+    }
+
+    window.open(ANDROID_APP_URL, '_blank');
+  };
 
   const handleApplyManual = async () => {
     if (!couponCode.trim()) {
@@ -124,7 +142,7 @@ export const CouponsModal: React.FC<CouponsModalProps> = ({
             </div>
 
             <div className="flex-1 overflow-y-auto p-6">
-              <div className="mb-6">
+              <div className="mb-4">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -143,6 +161,13 @@ export const CouponsModal: React.FC<CouponsModalProps> = ({
                   </button>
                 </div>
               </div>
+
+              <button
+                onClick={redirectToAppStore}
+                className="cursor-pointer w-full bg-gradient-to-r from-[#9cd1e5] to-[#2490b7] text-white font-bold py-3 px-4 rounded-lg mb-4 text-sm hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                Get Extra Discount and offer – Download App
+              </button>
 
               <div className="mb-4">
                 <h3 className="text-lg font-bold text-gray-900">More offers</h3>
@@ -164,11 +189,10 @@ export const CouponsModal: React.FC<CouponsModalProps> = ({
                     return (
                       <div
                         key={coupon._id}
-                        className={`border rounded-lg p-4 transition-all ${
-                          isApplied
-                            ? 'bg-green-50 border-green-500'
-                            : 'bg-orange-50 border-orange-200'
-                        }`}
+                        className={`border rounded-lg p-4 transition-all ${isApplied
+                          ? 'bg-green-50 border-green-500'
+                          : 'bg-orange-50 border-orange-200'
+                          }`}
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
