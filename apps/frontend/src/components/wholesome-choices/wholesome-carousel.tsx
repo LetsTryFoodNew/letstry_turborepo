@@ -75,20 +75,22 @@ export function WholesomeCarousel({ items }: WholesomeCarouselProps) {
         </div>
       </div>
 
-      <div className="flex justify-center space-x-4 mt-6">
+
+
+      <div className="flex justify-center items-center gap-4 mt-4">
         <button
           onClick={() => handleScroll('left')}
-          className="border-2 border-[#807171] rounded-full flex items-center justify-center w-6 h-6 md:w-10 md:h-10 lg:hover:bg-gray-100 transition-all duration-200"
+          className="static translate-y-0 flex justify-center items-center cursor-pointer w-8 h-8 md:w-10 md:h-10 border-2 border-gray-500 rounded-full bg-transparent hover:bg-gray-100"
           aria-label="Scroll left"
         >
-          <ChevronLeft className="w-3 h-3 md:w-5 md:h-5" />
+          <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
         </button>
         <button
           onClick={() => handleScroll('right')}
-          className="border-2 border-[#807171] rounded-full flex items-center justify-center w-6 h-6 md:w-10 md:h-10 lg:hover:bg-gray-100 transition-all duration-200"
+          className="static translate-y-0 flex justify-center items-center cursor-pointer w-8 h-8 md:w-10 md:h-10 border-2 border-gray-500 rounded-full bg-transparent hover:bg-gray-100"
           aria-label="Scroll right"
         >
-          <ChevronRight className="w-3 h-3 md:w-5 md:h-5" />
+          <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
         </button>
       </div>
     </>
