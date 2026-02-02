@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileMenu } from "./mobile-menu";
+import { CartButton } from "./cart-button";
 
 interface MobileNavbarProps {
     cartItemCount: number;
@@ -52,18 +53,7 @@ export const MobileNavbar = ({
                     <Search className="size-6 text-black stroke-[1.5]" />
                 </Button>
 
-                <Button variant="ghost" size="icon" className="h-12 w-10 p-0 relative" onClick={toggleCart}>
-                    <div className="relative">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-6 text-black">
-                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-                            <path d="M3 6h18" />
-                            <path d="M16 10a4 4 0 0 1-8 0" />
-                        </svg>
-                        <div className="absolute -right-1 -bottom-1 bg-white rounded-full border border-black w-4 h-4 flex items-center justify-center">
-                            <span className="text-black text-[10px] font-bold">+</span>
-                        </div>
-                    </div>
-                </Button>
+                <CartButton itemCount={cartItemCount} onClick={toggleCart} />
 
                 <MobileMenu
                     isOpen={isOpen}

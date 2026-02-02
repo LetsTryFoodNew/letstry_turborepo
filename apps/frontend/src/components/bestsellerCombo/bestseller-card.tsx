@@ -102,7 +102,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
     <article className="relative flex flex-col border border-gray-300 rounded-lg bg-gray-50 hover:shadow-lg transition-shadow">
       {variant.discountPercent > 0 && <DiscountBadge discountPercent={variant.discountPercent} />}
       <Link href={`/product/${product.slug}`}>
-        <div className="relative w-full aspect-square mb-4 bg-[#F3EEEA] rounded overflow-hidden">
+        <div className="relative w-full aspect-square mb-2 sm:mb-4 bg-[#F3EEEA] rounded overflow-hidden">
           <Image
             src={displayImages[0].url}
             alt={displayImages[0].alt || product.name}
@@ -111,7 +111,7 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
           />
         </div>
-        <h3 className="text-base font-semibold text-center text-gray-900 line-clamp-2 min-h-[48px] p-2">
+        <h3 className="text-sm sm:text-base font-semibold text-center text-gray-900 line-clamp-2 min-h-[48px] p-1 sm:p-2">
           {product.name}
         </h3>
         <h4 className="text-sm pb-1 text-center text-gray-600">{variant.packageSize}</h4>
@@ -136,26 +136,26 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
       <div className="px-4 pb-4 mt-auto">
         {quantityInCart === 0 ? (
           <button
-            className="cursor-pointer w-full border-2 border-[#0C5273] text-[#0C5273] text-sm font-semibold py-2 rounded-md hover:bg-[#0C5273] hover:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="cursor-pointer w-full border sm:border-2 border-[#0C5273] text-[#0C5273] text-sm font-semibold py-2 rounded-md hover:bg-[#0C5273] hover:text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleAddToCart}
             disabled={isLoading}
           >
             {isLoading ? 'Adding...' : 'Add to cart'}
           </button>
         ) : (
-          <div className="w-full flex items-center justify-between border-2 border-[#0C5273] rounded-md overflow-hidden">
+          <div className="w-full flex items-center justify-between border sm:border-2 border-[#0C5273] rounded-md overflow-hidden">
             <button
-              className="flex-1 py-1 border-[#0C5273] font-bold text-xl hover:bg-[#0C5273] hover:text-white transition-all duration-200 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 py-1 border-[#0C5273] bg-[#D1E9F2] font-bold text-xl transition-all duration-200 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleDecrement}
               disabled={isLoading}
             >
               −
             </button>
-            <span className="flex-1 text-center py-1 text-[#0C5273] font-semibold text-base border-x-2 border-[#0C5273]">
+            <span className="flex-1 text-center py-1 text-[#0C5273] font-semibold text-base">
               {isLoading ? '...' : quantityInCart}
             </span>
             <button
-              className="flex-1 py-1 text-[#0C5273] font-bold text-xl hover:bg-[#0C5273] hover:text-white transition-all duration-200 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 py-1 text-[#0C5273 bg-[#D1E9F2] font-bold text-xl transition-all duration-200 active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleIncrement}
               disabled={isLoading}
             >

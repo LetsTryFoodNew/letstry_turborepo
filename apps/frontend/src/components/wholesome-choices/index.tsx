@@ -23,16 +23,18 @@ export function WholesomeChoices({ categories }: WholesomeChoicesProps) {
 
   return (
     <section
-      className="container py-8 md:py-12 lg:py-16 mx-auto"
-    // style={{
-    //   background:
-    //     'linear-gradient(180deg, #FFFFFF 0%, #F3EEEA 40%, #F3EEEA 60%, #FFFFFF 100%)',
-    // }}
+      className="w-full py-8 md:py-10 lg:py-12"
+      style={{
+        background: "linear-gradient(180deg, #FFFFFF, #FAEFEB, #FFF0EA, #FFFFFF)",
+      }}
+
     >
-      <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-black mb-6 mx-4">
-        Wholesome Choices
-      </h2>
-      <WholesomeCarousel items={items} />
+      <div className="container py-8 md:py-12 lg:py-16 mx-auto">
+        <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-black mb-6 mx-4">
+          Wholesome Choices
+        </h2>
+        <WholesomeCarousel items={items} />
+      </div>
     </section>
   );
 }

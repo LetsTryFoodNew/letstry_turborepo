@@ -17,7 +17,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 export const HealthySnacking = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+
   const autoplayPlugin = useRef(
     Autoplay({
       delay: 4000,
@@ -91,12 +91,12 @@ export const HealthySnacking = () => {
             ))}
           </CarouselContent>
 
-          <div className="mt-8 flex flex-col items-center gap-6">
+          <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[80%] mx-auto sm:mt-8 flex flex-col sm:flex-row  items-center justify-between gap-6">
             <div className="relative w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl xl:max-w-4xl">
               <div className="absolute top-[5px] md:top-[8px] lg:top-[10px] left-[8%] right-[9%] h-0.5 bg-[#FFD3B3] z-0">
-                <div 
+                <div
                   className="h-full bg-[#FF5400] absolute top-0 left-0"
-                  style={{ 
+                  style={{
                     width: `${(currentIndex / (healthySnackingSlides.length - 1)) * 100}%`,
                     transition: "width 0s"
                   }}
@@ -112,18 +112,16 @@ export const HealthySnacking = () => {
                   />
                 )}
               </div>
-              <div className="flex justify-between relative z-10 px-[5%]">
+              <div className="flex justify-between relative z-10 sm:px-[5%]">
                 {healthySnackingSlides.map((slide, index) => (
                   <div key={index} className="flex flex-col items-center">
-                    <div 
-                      className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full cursor-pointer ${
-                        index <= currentIndex ? "bg-[#FF5400]" : "bg-gray-300"
-                      }`} 
+                    <div
+                      className={`w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full cursor-pointer ${index <= currentIndex ? "bg-[#FF5400]" : "bg-gray-300"
+                        }`}
                     />
-                    <span 
-                      className={`text-[10px] md:text-xs lg:text-sm text-center mt-2 font-normal transition-all duration-200 whitespace-nowrap ${
-                        index === currentIndex ? "text-orange-600 font-bold" : "text-gray-700"
-                      }`}
+                    <span
+                      className={`text-[10px] md:text-xs lg:text-sm text-center mt-2 font-normal transition-all duration-200 whitespace-nowrap ${index === currentIndex ? "text-orange-600 font-bold" : "text-gray-700"
+                        }`}
                     >
                       {slide.tag}
                     </span>
