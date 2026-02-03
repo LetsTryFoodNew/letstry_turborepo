@@ -39,7 +39,7 @@ export const CategoryProductsSections: React.FC<
 
   return (
     <>
-      {validCategories.map(({ category, products }) => (
+      {validCategories.slice(0, 3).map(({ category, products }) => (
         <CategoryProductSection
           key={category.id}
           categoryName={category.name}
