@@ -84,7 +84,7 @@ export function BestsellerCarouselClient({ initialProducts }: BestsellerCarousel
       ref={bestsellerRef}
       className="relative mt-6 px-4 sm:px-6 lg:px-8 pt-2 pb-8 sm:pb-12 md:pb-14 lg:pb-16 overflow-hidden"
       style={{
-        backgroundImage: 'url(https://d11a0m43ek7ap8.cloudfront.net/backgroundUpdate.png)',
+        backgroundImage: 'url(https://d2tmwt8yl5m7qh.cloudfront.net/e9ba9be25cebd48419d4f1c78e0476f7.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
