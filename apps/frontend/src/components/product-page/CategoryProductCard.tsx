@@ -105,6 +105,9 @@ export const CategoryProductCard: React.FC<CategoryProductCardProps> = ({
         <h3 className="sm:text-base text-sm font-semibold text-center text-gray-900 line-clamp-2 sm:min-h-12 min-h-6 ">
           {product.name}
         </h3>
+        <h4 className="text-sm pb-1 text-center text-gray-600">
+          {variant.packageSize}
+        </h4>
       </Link>
       <div className="flex flex-col items-center justify-center sm:mb-2 mb-1 gap-1">
         <div className="flex items-center gap-2">
