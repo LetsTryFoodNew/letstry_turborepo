@@ -10,8 +10,12 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    unoptimized: true,
+    unoptimized: false,
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.krishnaseth.xyz',
+      },
       {
         protocol: 'https',
         hostname: '**.example.com',

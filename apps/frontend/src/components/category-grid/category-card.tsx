@@ -7,9 +7,10 @@ import { getCdnUrl } from '@/lib/image-utils';
 
 export interface CategoryCardProps {
   category: Category;
+  priority?: boolean;
 }
 
-export const CategoryCard = ({ category }: CategoryCardProps) => {
+export const CategoryCard = ({ category, priority = false }: CategoryCardProps) => {
   return (
     <article className="flex flex-col items-center text-center">
       <Link href={category.href} className="group w-full">
@@ -21,7 +22,8 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
               alt={category.name}
               fill
               className="object-contain group-hover:scale-110 transition-transform duration-300"
-              unoptimized
+              sizes="(max-width: 640px) 25vw, (max-width: 768px) 20vw, 15vw"
+              priority={priority}
             />
           </div>
         </div>
