@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { ProductVariant } from "@/types/product";
+import { getCdnUrl } from "@/lib/image-utils";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -382,7 +383,7 @@ export default function ProductDetailPage() {
                   >
             
                     <Image
-                      src={img.url}
+                      src={getCdnUrl(img.url)}
                       
                       alt={img.alt || product.name}
                       fill
