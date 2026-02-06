@@ -124,6 +124,9 @@ export const BestsellerCard = ({ product }: BestsellerCardProps) => {
             alt={product.name}
             fill
             className="object-contain"
+            loading="lazy"
+            quality={75}
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
         </div>
         <h3 className="lg:text-[22px] md:text-[14px] text-[12px] font-bold text-black leading-snug min-h-[35px] md:min-h-[40px] lg:min-h-[70px] lg:mb-[10px] md:mb-[10px] mb-[5px]">

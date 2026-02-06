@@ -135,6 +135,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, categoryType 
             alt={product.name}
             fill
             className="object-contain"
+            loading="lazy"
+            quality={75}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
