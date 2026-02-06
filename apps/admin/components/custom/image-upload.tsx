@@ -9,13 +9,11 @@ import Compressor from '@uppy/compressor'
 import ImageEditor from '@uppy/image-editor'
 import { useFileUpload } from '@/hooks/use-file-upload'
 import { deleteFileFromS3 } from '@/lib/file-upload'
-import { getCdnUrl } from '@/lib/image-utils'
 import type { UploadedFile } from '@/types/file-upload'
 
 import '@uppy/core/css/style.min.css'
 import '@uppy/dashboard/css/style.min.css'
 import '@uppy/image-editor/css/style.min.css'
-import { getCdnUrl } from '@/lib/image-utils'
 
 interface ImageUploadProps {
   onImagesChange: (images: Array<{ file: File; alt: string; preview: string; finalUrl?: string }>) => void
