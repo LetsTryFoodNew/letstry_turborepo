@@ -49,10 +49,7 @@ export const CategoryProductSection: React.FC<CategoryProductSectionProps> = ({
           href={`/category/${categorySlug}`}
           className="text-sm sm:text-base text-brand-hover font-medium flex items-center gap-1"
         >
-          <span className="hover:underline">View All</span>{" "}
-          <span className="flex justify-center items-center mb-1 font-extrabold">
-            →
-          </span>
+          <span className="hover:underline">View All</span>
         </Link>
       </div>
 
