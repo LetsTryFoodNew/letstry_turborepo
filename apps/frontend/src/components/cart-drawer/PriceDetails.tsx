@@ -1,10 +1,10 @@
 import React from 'react';
-import { ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { X, ClipboardList, Tag, FileText, Truck, ShoppingBag, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface PriceDetailsProps {
-  isExpanded: boolean;
-  onToggle: () => void;
+  isOpen: boolean;
+  onClose: () => void;
   priceBreakdown: {
     subtotal: number;
     discountAmount: number;
@@ -16,115 +16,106 @@ interface PriceDetailsProps {
 }
 
 export const PriceDetails: React.FC<PriceDetailsProps> = ({
-  isExpanded,
-  onToggle,
+  isOpen,
+  onClose,
   priceBreakdown,
 }) => {
   const savings = priceBreakdown.discountAmount;
 
   return (
-    <div className="border-t border-gray-100 bg-white">
-      <button
-        onClick={onToggle}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
-      >
-        <span className="text-sm font-medium text-[#003B65] underline decoration-[#003B65] underline-offset-2">
-          View price details
-        </span>
-        {isExpanded ? (
-          <ChevronUp className="w-4 h-4 text-[#003B65]" />
-        ) : (
-          <ChevronDown className="w-4 h-4 text-[#003B65]" />
-        )}
-      </button>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          exit={{ y: '100%' }}
+          transition={{ type: 'tween', duration: 0.3, ease: 'easeOut' }}
+          className="absolute inset-0 z-[110] bg-white flex flex-col"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+            <div className="flex-1" />
+            <h2 className="text-lg font-bold text-black">Price Details</h2>
+            <div className="flex-1 flex justify-end">
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close price details"
+              >
+                <X size={24} className="text-gray-500" />
+              </button>
+            </div>
+          </div>
 
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="px-4 pb-4 space-y-3 border-t border-gray-100 pt-3">
-              <div className="flex items-center justify-between text-sm text-gray-700">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400">📦</span>
-                  <span>Items total</span>
-                </div>
-                <span className="font-medium">₹{priceBreakdown.subtotal.toFixed(2)}</span>
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+            <div className="flex items-center justify-between text-base">
+              <div className="flex items-center gap-3 text-gray-600">
+                <ClipboardList size={20} />
+                <span>Items total</span>
               </div>
+              <span className="font-bold text-gray-900">₹{priceBreakdown.subtotal.toFixed(2)}</span>
+            </div>
 
-              {priceBreakdown.discountAmount > 0 && (
-                <div className="flex items-center justify-between text-sm text-green-600">
-                  <div className="flex items-center gap-2">
-                    <span>🎟️</span>
-                    <span>Coupon Discount</span>
-                  </div>
-                  <span className="font-medium">-₹{priceBreakdown.discountAmount.toFixed(2)}</span>
+            {priceBreakdown.discountAmount > 0 && (
+              <div className="flex items-center justify-between text-base">
+                <div className="flex items-center gap-3 text-gray-600">
+                  <Tag size={20} />
+                  <span>Coupon Discount</span>
                 </div>
-              )}
-
-              <div className="flex items-center justify-between text-sm text-gray-700">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400">📊</span>
-                  <span>Subtotal</span>
-                </div>
-                <span className="font-medium">₹{(priceBreakdown.subtotal - priceBreakdown.discountAmount).toFixed(2)}</span>
+                <span className="font-bold text-[#006DBC]">-₹{priceBreakdown.discountAmount.toFixed(2)}</span>
               </div>
+            )}
 
-              <div className="flex items-center justify-between text-sm text-gray-700">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400">🚚</span>
-                  <span>Delivery Charge</span>
-                </div>
-                <span className="font-medium">
-                  {priceBreakdown.shippingCost === 0 ? (
-                    <span className="text-green-600">FREE</span>
-                  ) : (
-                    `₹${priceBreakdown.shippingCost.toFixed(2)}`
-                  )}
-                </span>
+            <div className="flex items-center justify-between text-base">
+              <div className="flex items-center gap-3 text-gray-600">
+                <FileText size={20} />
+                <span>Subtotal</span>
               </div>
+              <span className="font-bold text-gray-900">₹{(priceBreakdown.subtotal - priceBreakdown.discountAmount).toFixed(2)}</span>
+            </div>
 
-              <div className="flex items-center justify-between text-sm text-gray-700">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400">📋</span>
-                  <span>Handling Charge</span>
-                </div>
-                <span className="font-medium">₹{priceBreakdown.handlingCharge.toFixed(2)}</span>
+            <div className="flex items-center justify-between text-base">
+              <div className="flex items-center gap-3 text-gray-600">
+                <Truck size={20} />
+                <span>Delivery Charge</span>
               </div>
+              <span className="font-bold text-gray-900">
+                {priceBreakdown.shippingCost === 0 ? 'FREE' : `₹${priceBreakdown.shippingCost.toFixed(2)}`}
+              </span>
+            </div>
 
-              {priceBreakdown.estimatedTax > 0 && (
-                <div className="flex items-center justify-between text-sm text-gray-700 pb-3 border-b border-gray-200">
-                  <div className="flex items-center gap-2">
-                    <Info className="w-3.5 h-3.5 text-gray-400" />
-                    <span>Taxes & Charges</span>
-                  </div>
-                  <span className="font-medium">₹{priceBreakdown.estimatedTax.toFixed(2)}</span>
-                </div>
-              )}
-
-              <div className="pt-2">
-                <div className="flex items-center justify-between text-base font-bold text-gray-900">
-                  <span>Grand Total</span>
-                  <span className="text-[#003B65]">₹{priceBreakdown.grandTotal.toFixed(2)}</span>
-                </div>
+            <div className="flex items-center justify-between text-base text-gray-600">
+              <div className="flex items-center gap-3">
+                <ShoppingBag size={20} />
+                <span>Handling Charge</span>
               </div>
+              <span className="font-bold text-gray-900">₹{priceBreakdown.handlingCharge.toFixed(2)}</span>
+            </div>
 
+            <div className="flex items-center gap-2 text-gray-600">
+              <span>Taxes & Charges</span>
+              <Info size={16} className="text-blue-400 fill-current bg-white" />
+            </div>
+
+            {/* Grand Total Section - After Taxes & Charges */}
+            <div className="pt-6 border-t border-dotted border-gray-200">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xl font-bold text-gray-900">Grand Total</span>
+                <span className="text-xl font-bold text-gray-900">₹{priceBreakdown.grandTotal.toFixed(2)}</span>
+              </div>
               {savings > 0 && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-2.5 mt-2">
-                  <p className="text-xs font-medium text-blue-900">
+                <div className="space-y-1">
+                  <div className="inline-block bg-[#4A90E2] text-white text-xs font-bold px-2 py-1 rounded">
                     You Saves ₹{savings.toFixed(2)}
-                  </p>
-                  <p className="text-[10px] text-blue-700 mt-0.5">Including taxes & charges</p>
+                  </div>
+                  <p className="text-xs text-gray-500">Including taxes & charges</p>
                 </div>
               )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

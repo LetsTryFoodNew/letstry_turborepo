@@ -10,6 +10,8 @@ import { CouponsModal } from './CouponsModal';
 import { AddressModal } from './AddressModal';
 import { AddressDetailsModal, AddressFormData } from './AddressDetailsModal';
 import { PaymentModal } from './PaymentModal';
+import { AppliedCoupon } from './AppliedCoupon';
+import { ChevronUp } from 'lucide-react';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -164,7 +166,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             transition={{ type: 'tween', duration: 0.3, ease: 'easeOut' }}
             className="relative w-full md:w-[448px] h-[85vh] md:h-full bg-white shadow-2xl flex flex-col rounded-t-[20px] md:rounded-t-none overflow-hidden"
           >
-            <CartHeader itemCount={items.length} onClose={onClose} />
+            <CartHeader
+              itemCount={items.length}
+              onClose={onClose}
+              savings={priceBreakdown.discountAmount}
+            />
 
             <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
               <div className="mb-6">
@@ -178,7 +184,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 ))}
               </div>
 
-              <CartCoupon onClick={onToggleCoupons} />
+              {appliedCouponCode ? (
+                <AppliedCoupon
+                  code={appliedCouponCode}
+                  discountAmount={priceBreakdown.discountAmount}
+                  onRemove={onRemoveCoupon}
+                />
+              ) : (
+                <CartCoupon onClick={onToggleCoupons} />
+              )}
 
               <CartSuggestions
                 suggestions={suggestions}
@@ -186,9 +200,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               />
             </div>
 
+            <div className="border-t border-gray-100 bg-white">
+              <button
+                onClick={onTogglePriceDetails}
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              >
+                <span className="text-sm font-medium text-[#003B65] underline decoration-[#003B65] underline-offset-2">
+                  View price details
+                </span>
+                <ChevronUp className="w-4 h-4 text-[#003B65]" />
+              </button>
+            </div>
+
             <PriceDetails
-              isExpanded={showPriceDetails}
-              onToggle={onTogglePriceDetails}
+              isOpen={showPriceDetails}
+              onClose={onTogglePriceDetails}
               priceBreakdown={priceBreakdown}
             />
 
@@ -233,8 +259,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               userDetails={userDetails}
             />
           </motion.div>
-        </div>
+        </div >
       )}
-    </AnimatePresence>
+    </AnimatePresence >
   );
 };
