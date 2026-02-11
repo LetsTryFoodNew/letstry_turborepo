@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { getCdnUrl } from '@/lib/image-utils';
+import useEmblaCarousel from 'embla-carousel-react';
+import type { EmblaCarouselType } from 'embla-carousel';
 
 interface ProductGalleryProps {
   images: string[];
@@ -13,8 +15,40 @@ interface ProductGalleryProps {
 }
 
 export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, isOutOfStock = false }) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [mainCarouselRef, mainApi] = useEmblaCarousel({ loop: false });
+  const [thumbCarouselRef, thumbApi] = useEmblaCarousel({
+    containScroll: 'keepSnaps',
+    dragFree: true,
+  });
+
+  const onThumbClick = useCallback(
+    (index: number) => {
+      if (!mainApi || !thumbApi) return;
+      mainApi.scrollTo(index);
+    },
+    [mainApi, thumbApi]
+  );
+
+  const onSelect = useCallback(() => {
+    if (!mainApi || !thumbApi) return;
+    const selected = mainApi.selectedScrollSnap();
+    setSelectedIndex(selected);
+    thumbApi.scrollTo(selected);
+  }, [mainApi, thumbApi]);
+
+  useEffect(() => {
+    if (!mainApi) return;
+    onSelect();
+    mainApi.on('select', onSelect);
+    mainApi.on('reInit', onSelect);
+
+    return () => {
+      mainApi.off('select', onSelect);
+      mainApi.off('reInit', onSelect);
+    };
+  }, [mainApi, onSelect]);
 
   return (
     <div className={cn("flex flex-col gap-4", isOutOfStock && "grayscale opacity-80")}>
@@ -26,37 +60,45 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ images, isOutOfS
           <ChevronLeft className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-black cursor-pointer" />
         </button>
 
-        <div className="relative w-full h-full p-2 sm:p-4 md:p-6">
-          <Image
-            src={getCdnUrl(images[selectedIndex])}
-            alt="Product Image"
-            fill
-            className="object-contain"
-            priority
-          />
+        <div className="overflow-hidden w-full h-full" ref={mainCarouselRef}>
+          <div className="flex h-full">
+            {images.map((img, idx) => (
+              <div key={idx} className="flex-[0_0_100%] min-w-0 relative p-2 sm:p-4 md:p-6">
+                <Image
+                  src={getCdnUrl(img)}
+                  alt={`Product Image ${idx + 1}`}
+                  fill
+                  className="object-contain"
+                  priority={idx === 0}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="flex gap-2 sm:gap-3 md:gap-4 overflow-x-auto pb-2">
-        {images.map((img, idx) => (
-          <button
-            key={idx}
-            onClick={() => setSelectedIndex(idx)}
-            className={cn(
-              "relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex-shrink-0 rounded-md sm:rounded-lg overflow-hidden border-2 bg-white p-0.5 sm:p-1",
-              selectedIndex === idx ? "border-blue-900" : "border-gray-200"
-            )}
-          >
-            <div className="relative w-full h-full">
-              <Image
-                src={getCdnUrl(img)}
-                alt={`Thumbnail ${idx + 1}`}
-                fill
-                className="object-contain"
-              />
-            </div>
-          </button>
-        ))}
+      <div className="overflow-hidden" ref={thumbCarouselRef}>
+        <div className="flex gap-2 sm:gap-3 md:gap-4">
+          {images.map((img, idx) => (
+            <button
+              key={idx}
+              onClick={() => onThumbClick(idx)}
+              className={cn(
+                "relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex-shrink-0 rounded-md sm:rounded-lg overflow-hidden border-2 bg-white p-0.5 sm:p-1",
+                selectedIndex === idx ? "border-blue-900" : "border-gray-200"
+              )}
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={getCdnUrl(img)}
+                  alt={`Thumbnail ${idx + 1}`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
