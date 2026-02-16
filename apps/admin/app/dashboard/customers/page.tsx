@@ -132,7 +132,7 @@ export default function CustomersPage() {
       <Card>
         <CardContent className="pt-6">
           <h3 className="text-sm font-medium text-muted-foreground mb-4">Platform Breakdown</h3>
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             <div className="flex items-center gap-2">
               <Smartphone className="h-4 w-4 text-green-600" />
               <div>
@@ -173,13 +173,6 @@ export default function CustomersPage() {
               <div>
                 <p className="text-lg font-bold">{summary?.platformStats?.linux || 0}</p>
                 <p className="text-xs text-muted-foreground">Linux</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Monitor className="h-4 w-4 text-muted-foreground" />
-              <div>
-                <p className="text-lg font-bold">{summary?.platformStats?.desktop || 0}</p>
-                <p className="text-xs text-muted-foreground">Desktop</p>
               </div>
             </div>
           </div>

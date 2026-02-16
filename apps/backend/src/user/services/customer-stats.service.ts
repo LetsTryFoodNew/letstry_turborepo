@@ -80,7 +80,7 @@ export class CustomerStatsService {
 
     const web = Math.max(0, total - ios - android - windows - macos - linux);
 
-    return { android, ios, web, macos, desktop: 0, linux, windows };
+    return { android, ios, web, macos, linux, windows };
   }
 
   async getStatusStats(): Promise<StatusStats> {

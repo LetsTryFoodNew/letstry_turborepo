@@ -7,7 +7,6 @@ export enum CustomerPlatform {
   IOS = 'ios',
   WEB = 'web',
   MACOS = 'macos',
-  DESKTOP = 'desktop',
   LINUX = 'linux',
   WINDOWS = 'windows',
 }

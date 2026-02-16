@@ -49,7 +49,7 @@ export const GET_ALL_CUSTOMERS = gql`
           ios
           web
           macos
-          desktop
+
           linux
           windows
         }

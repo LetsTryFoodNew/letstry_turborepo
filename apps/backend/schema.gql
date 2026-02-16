@@ -139,7 +139,6 @@ type PlatformStats {
   ios: Int!
   web: Int!
   macos: Int!
-  desktop: Int!
   linux: Int!
   windows: Int!
 }
@@ -1284,7 +1283,6 @@ enum CustomerPlatform {
   IOS
   WEB
   MACOS
-  DESKTOP
   LINUX
   WINDOWS
 }

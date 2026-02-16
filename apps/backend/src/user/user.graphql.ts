@@ -19,9 +19,6 @@ export class PlatformStats {
   macos: number;
 
   @Field(() => Int)
-  desktop: number;
-
-  @Field(() => Int)
   linux: number;
 
   @Field(() => Int)

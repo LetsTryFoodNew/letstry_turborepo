@@ -56,7 +56,7 @@ export interface CustomerSummary {
     ios: number;
     web: number;
     macos: number;
-    desktop: number;
+
     linux: number;
     windows: number;
   };
