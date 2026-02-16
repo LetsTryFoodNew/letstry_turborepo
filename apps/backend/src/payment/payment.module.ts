@@ -47,10 +47,10 @@ import { WhatsAppNotificationProcessor } from './processors/whatsapp-notificatio
       defaultJobOptions: {
         removeOnComplete: false,
         removeOnFail: false,
-        attempts: 3,
+        attempts: Number.MAX_SAFE_INTEGER,
         backoff: {
           type: 'exponential',
-          delay: 5000,
+          delay: 30000,
         },
       },
     }),

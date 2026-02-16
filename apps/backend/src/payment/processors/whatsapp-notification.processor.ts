@@ -27,7 +27,7 @@ export class WhatsAppNotificationProcessor extends WorkerHost {
     const { phoneNumber, orderId, amountPaid, paymentMode, transactionId, orderDate } = job.data;
 
     this.logger.log(
-      `Processing WhatsApp payment confirmation for Order: ${orderId}`,
+      `Processing WhatsApp payment confirmation - ${JSON.stringify({ jobId: job.id, attempt: job.attemptsMade + 1, payload: job.data })}`,
       'WhatsAppNotificationProcessor',
     );
 
