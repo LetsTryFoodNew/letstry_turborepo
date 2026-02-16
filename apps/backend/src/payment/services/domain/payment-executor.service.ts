@@ -294,6 +294,11 @@ export class PaymentExecutorService {
     order: any,
   ): Promise<void> {
     try {
+      this.paymentLogger.log('Attempting to queue WhatsApp notification', {
+        paymentOrderId: paymentOrder.paymentOrderId,
+        orderId: order.orderId,
+      });
+
       const identity = await this.identityModel.findById(paymentOrder.identityId);
       const paymentEvent = await this.getPaymentEvent(paymentOrder.paymentEventId);
       
@@ -301,6 +306,13 @@ export class PaymentExecutorService {
         identity?.phoneNumber || 
         order.recipientContact?.phone ||
         paymentEvent?.cartSnapshot?.shippingAddress?.recipientPhone;
+      
+      this.paymentLogger.log('WhatsApp phone number resolution', {
+        identityPhone: identity?.phoneNumber,
+        orderPhone: order.recipientContact?.phone,
+        shippingPhone: paymentEvent?.cartSnapshot?.shippingAddress?.recipientPhone,
+        resolvedPhone: phoneNumber
+      });
 
       if (!phoneNumber || phoneNumber === 'N/A') {
         this.paymentLogger.warn('No phone number available for WhatsApp notification', {
