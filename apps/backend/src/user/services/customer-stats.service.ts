@@ -8,7 +8,6 @@ import {
 } from '../../common/schemas/identity.schema';
 import { Role } from '../../common/enums/role.enum';
 import { Order } from '../../order/order.schema';
-import { CustomerPlatform } from '../user.input';
 import { CustomerSummary, PlatformStats, StatusStats } from '../user.graphql';
 
 @Injectable()
@@ -40,31 +39,48 @@ export class CustomerStatsService {
   }
 
   async getPlatformStats(): Promise<PlatformStats> {
-    const baseFilter = { role: { $in: [Role.USER, Role.GUEST] } };
+    const baseFilter = {
+      role: { $in: [Role.USER, Role.GUEST] },
+      deviceInfo: { $ne: null },
+    };
 
-    const [android, ios, web, macos, desktop, linux, windows] = await Promise.all([
-      this.countByPlatform(baseFilter, CustomerPlatform.ANDROID),
-      this.countByPlatform(baseFilter, CustomerPlatform.IOS),
-      this.countByPlatform(baseFilter, CustomerPlatform.WEB),
-      this.countByPlatform(baseFilter, CustomerPlatform.MACOS),
-      this.countByPlatform(baseFilter, CustomerPlatform.DESKTOP),
-      this.countByPlatform(baseFilter, CustomerPlatform.LINUX),
-      this.countByPlatform(baseFilter, CustomerPlatform.WINDOWS),
+    const [ios, android, windows, macos, linux] = await Promise.all([
+      this.identityModel.countDocuments({
+        ...baseFilter,
+        deviceInfo: { $regex: /iphone|ipad|ipod/i },
+      }).exec(),
+      this.identityModel.countDocuments({
+        ...baseFilter,
+        deviceInfo: { $regex: /android/i },
+      }).exec(),
+      this.identityModel.countDocuments({
+        ...baseFilter,
+        deviceInfo: { $regex: /windows/i },
+      }).exec(),
+      this.identityModel.countDocuments({
+        ...baseFilter,
+        deviceInfo: {
+          $regex: /macintosh|mac os x/i,
+          $not: { $regex: /iphone|ipad|ipod/i },
+        },
+      }).exec(),
+      this.identityModel.countDocuments({
+        ...baseFilter,
+        deviceInfo: {
+          $regex: /linux/i,
+          $not: { $regex: /android/i },
+        },
+      }).exec(),
     ]);
 
-    return { android, ios, web, macos, desktop, linux, windows };
-  }
+    const total = await this.identityModel.countDocuments({
+      role: { $in: [Role.USER, Role.GUEST] },
+      deviceInfo: { $ne: null },
+    }).exec();
 
-  async countByPlatform(
-    baseFilter: any,
-    platform: CustomerPlatform,
-  ): Promise<number> {
-    return this.identityModel
-      .countDocuments({
-        ...baseFilter,
-        'signupSource.platform': platform,
-      })
-      .exec();
+    const web = Math.max(0, total - ios - android - windows - macos - linux);
+
+    return { android, ios, web, macos, desktop: 0, linux, windows };
   }
 
   async getStatusStats(): Promise<StatusStats> {
