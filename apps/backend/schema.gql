@@ -192,7 +192,7 @@ type EnrichedCustomer {
   createdAt: DateTime!
   updatedAt: DateTime!
   totalOrders: Int!
-  totalSpent: Int!
+  totalSpent: Float!
   activeCartItemsCount: Int
   displayPhone: String
   isGuest: Boolean!
@@ -248,7 +248,7 @@ type CustomerDetails {
   createdAt: DateTime!
   updatedAt: DateTime!
   totalOrders: Int!
-  totalSpent: Int!
+  totalSpent: Float!
   isGuest: Boolean!
   orders: JSON!
   activeCart: JSON
