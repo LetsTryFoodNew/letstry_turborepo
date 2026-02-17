@@ -90,6 +90,16 @@ export class OrderService {
     return this.itemService.populateOrderItems(order);
   }
 
+  async getOrderByInternalId(id: string): Promise<Order> {
+    const order = await this.queryService.getOrderByInternalId(id);
+
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+    return this.itemService.populateOrderItems(order);
+  }
+
   async getOrdersByIdentity(params: {
     identityId: string;
     mergedGuestIds?: string[];

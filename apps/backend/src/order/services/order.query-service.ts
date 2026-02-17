@@ -27,6 +27,10 @@ export class OrderQueryService {
     return this.orderRepository.findById(orderId);
   }
 
+  async getOrderByInternalId(id: string): Promise<Order | null> {
+    return this.orderRepository.findByInternalId(id);
+  }
+
   async getOrderByPaymentOrderId(
     paymentOrderId: string,
   ): Promise<Order | null> {

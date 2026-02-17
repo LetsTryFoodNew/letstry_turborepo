@@ -71,10 +71,10 @@ export class WinstonLoggerService implements LoggerService {
           level: 'info',
           format: winston.format.combine(
             winston.format((info) => {
-              const isWhatsAppContext = info.context === 'WhatsAppNotificationProcessor' || 
-                                       info.context === 'WhatsAppService';
-              const hasWhatsAppInMessage = typeof info.message === 'string' && 
-                                          info.message.toLowerCase().includes('whatsapp');
+              const isWhatsAppContext = info.context === 'WhatsAppNotificationProcessor' ||
+                info.context === 'WhatsAppService';
+              const hasWhatsAppInMessage = typeof info.message === 'string' &&
+                info.message.toLowerCase().includes('whatsapp');
               return isWhatsAppContext || hasWhatsAppInMessage ? info : false;
             })(),
             winston.format.timestamp(),
@@ -88,6 +88,18 @@ export class WinstonLoggerService implements LoggerService {
           format: winston.format.combine(
             winston.format((info) => {
               return info.context === 'GuestConversion' ? info : false;
+            })(),
+            winston.format.timestamp(),
+            winston.format.errors({ stack: true }),
+            winston.format.json(),
+          ),
+        }),
+        new winston.transports.File({
+          filename: path.resolve('logs/invoice.log'),
+          level: 'debug',
+          format: winston.format.combine(
+            winston.format((info) => {
+              return info.context === 'InvoiceService' ? info : false;
             })(),
             winston.format.timestamp(),
             winston.format.errors({ stack: true }),

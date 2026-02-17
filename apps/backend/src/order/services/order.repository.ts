@@ -16,6 +16,10 @@ export class OrderRepository {
     return this.orderModel.findOne({ orderId }).exec();
   }
 
+  async findByInternalId(id: string): Promise<Order | null> {
+    return this.orderModel.findById(id).exec();
+  }
+
   async findByPaymentOrderId(paymentOrderId: string): Promise<Order | null> {
     return this.orderModel.findOne({ paymentOrderId }).exec();
   }

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Package, Truck, CheckCircle, XCircle, RefreshCcw, Clock, Loader2 } from "lucide-react"
+import { Eye, Package, Truck, CheckCircle, XCircle, RefreshCcw, Clock, Loader2, FileDown } from "lucide-react"
 import {
   Tooltip,
   TooltipContent,
@@ -34,6 +34,8 @@ interface OrderTableProps {
   onViewDetails: (order: Order) => void
   onUpdateStatus: (orderId: string, status: OrderStatus) => void
 }
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL?.replace('/graphql', '') || 'http://localhost:5000'
 
 export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTableProps) {
   const getOrderStatusBadge = (status: OrderStatus) => {
@@ -186,6 +188,22 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>View Details</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          onClick={() => window.open(`${API_BASE_URL}/orders/${order._id}/invoice`, '_blank')}
+                        >
+                          <FileDown className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Download Invoice</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
 

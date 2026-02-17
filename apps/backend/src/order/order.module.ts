@@ -12,6 +12,8 @@ import { OrderCommandService } from './services/order.command-service';
 import { OrderItemService } from './services/order.item-service';
 import { PaymentOrder, PaymentOrderSchema } from '../payment/entities/payment.schema';
 import { Address, AddressSchema } from '../address/address.schema'; import { PackingModule } from '../packing/packing.module';
+import { OrderController } from './order.controller';
+import { InvoiceService } from './services/invoice.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -23,6 +25,7 @@ import { Address, AddressSchema } from '../address/address.schema'; import { Pac
     ProductModule,
     forwardRef(() => PackingModule),
   ],
+  controllers: [OrderController],
   providers: [
     OrderService,
     OrderResolver,
@@ -32,6 +35,7 @@ import { Address, AddressSchema } from '../address/address.schema'; import { Pac
     OrderQueryService,
     OrderCommandService,
     OrderItemService,
+    InvoiceService,
   ],
   exports: [OrderService, OrderCartLoggerService, OrderRepository],
 })
