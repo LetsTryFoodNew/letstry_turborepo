@@ -80,6 +80,14 @@ export class ScanLoggerService {
         });
     }
 
+    logValidationStep(step: string, data: Record<string, any>) {
+        this.logger.info('Validation step', {
+            event: 'SCAN_VALIDATION_STEP',
+            step,
+            ...data,
+        });
+    }
+
     logScanError(mutation: string, packingOrderId: string, error: any) {
         this.logger.error('Scan error occurred', {
             event: 'SCAN_ERROR',
