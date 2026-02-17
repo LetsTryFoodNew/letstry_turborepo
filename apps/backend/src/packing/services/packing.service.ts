@@ -8,6 +8,7 @@ import { PackingLifecycleService } from './domain/packing-lifecycle.service';
 import { PackingOrderCrudService } from './core/packing-order-crud.service';
 import { BoxRecommendationService } from '../../box-size/services/domain/box-recommendation.service';
 import { PackingLoggerService } from './domain/packing-logger.service';
+import { ScanLoggerService } from './domain/scan-logger.service';
 import { OrderStatus } from '../../order/order.schema';
 import { PackingOrderCreatorService } from './domain/packing-order-creator.service';
 import { Order } from '../../order/order.schema';
@@ -31,6 +32,7 @@ export class PackingService {
     private readonly packingOrderCrud: PackingOrderCrudService,
     private readonly boxRecommendation: BoxRecommendationService,
     private readonly packingLogger: PackingLoggerService,
+    private readonly scanLogger: ScanLoggerService,
     private readonly orderRepository: OrderRepository,
     private readonly packingOrderCreator: PackingOrderCreatorService,
     private readonly shipmentService: ShipmentService,
@@ -79,10 +81,14 @@ export class PackingService {
     ean: string,
     packerId: string,
   ): Promise<any> {
+    this.scanLogger.logScanRequest('scanItem', { packingOrderId, ean, packerId });
+
     const validation = await this.scanValidation.validateEAN(
       packingOrderId,
       ean,
     );
+
+    this.scanLogger.logScanValidation(packingOrderId, ean, validation);
 
     const scanLog = await this.scanLogCrud.create({
       packingOrderId,
@@ -106,10 +112,14 @@ export class PackingService {
     }
 
     const logObj = scanLog.toObject ? scanLog.toObject() : scanLog;
-    return {
+    const response = {
       ...logObj,
       itemName: validation.item?.name,
     };
+
+    this.scanLogger.logScanResponse('scanItem', packingOrderId, response);
+
+    return response;
   }
 
   async batchScanItems(
@@ -117,16 +127,19 @@ export class PackingService {
     items: { ean: string }[],
     packerId: string,
   ): Promise<any> {
+    this.scanLogger.logBatchScanRequest({ packingOrderId, items, packerId });
+
     const results: any[] = [];
     let successCount = 0;
     let failureCount = 0;
 
     for (const item of items) {
-      // Process each scan individually
       const validation = await this.scanValidation.validateEAN(
         packingOrderId,
         item.ean,
       );
+
+      this.scanLogger.logScanValidation(packingOrderId, item.ean, validation);
 
       const scanLog = await this.scanLogCrud.create({
         packingOrderId,
@@ -159,12 +172,16 @@ export class PackingService {
       });
     }
 
-    return {
+    const response = {
       totalProcessed: results.length,
       successCount,
       failureCount,
       results,
     };
+
+    this.scanLogger.logBatchScanResponse(packingOrderId, response);
+
+    return response;
   }
 
   async uploadEvidence(

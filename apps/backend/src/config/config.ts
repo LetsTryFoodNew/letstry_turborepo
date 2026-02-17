@@ -15,6 +15,7 @@ export default () => ({
     guestConversionFile:
       process.env.GUEST_CONVERSION_LOG_FILE || 'logs/guest-conversion.log',
     packingFile: process.env.PACKING_LOG_FILE || 'logs/packing.log',
+    scanFile: process.env.SCAN_LOG_FILE || 'logs/scan.log',
     shipmentFile: process.env.SHIPMENT_LOG_FILE || 'logs/shipment.log',
   },
   packing: {
