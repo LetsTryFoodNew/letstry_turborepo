@@ -158,15 +158,19 @@ export class OrderResolver {
   @ResolveField('estimatedWeight', () => Number, { nullable: true })
   async estimatedWeight(@Parent() order: any): Promise<number | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
-    if (!details) return null;
-    return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.weight || null;
+    if (details) {
+      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.weight || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.weight || null;
   }
 
   @ResolveField('boxDimensions', () => BoxDimensionType, { nullable: true })
   async boxDimensions(@Parent() order: any): Promise<BoxDimensionType | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
-    if (!details) return null;
-    return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.boxDimensions || null;
+    if (details) {
+      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.boxDimensions || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.boxDimensions || null;
   }
 }
 
@@ -202,14 +206,18 @@ export class OrderWithUserInfoResolver {
   @ResolveField('estimatedWeight', () => Number, { nullable: true })
   async estimatedWeight(@Parent() order: any): Promise<number | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
-    if (!details) return null;
-    return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.weight || null;
+    if (details) {
+      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.weight || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.weight || null;
   }
 
   @ResolveField('boxDimensions', () => BoxDimensionType, { nullable: true })
   async boxDimensions(@Parent() order: any): Promise<BoxDimensionType | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
-    if (!details) return null;
-    return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.boxDimensions || null;
+    if (details) {
+      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.boxDimensions || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.boxDimensions || null;
   }
 }

@@ -560,6 +560,21 @@ export class PackingService {
     return { packingOrder, evidence };
   }
 
+  async calculateWeightAndBoxFromOrder(order: any): Promise<{ weight: number; boxDimensions: any } | null> {
+    try {
+      const items = await this.packingOrderCreator.extractItemsForOrder(order);
+      const totalWeight = Math.max(
+        items.reduce((sum, item) => sum + (item.dimensions?.weight || 0) * item.quantity, 0) / 1000,
+        0.5,
+      );
+      const recommendedBox = await this.boxRecommendation.selectOptimalBox(items);
+      const boxDimensions = recommendedBox?.internalDimensions || null;
+      return { weight: totalWeight, boxDimensions };
+    } catch {
+      return null;
+    }
+  }
+
   calculateShipmentWeight(order: any, packingOrder: any, evidence: any): { weight: number; boxDimensions: any } | null {
     let boxDimensions: any;
     let totalWeight = 0;
