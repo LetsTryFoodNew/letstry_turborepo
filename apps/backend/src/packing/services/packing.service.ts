@@ -575,38 +575,35 @@ export class PackingService {
     }
   }
 
-  calculateShipmentWeight(order: any, packingOrder: any, evidence: any): { weight: number; boxDimensions: any } | null {
+  async calculateShipmentWeight(order: any, packingOrder: any, evidence: any): Promise<{ weight: number; boxDimensions: any } | null> {
     let boxDimensions: any;
     let totalWeight = 0;
 
     if (evidence) {
       boxDimensions = evidence.actualBox?.dimensions || evidence.recommendedBox?.dimensions;
-      // Calculate weight from order items as evidenced
       totalWeight = order.items.reduce(
         (sum: number, item: any) => sum + (item.dimensions?.weight || 0) * item.quantity,
         0,
       ) / 1000;
     } else if (packingOrder) {
-      // Fallback to packing order items if evidence not found (rare but possible during packing)
-      // This might need box recommendation if not stored, but for now assuming we want what's available
-      // Ideally we should use boxRecommendation service here if needed, but let's stick to simple weight calc
       totalWeight = packingOrder.items.reduce(
         (sum: number, item: any) => sum + (item.dimensions?.weight || 0) * item.quantity,
         0,
       ) / 1000;
-      // We can't easily get dimensions without running recommendation, so returning null for dimensions if no evidence
+
+      try {
+        const recommendedBox = await this.boxRecommendation.selectOptimalBox(packingOrder.items);
+        boxDimensions = recommendedBox?.internalDimensions || null;
+      } catch {
+        boxDimensions = null;
+      }
     }
 
-    if (!boxDimensions && packingOrder) {
-      // Optional: Run recommendation on fly if needed, but for display purposes maybe just weight is enough if no box
-    }
-
-    // Ensure minimum weight of 0.5kg
     totalWeight = Math.max(totalWeight, 0.5);
 
     return {
       weight: totalWeight,
-      boxDimensions: boxDimensions || null
+      boxDimensions: boxDimensions || null,
     };
   }
 }

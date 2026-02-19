@@ -159,7 +159,7 @@ export class OrderResolver {
   async estimatedWeight(@Parent() order: any): Promise<number | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
     if (details) {
-      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.weight || null;
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.weight || null;
     }
     return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.weight || null;
   }
@@ -168,7 +168,7 @@ export class OrderResolver {
   async boxDimensions(@Parent() order: any): Promise<BoxDimensionType | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
     if (details) {
-      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.boxDimensions || null;
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.boxDimensions || null;
     }
     return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.boxDimensions || null;
   }
@@ -207,7 +207,7 @@ export class OrderWithUserInfoResolver {
   async estimatedWeight(@Parent() order: any): Promise<number | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
     if (details) {
-      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.weight || null;
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.weight || null;
     }
     return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.weight || null;
   }
@@ -216,7 +216,7 @@ export class OrderWithUserInfoResolver {
   async boxDimensions(@Parent() order: any): Promise<BoxDimensionType | null> {
     const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
     if (details) {
-      return this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence)?.boxDimensions || null;
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.boxDimensions || null;
     }
     return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.boxDimensions || null;
   }
