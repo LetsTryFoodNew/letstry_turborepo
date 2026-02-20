@@ -38,12 +38,13 @@ const manufacturingUnits = [
         fssaiLicense: "10824999000091",
     },
     {
-        batchCode: "T",
-        companyName: "EARTH CRUST PRIVATE LIMITED",
+        batchCode: "G",
+        companyName: "GAVYANMART PANCHGVYA UTPPAD PRIVATE LIMITED",
         address:
-            "TIERRA FOOD INDIA PRIVATE LIMITED, KINFRA FOOD PROCESSING PARK, ELAMANNOOR P.O, ADOOR, PATHANAMTHITTA, KERALA-681524",
-        fssaiLicense: "10019041002004",
+            "BHARI VAS, NEAR SWAMI VAS, VILLAGE SHERPURA,POST KANSARI DEESA, Banas Kantha, Banaskantha, Gujarat-385535",
+        fssaiLicense: "XXXXXXXXXXXXXXX",
     },
+
 ];
 
 export default function AddressPage() {
