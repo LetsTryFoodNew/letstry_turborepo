@@ -44,6 +44,14 @@ const manufacturingUnits = [
             "BHARI VAS, NEAR SWAMI VAS, VILLAGE SHERPURA,POST KANSARI DEESA, Banas Kantha, Banaskantha, Gujarat-385535",
         fssaiLicense: "XXXXXXXXXXXXXXX",
     },
+    {
+        batchCode: "T",
+        companyName: "TIERRA FOOD INDIA PRIVATE LIMITED",
+        address:
+            "KINFRA FOOD PROCESSING PARK, ELAMANNOOR P.O, ADOOR, PATHANAMTHITTA, KERALA-681524",
+        fssaiLicense: "10019041002004",
+
+    },
 
 ];
 
