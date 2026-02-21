@@ -11,7 +11,8 @@ export type OrderStatus =
   | "PACKED"
   | "SHIPPED"
   | "IN_TRANSIT"
-  | "DELIVERED";
+  | "DELIVERED"
+  | "SHIPMENT_FAILED";
 export type PaymentStatus =
   | "NOT_STARTED"
   | "EXECUTING"

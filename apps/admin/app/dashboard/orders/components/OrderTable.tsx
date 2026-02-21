@@ -64,6 +64,8 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
         return <Badge variant="outline" className="border-indigo-500 text-indigo-600"><Loader2 className="h-3 w-3 mr-1" /> In Transit</Badge>
       case 'DELIVERED':
         return <Badge className="bg-green-600"><CheckCircle className="h-3 w-3 mr-1" /> Delivered</Badge>
+      case 'SHIPMENT_FAILED':
+        return <Badge variant="outline" className="border-red-500 text-red-600"><XCircle className="h-3 w-3 mr-1" /> Shipment Failed</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -93,7 +95,8 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
       'PACKED': ['SHIPPED'],
       'SHIPPED': ['IN_TRANSIT'],
       'IN_TRANSIT': ['DELIVERED'],
-      'DELIVERED': []
+      'DELIVERED': [],
+      'SHIPMENT_FAILED': [],
     }
     return statusFlow[currentStatus]?.includes(newStatus) || false
   }
@@ -221,7 +224,7 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
                     </Tooltip>
                   </TooltipProvider>
 
-                  {(order.orderStatus === 'CONFIRMED' || order.orderStatus === 'PACKED') && (
+                  {order.orderStatus !== 'DELIVERED' && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button

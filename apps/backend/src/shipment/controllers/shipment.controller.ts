@@ -22,6 +22,8 @@ export class ShipmentController {
     async getPublicTracking(@Param('awb') awb: string) {
         const result = await this.shipmentService.getShipmentWithFreshTracking(awb);
         const shipmentObj = result.shipment.toObject() as any;
+        const orderObj = result.order ? (result.order.toObject ? result.order.toObject() : result.order) : null;
+
         return {
             awbNumber: shipmentObj.dtdcAwbNumber,
             statusCode: shipmentObj.currentStatusCode,
@@ -32,6 +34,20 @@ export class ShipmentController {
             isDelivered: shipmentObj.isDelivered,
             isCancelled: shipmentObj.isCancelled,
             estimatedDelivery: shipmentObj.estimatedDelivery ?? null,
+            deliveryAddress: shipmentObj.destinationDetails ?? null,
+            order: orderObj ? {
+                orderId: orderObj.orderId,
+                totalAmount: orderObj.totalAmount,
+                currency: orderObj.currency,
+                items: (orderObj.items ?? []).map((item: any) => ({
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price,
+                    totalPrice: item.totalPrice,
+                    variant: item.variant ?? null,
+                    image: item.image ?? null,
+                })),
+            } : null,
             trackingHistory: result.tracking.map((t: any) => {
                 const obj = t.toObject ? t.toObject() : t;
                 return {

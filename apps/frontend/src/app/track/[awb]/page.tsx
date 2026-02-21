@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { CheckCircle, Truck, XCircle, Package, MapPin, Clock, Loader2 } from 'lucide-react';
+import { CheckCircle, Truck, XCircle, Package, MapPin, Clock, Loader2, ShoppingBag, User } from 'lucide-react';
 import Link from 'next/link';
 
 interface TrackingEvent {
@@ -11,6 +11,32 @@ interface TrackingEvent {
   location: string | null;
   actionDatetime: string;
   remarks: string | null;
+}
+
+interface DeliveryAddress {
+  name: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2?: string;
+  pincode: string;
+  city: string;
+  state: string;
+}
+
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: string;
+  totalPrice: string;
+  variant: string | null;
+  image: string | null;
+}
+
+interface OrderData {
+  orderId: string;
+  totalAmount: string;
+  currency: string;
+  items: OrderItem[];
 }
 
 interface TrackingData {
@@ -23,7 +49,14 @@ interface TrackingData {
   isDelivered: boolean;
   isCancelled: boolean;
   estimatedDelivery: string | null;
+  deliveryAddress: DeliveryAddress | null;
+  order: OrderData | null;
   trackingHistory: TrackingEvent[];
+}
+
+function maskPhone(phone: string): string {
+  if (phone.length < 7) return phone;
+  return phone.slice(0, 3) + '****' + phone.slice(-3);
 }
 
 function formatDateTime(iso: string): string {
@@ -151,6 +184,53 @@ export default function TrackPage() {
             )}
           </div>
         </div>
+
+        {data.deliveryAddress && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 className="text-sm font-semibold text-gray-900 mb-4 flex gap-2 items-center">
+              <User className="h-4 w-4 text-yellow-500" />
+              Delivery Address
+            </h2>
+            <div className="text-sm text-gray-700 space-y-1">
+              <p className="font-medium text-gray-900">{data.deliveryAddress.name}</p>
+              <p>{data.deliveryAddress.addressLine1}</p>
+              {data.deliveryAddress.addressLine2 && <p>{data.deliveryAddress.addressLine2}</p>}
+              <p>{data.deliveryAddress.city}, {data.deliveryAddress.state} — {data.deliveryAddress.pincode}</p>
+              <p className="text-gray-500">{maskPhone(data.deliveryAddress.phone)}</p>
+            </div>
+          </div>
+        )}
+
+        {data.order && data.order.items.length > 0 && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 className="text-sm font-semibold text-gray-900 mb-4 flex gap-2 items-center">
+              <ShoppingBag className="h-4 w-4 text-yellow-500" />
+              Order Details
+              {data.order.orderId && (
+                <span className="ml-auto text-xs text-gray-400 font-normal">#{data.order.orderId}</span>
+              )}
+            </h2>
+            <div className="space-y-3">
+              {data.order.items.map((item, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  {item.image && (
+                    <img src={item.image} alt={item.name} className="h-12 w-12 rounded-lg object-cover shrink-0 bg-gray-50" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
+                    {item.variant && <p className="text-xs text-gray-400">{item.variant}</p>}
+                    <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                  </div>
+                  <p className="text-sm font-medium text-gray-800 shrink-0">₹{item.totalPrice}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between text-sm">
+              <span className="text-gray-500">Total</span>
+              <span className="font-semibold text-gray-900">₹{data.order.totalAmount}</span>
+            </div>
+          </div>
+        )}
 
         {sortedHistory.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

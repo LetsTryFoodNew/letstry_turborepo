@@ -9,6 +9,7 @@ import { CreateShipmentData, ShipmentFilters } from '../interfaces/shipment.inte
 import { DtdcBookingPayload } from '../interfaces/dtdc-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { ShipmentLoggerService } from './shipment-logger.service';
+import { OrderRepository } from '../../order/services/order.repository';
 
 @Injectable()
 export class ShipmentService {
@@ -20,6 +21,7 @@ export class ShipmentService {
     private readonly statusMapper: ShipmentStatusMapperService,
     private readonly configService: ConfigService,
     private readonly shipmentLogger: ShipmentLoggerService,
+    private readonly orderRepository: OrderRepository,
   ) { }
 
   async createShipment(data: CreateShipmentData): Promise<{ shipment: Shipment; awbNumber: string; labelUrl: string }> {
@@ -273,7 +275,7 @@ export class ShipmentService {
     return { shipment, tracking };
   }
 
-  async getShipmentWithFreshTracking(awbNumber: string): Promise<{ shipment: Shipment; tracking: any[] }> {
+  async getShipmentWithFreshTracking(awbNumber: string): Promise<{ shipment: Shipment; tracking: any[]; order: any | null }> {
     const shipment = await this.findByAwbNumber(awbNumber);
 
     if (!shipment) {
@@ -300,6 +302,11 @@ export class ShipmentService {
     const updatedShipment = await this.findByAwbNumber(awbNumber);
     const tracking = await this.trackingService.getShipmentTimeline(shipmentId);
 
-    return { shipment: updatedShipment!, tracking };
+    let order: any | null = null;
+    if (updatedShipment!.orderId) {
+      order = await this.orderRepository.findByInternalId(updatedShipment!.orderId.toString());
+    }
+
+    return { shipment: updatedShipment!, tracking, order };
   }
 }

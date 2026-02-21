@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { OrderModule } from '../order/order.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule } from '@nestjs/config';
 import { Shipment, ShipmentSchema } from './entities/shipment.entity';
@@ -43,6 +44,7 @@ import { TrackingLoggerService } from './services/tracking-logger.service';
       name: 'tracking-queue',
     }),
     ConfigModule,
+    forwardRef(() => OrderModule),
   ],
   controllers: [DtdcWebhookController, ShipmentController],
   providers: [
