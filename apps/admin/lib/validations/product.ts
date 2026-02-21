@@ -22,22 +22,18 @@ export const variantFormSchema = z
     discountSource: z.string().default("product"),
     weight: z.coerce
       .number()
-      .min(0, "Weight cannot be negative")
-      .positive("Weight must be greater than 0"),
+      .min(0, "Weight cannot be negative"),
     weightUnit: z.string().default("g"),
     packageSize: z.string().min(1, "Package size is required"),
     length: z.coerce
       .number()
-      .min(0, "Length cannot be negative")
-      .positive("Length must be greater than 0"),
+      .min(0, "Length cannot be negative"),
     height: z.coerce
       .number()
-      .min(0, "Height cannot be negative")
-      .positive("Height must be greater than 0"),
+      .min(0, "Height cannot be negative"),
     breadth: z.coerce
       .number()
-      .min(0, "Breadth cannot be negative")
-      .positive("Breadth must be greater than 0"),
+      .min(0, "Breadth cannot be negative"),
     stockQuantity: z.coerce
       .number()
       .int("Stock must be a whole number")
