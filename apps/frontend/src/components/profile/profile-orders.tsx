@@ -164,7 +164,10 @@ export const ProfileOrders = () => {
                                             </Badge>
                                         )}
                                         {order.awb_number && (
-                                            <Badge className="bg-green-100 text-green-800 cursor-pointer" onClick={() => router.push(`/track/${order.awb_number}`)}>
+                                            <Badge className="bg-green-100 text-green-800 cursor-pointer" onClick={(e: React.MouseEvent) => {
+                                                e.stopPropagation();
+                                                router.push(`/track/${order.awb_number}`);
+                                            }}>
                                                 {order.awb_number}
                                             </Badge>
                                         )}
