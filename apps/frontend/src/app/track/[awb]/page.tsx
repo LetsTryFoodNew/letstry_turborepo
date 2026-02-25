@@ -90,6 +90,7 @@ export default function TrackPage() {
   const [data, setData] = useState<TrackingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const imageCdn = process.env.NEXT_PUBLIC_API_IMAGE_URL;
 
   useEffect(() => {
     if (!awb) return;
@@ -103,6 +104,8 @@ export default function TrackPage() {
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, [awb]);
+
+  console.log(data, "tracking data")
 
   if (loading) {
     return (
@@ -214,7 +217,7 @@ export default function TrackPage() {
               {data.order.items.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3">
                   {item.image && (
-                    <img src={item.image} alt={item.name} className="h-12 w-12 rounded-lg object-cover shrink-0 bg-gray-50" />
+                    <img src={`${imageCdn}/${item.image}`} alt={item.name} className="h-12 w-12 rounded-lg object-cover shrink-0 bg-gray-50" />
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
