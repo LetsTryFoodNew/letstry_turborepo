@@ -1,15 +1,17 @@
-import { Resolver, Query, Mutation, Args, Context, ResolveField, Parent, ObjectType, Field, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context, ResolveField, Parent, ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { PackingService } from './services/packing.service';
 import { PackerService } from './services/packer.service';
 import { QueueCleanupService } from './services/domain/queue-cleanup.service';
 import { PackerAuthGuard } from './guards/packer-auth.guard';
+import { JwtAuthGuard } from '../authentication/common/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../common/enums/role.enum';
-import { ScanItemInput } from './dto/scan-item.input';
+
 import { UploadEvidenceInput } from './dto/upload-evidence.input';
 import { BatchScanInput } from './dto/batch-scan.input';
+import { AdminPunchShipmentInput } from './dto/admin-punch-shipment.input';
 import { BatchScanResult } from './dto/batch-scan.result';
 import { PackingOrder } from './types/packing-order.type';
 import { ScanLog } from './types/scan-log.type';
@@ -72,19 +74,7 @@ export class PackingResolver {
     return this.packingService.startPacking(packingOrderId);
   }
 
-  @Mutation(() => ScanLog)
-  @UseGuards(PackerAuthGuard, RolesGuard)
-  @Roles(Role.PACKER)
-  async scanItem(
-    @Args('input', { type: () => ScanItemInput }) input: ScanItemInput,
-    @Context() ctx,
-  ): Promise<any> {
-    return this.packingService.scanItem(
-      input.packingOrderId,
-      input.ean,
-      ctx.req.user.packerId,
-    );
-  }
+
 
   @Mutation(() => BatchScanResult)
   @UseGuards(PackerAuthGuard, RolesGuard)
@@ -111,6 +101,7 @@ export class PackingResolver {
       input.packingOrderId,
       input.prePackImages || [],
       input.actualBoxCode || '',
+      ctx.req.user.packerId,
     );
   }
 
@@ -119,8 +110,18 @@ export class PackingResolver {
   @Roles(Role.PACKER)
   async completePacking(
     @Args('packingOrderId') packingOrderId: string,
+    @Context() ctx,
   ): Promise<any> {
-    return this.packingService.completePacking(packingOrderId);
+    return this.packingService.completePacking(packingOrderId, ctx.req.user.packerId);
+  }
+
+  @Mutation(() => PackingOrder)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  async adminPunchShipment(
+    @Args('input') input: AdminPunchShipmentInput,
+  ): Promise<any> {
+    return this.packingService.adminPunchShipment(input);
   }
 
   @Query(() => BoxSize)
@@ -156,5 +157,13 @@ export class PackingResolver {
   @Roles(Role.ADMIN)
   async cleanupOrphanedJobs(): Promise<CleanupResult> {
     return this.queueCleanupService.cleanupOrphanedJobs();
+  }
+}
+
+@Resolver(() => ScanLog)
+export class ScanLogResolver {
+  @ResolveField(() => ID)
+  id(@Parent() scanLog: any): string {
+    return scanLog._id?.toString() || scanLog.id;
   }
 }

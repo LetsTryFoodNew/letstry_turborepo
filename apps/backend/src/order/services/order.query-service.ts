@@ -27,6 +27,10 @@ export class OrderQueryService {
     return this.orderRepository.findById(orderId);
   }
 
+  async getOrderByInternalId(id: string): Promise<Order | null> {
+    return this.orderRepository.findByInternalId(id);
+  }
+
   async getOrderByPaymentOrderId(
     paymentOrderId: string,
   ): Promise<Order | null> {
@@ -172,22 +176,17 @@ export class OrderQueryService {
   }
 
   private async calculateTotalRevenue(): Promise<string> {
-    const deliveredOrders = await this.orderRepository.findByStatus(
-      OrderStatus.DELIVERED,
-    );
-    const total = deliveredOrders.reduce((sum, order) => {
-      return sum + parseFloat(order.totalAmount || '0');
-    }, 0);
-    return total.toString();
+    return this.orderRepository.sumTotalRevenue();
   }
 
   private async getStatusCounts(): Promise<OrderStatusCount> {
-    const [confirmed, packed, shipped, inTransit, delivered] = await Promise.all([
+    const [confirmed, packed, shipped, inTransit, delivered, shipmentFailed] = await Promise.all([
       this.orderRepository.countByStatus(OrderStatus.CONFIRMED),
       this.orderRepository.countByStatus(OrderStatus.PACKED),
       this.orderRepository.countByStatus(OrderStatus.SHIPPED),
       this.orderRepository.countByStatus(OrderStatus.IN_TRANSIT),
       this.orderRepository.countByStatus(OrderStatus.DELIVERED),
+      this.orderRepository.countByStatus(OrderStatus.SHIPMENT_FAILED),
     ]);
 
     return {
@@ -196,6 +195,7 @@ export class OrderQueryService {
       shipped,
       inTransit,
       delivered,
+      shipmentFailed,
     };
   }
 

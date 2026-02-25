@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,7 +30,8 @@ import {
   Loader2,
   Phone,
   Mail,
-  IndianRupee
+  IndianRupee,
+  FileDown
 } from "lucide-react"
 
 interface OrderDetailsDialogProps {
@@ -37,6 +39,8 @@ interface OrderDetailsDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
 }
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL?.replace('/graphql', '') || 'http://localhost:5000'
 
 export function OrderDetailsDialog({ order, open, onOpenChange }: OrderDetailsDialogProps) {
   if (!order) return null
@@ -94,8 +98,19 @@ export function OrderDetailsDialog({ order, open, onOpenChange }: OrderDetailsDi
       <DialogContent className="sm:max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
-            <span>Order {order.orderId}</span>
-            {getOrderStatusBadge(order.orderStatus)}
+            <div className="flex items-center gap-4">
+              <span>Order {order.orderId}</span>
+              {getOrderStatusBadge(order.orderStatus)}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-blue-600 border-blue-200 hover:bg-blue-50"
+              onClick={() => window.open(`${API_BASE_URL}/orders/${order._id}/invoice`, '_blank')}
+            >
+              <FileDown className="h-4 w-4 mr-2" />
+              Download Invoice
+            </Button>
           </DialogTitle>
           <DialogDescription>
             Placed on {format(new Date(order.createdAt), 'dd MMM yyyy, hh:mm a')}
@@ -226,6 +241,36 @@ export function OrderDetailsDialog({ order, open, onOpenChange }: OrderDetailsDi
                   <div className="mt-3 pt-3 border-t">
                     <p className="text-xs text-muted-foreground font-medium mb-1">Complete Address:</p>
                     <p className="text-sm">{order.shippingAddress?.formattedAddress}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Shipment Data */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center">
+                  <Package className="h-4 w-4 mr-2" />
+                  Shipment Data
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Calculated Weight</span>
+                  <span className="font-medium">{order.estimatedWeight ? `${order.estimatedWeight} kg` : 'N/A'}</span>
+                </div>
+                {order.boxDimensions && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Box Dimensions</span>
+                    <span className="font-medium">
+                      {order.boxDimensions.l} x {order.boxDimensions.w} x {order.boxDimensions.h} cm
+                    </span>
+                  </div>
+                )}
+                {!order.boxDimensions && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Box Recommendation</span>
+                    <span className="text-muted-foreground italic">Not available</span>
                   </div>
                 )}
               </CardContent>

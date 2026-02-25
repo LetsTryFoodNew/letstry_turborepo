@@ -76,10 +76,36 @@ export class WhatsAppService {
     return this.sendTemplate(payload);
   }
 
+  async sendPaymentConfirmation(
+    phoneNumber: string,
+    orderId: string,
+    amountPaid: string,
+    paymentMode: string,
+    transactionId: string,
+    orderDate: string,
+  ): Promise<boolean> {
+    const payload: WhatsAppTemplatePayload = {
+      template: 'paymentconfirm',
+      recipients: [
+        {
+          phone: phoneNumber,
+          variables: [orderId, amountPaid, paymentMode, transactionId, orderDate],
+        },
+      ],
+    };
+
+    return this.sendTemplate(payload);
+  }
+
   private async sendTemplate(
     payload: WhatsAppTemplatePayload,
   ): Promise<boolean> {
     try {
+      this.logger.log(
+        `WhatsApp API request: ${JSON.stringify({ url: this.apiUrl, template: payload.template, recipients: payload.recipients })}`,
+        'WhatsAppService',
+      );
+
       const response = await fetch(this.apiUrl, {
         method: 'POST',
         headers: {
@@ -91,8 +117,9 @@ export class WhatsAppService {
 
       if (!response.ok) {
         const errorText = await response.text();
+        const responseHeaders = Object.fromEntries(response.headers.entries());
         this.logger.error(
-          `WhatsApp API error: ${response.status} - ${errorText}`,
+          `WhatsApp API error: ${JSON.stringify({ status: response.status, statusText: response.statusText, body: errorText, headers: responseHeaders, requestPayload: payload })}`,
           'WhatsAppService',
         );
         return false;
@@ -100,13 +127,13 @@ export class WhatsAppService {
 
       const result = await response.json();
       this.logger.log(
-        `WhatsApp template sent successfully: ${payload.template}`,
+        `WhatsApp template sent successfully: ${JSON.stringify({ template: payload.template, response: result })}`,
         'WhatsAppService',
       );
       return true;
     } catch (error) {
       this.logger.error(
-        `Failed to send WhatsApp template: ${error.message}`,
+        `Failed to send WhatsApp template: ${JSON.stringify({ message: error.message, stack: error.stack, requestPayload: payload })}`,
         'WhatsAppService',
       );
       return false;

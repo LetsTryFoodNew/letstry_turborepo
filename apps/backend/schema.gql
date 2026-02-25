@@ -139,7 +139,8 @@ type PlatformStats {
   ios: Int!
   web: Int!
   macos: Int!
-  desktop: Int!
+  linux: Int!
+  windows: Int!
 }
 
 type StatusStats {
@@ -190,7 +191,7 @@ type EnrichedCustomer {
   createdAt: DateTime!
   updatedAt: DateTime!
   totalOrders: Int!
-  totalSpent: Int!
+  totalSpent: Float!
   activeCartItemsCount: Int
   displayPhone: String
   isGuest: Boolean!
@@ -246,7 +247,7 @@ type CustomerDetails {
   createdAt: DateTime!
   updatedAt: DateTime!
   totalOrders: Int!
-  totalSpent: Int!
+  totalSpent: Float!
   isGuest: Boolean!
   orders: JSON!
   activeCart: JSON
@@ -718,6 +719,7 @@ type OrderPaymentType {
   transactionId: String
   amount: String!
   paidAt: DateTime
+  handlingCharge: Float
 }
 
 type OrderShippingAddressType {
@@ -763,6 +765,12 @@ type OrderUserInfo {
   status: String!
 }
 
+type BoxDimensionType {
+  l: Float!
+  w: Float!
+  h: Float!
+}
+
 type OrderType {
   _id: String!
   orderId: String!
@@ -784,6 +792,8 @@ type OrderType {
   cancelledAt: DateTime
   trackingNumber: String
   cancellationReason: String
+  estimatedWeight: Float
+  boxDimensions: BoxDimensionType
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -794,6 +804,7 @@ enum OrderStatus {
   SHIPPED
   IN_TRANSIT
   DELIVERED
+  SHIPMENT_FAILED
 }
 
 type OrderWithUserInfo {
@@ -817,6 +828,8 @@ type OrderWithUserInfo {
   cancelledAt: DateTime
   trackingNumber: String
   cancellationReason: String
+  estimatedWeight: Float
+  boxDimensions: BoxDimensionType
   createdAt: DateTime!
   updatedAt: DateTime!
   userInfo: OrderUserInfo
@@ -828,6 +841,7 @@ type OrderStatusCount {
   shipped: Int!
   inTransit: Int!
   delivered: Int!
+  shipmentFailed: Int!
 }
 
 type OrdersSummary {
@@ -847,18 +861,24 @@ type AdminOrdersResponse {
   summary: OrdersSummary!
 }
 
-type BatchItemResult {
-  ean: String!
+type ProductValidation {
+  productId: String!
   isValid: Boolean!
   errorType: String
-  itemName: String
+  errorMessage: String
+  expectedQuantity: Int
+  scannedQuantity: Int
+  productName: String
 }
 
 type BatchScanResult {
+  success: Boolean!
   totalProcessed: Int!
   successCount: Int!
   failureCount: Int!
-  results: [BatchItemResult!]!
+  validations: [ProductValidation!]!
+  errorMessage: String
+  totalScans: Int
 }
 
 type ItemDimensions {
@@ -914,6 +934,7 @@ type ScanLog {
   retrospectiveNotes: String
   flaggedBy: String
   flaggedAt: DateTime
+  itemName: String
 }
 
 type BoxDimensions {
@@ -1035,6 +1056,7 @@ type ShipmentResponse {
   webhookLastReceivedAt: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
+  trackingLink: String
 }
 
 type TrackingHistoryResponse {
@@ -1094,6 +1116,7 @@ type ShipmentWithTrackingResponse {
   webhookLastReceivedAt: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
+  trackingLink: String
   trackingHistory: [TrackingHistoryResponse!]!
 }
 
@@ -1103,6 +1126,7 @@ type CreateShipmentResponse {
   awbNumber: String!
   labelUrl: String
   message: String
+  trackingLink: String
 }
 
 type ShipmentListResponse {
@@ -1242,6 +1266,7 @@ type Query {
   getShipmentById(id: ID!): ShipmentResponse
   listShipments(filters: ShipmentFiltersInput): ShipmentListResponse!
   getShipmentWithTracking(awbNumber: String!): ShipmentWithTrackingResponse!
+  getShipmentLabel(awbNumber: String!): String
   getAllNewsletterSubscriptions(isActive: Boolean): [NewsletterSubscription!]!
   getNewsletterSubscriptionCount(isActive: Boolean): Float!
   redirects(page: Int! = 1, limit: Int! = 20, search: String): PaginatedRedirects!
@@ -1274,6 +1299,7 @@ input GetCustomersInput {
   sortOrder: SortOrder
   minSpent: Float
   maxSpent: Float
+  cartStatus: CartStatusFilter
 }
 
 enum CustomerPlatform {
@@ -1281,7 +1307,8 @@ enum CustomerPlatform {
   IOS
   WEB
   MACOS
-  DESKTOP
+  LINUX
+  WINDOWS
 }
 
 enum CustomerSortField {
@@ -1294,6 +1321,11 @@ enum CustomerSortField {
 enum SortOrder {
   ASC
   DESC
+}
+
+enum CartStatusFilter {
+  HAS_CART
+  NO_CART
 }
 
 input GeocodeAddressInput {
@@ -1414,10 +1446,10 @@ type Mutation {
   cancelOrder(input: CancelOrderInput!): OrderType!
   updateOrderStatus(input: UpdateOrderStatusInput!): OrderType!
   startPacking(packingOrderId: String!): PackingOrder!
-  scanItem(input: ScanItemInput!): ScanLog!
   batchScanItems(input: BatchScanInput!): BatchScanResult!
   uploadEvidence(input: UploadEvidenceInput!): PackingOrder!
   completePacking(packingOrderId: String!): PackingOrder!
+  adminPunchShipment(input: AdminPunchShipmentInput!): PackingOrder!
   cleanupOrphanedJobs: CleanupResult!
   createPacker(input: CreatePackerInput!): CreatePackerResponse!
   updatePacker(packerId: String!, input: UpdatePackerInput!): Packer!
@@ -1790,18 +1822,14 @@ input UpdateOrderStatusInput {
   trackingNumber: String
 }
 
-input ScanItemInput {
-  packingOrderId: String!
-  ean: String!
-}
-
 input BatchScanInput {
   packingOrderId: String!
-  items: [BatchScanItem!]!
+  items: [ProductScanItem!]!
 }
 
-input BatchScanItem {
-  ean: String!
+input ProductScanItem {
+  productId: String!
+  eans: [String!]!
 }
 
 input UploadEvidenceInput {
@@ -1809,6 +1837,11 @@ input UploadEvidenceInput {
   prePackImages: [String!]
   postPackImages: [String!]
   actualBoxCode: String
+}
+
+input AdminPunchShipmentInput {
+  orderId: ID!
+  serviceType: String
 }
 
 input CreatePackerInput {

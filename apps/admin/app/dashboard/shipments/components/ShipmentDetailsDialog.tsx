@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Separator } from '@/components/ui/separator'
-import { useShipmentWithTracking } from '@/lib/shipments/queries'
+import { useShipmentWithTracking, useShipmentLabel } from '@/lib/shipments/queries'
 import { Shipment } from '@/lib/shipments/types'
 import {
   formatDate,
@@ -20,7 +20,7 @@ import {
 } from '@/lib/shipments/utils'
 import { ShipmentStatusBadge } from './ShipmentStatusBadge'
 import { TrackingTimeline } from './TrackingTimeline'
-import { Copy, MapPin, Package, FileText, ExternalLink } from 'lucide-react'
+import { Copy, MapPin, Package, FileText, ExternalLink, Download } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
 
@@ -32,6 +32,7 @@ interface ShipmentDetailsDialogProps {
 
 export function ShipmentDetailsDialog({ isOpen, onClose, awbNumber }: ShipmentDetailsDialogProps) {
   const { shipment, trackingHistory, loading } = useShipmentWithTracking(awbNumber)
+  const { downloadLabel, loading: downloadingLabel } = useShipmentLabel()
 
   const handleCopy = async (text: string, label: string) => {
     const success = await copyToClipboard(text)
@@ -43,7 +44,7 @@ export function ShipmentDetailsDialog({ isOpen, onClose, awbNumber }: ShipmentDe
   if (loading) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="w-[95vw] max-w-[95vw] sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <Skeleton className="h-6 w-48" />
           </DialogHeader>
@@ -61,7 +62,7 @@ export function ShipmentDetailsDialog({ isOpen, onClose, awbNumber }: ShipmentDe
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="w-[95vw] max-w-[95vw] sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -92,48 +93,95 @@ export function ShipmentDetailsDialog({ isOpen, onClose, awbNumber }: ShipmentDe
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Shipment Information</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <div className="text-muted-foreground">Order ID</div>
-                <div className="font-medium">{shipment.orderId || '-'}</div>
-              </div>
-              <div>
-                <div className="text-muted-foreground">Service Type</div>
-                <div className="font-medium">{getServiceTypeLabel(shipment.serviceType)}</div>
-              </div>
-              <div>
-                <div className="text-muted-foreground">Booked On</div>
-                <div className="font-medium">{formatDate(shipment.bookedOn)}</div>
-              </div>
-              <div>
-                <div className="text-muted-foreground">Expected Delivery</div>
-                <div className="font-medium">{formatDate(shipment.expectedDeliveryDate)}</div>
-              </div>
-              <div>
-                <div className="text-muted-foreground">Weight</div>
-                <div className="font-medium">{formatWeight(shipment.weight)}</div>
-              </div>
-              <div>
-                <div className="text-muted-foreground">COD Amount</div>
-                <div className="font-medium">{formatCurrency(shipment.codAmount)}</div>
-              </div>
-              {shipment.currentLocation && (
-                <div className="col-span-2">
-                  <div className="text-muted-foreground">Current Location</div>
-                  <div className="font-medium flex items-center gap-1">
-                    <MapPin className="h-3 w-3" />
-                    {shipment.currentLocation}
-                  </div>
+          <div className="grid grid-cols-4 gap-4">
+            <Card className="col-span-3">
+              <CardHeader>
+                <CardTitle className="text-sm">Shipment Information</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-4 gap-4 text-sm">
+                <div>
+                  <div className="text-muted-foreground">Order ID</div>
+                  <div className="font-medium break-all">{shipment.orderId || '-'}</div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+                <div>
+                  <div className="text-muted-foreground">Service Type</div>
+                  <div className="font-medium">{getServiceTypeLabel(shipment.serviceType)}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">Booked On</div>
+                  <div className="font-medium">{formatDate(shipment.bookedOn)}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">Expected Delivery</div>
+                  <div className="font-medium">{formatDate(shipment.expectedDeliveryDate)}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">Weight</div>
+                  <div className="font-medium">{formatWeight(shipment.weight)}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">COD Amount</div>
+                  <div className="font-medium">{formatCurrency(shipment.codAmount)}</div>
+                </div>
+                <div>
+                  <div className="text-muted-foreground">Pieces</div>
+                  <div className="font-medium">{shipment.numPieces}</div>
+                </div>
+                {shipment.dimensions && (
+                  <div>
+                    <div className="text-muted-foreground">Dimensions</div>
+                    <div className="font-medium">
+                      {shipment.dimensions.length} × {shipment.dimensions.width} × {shipment.dimensions.height} {shipment.dimensions.unit}
+                    </div>
+                  </div>
+                )}
+                {shipment.invoiceNumber && (
+                  <div>
+                    <div className="text-muted-foreground flex items-center gap-1">
+                      <FileText className="h-3 w-3" />
+                      Invoice
+                    </div>
+                    <div className="font-medium">{shipment.invoiceNumber}</div>
+                  </div>
+                )}
+                {shipment.currentLocation && (
+                  <div className="col-span-2">
+                    <div className="text-muted-foreground">Current Location</div>
+                    <div className="font-medium flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      {shipment.currentLocation}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
 
-          <Separator />
+            <Card className="col-span-1">
+              <CardHeader>
+                <CardTitle className="text-sm">Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-2">
+                {!shipment.isCancelled && !shipment.isDelivered && (
+                  <Button className="w-full" onClick={() => downloadLabel(shipment.dtdcAwbNumber)} disabled={downloadingLabel}>
+                    <Download className="mr-2 h-4 w-4" />
+                    {downloadingLabel ? 'Downloading...' : 'Download Label'}
+                  </Button>
+                )}
+                {shipment.trackingLink && (
+                  <Button variant="outline" className="w-full justify-start" onClick={() => handleCopy(shipment.trackingLink!, 'Tracking Link')}>
+                    <Copy className="mr-2 h-4 w-4" />
+                    Copy Tracking Link
+                  </Button>
+                )}
+                <Button variant="outline" className="w-full justify-start" asChild>
+                  <Link href={`/dashboard/shipments/${shipment.id}`}>
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    View Full Details
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Card>
@@ -182,38 +230,6 @@ export function ShipmentDetailsDialog({ isOpen, onClose, awbNumber }: ShipmentDe
               </CardContent>
             </Card>
           </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm flex items-center gap-2">
-                <Package className="h-4 w-4" />
-                Package Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm space-y-4">
-              {shipment.dimensions && (
-                <div>
-                  <div className="text-muted-foreground">Dimensions</div>
-                  <div className="font-medium">
-                    {shipment.dimensions.length} × {shipment.dimensions.width} × {shipment.dimensions.height} {shipment.dimensions.unit}
-                  </div>
-                </div>
-              )}
-              <div>
-                <div className="text-muted-foreground">Number of Pieces</div>
-                <div className="font-medium">{shipment.numPieces}</div>
-              </div>
-              {shipment.invoiceNumber && (
-                <div>
-                  <div className="text-muted-foreground flex items-center gap-1">
-                    <FileText className="h-3 w-3" />
-                    Invoice Number
-                  </div>
-                  <div className="font-medium">{shipment.invoiceNumber}</div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
 
           <Card>
             <CardHeader>

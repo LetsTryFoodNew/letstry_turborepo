@@ -7,7 +7,13 @@ export enum CustomerPlatform {
   IOS = 'ios',
   WEB = 'web',
   MACOS = 'macos',
-  DESKTOP = 'desktop',
+  LINUX = 'linux',
+  WINDOWS = 'windows',
+}
+
+export enum CartStatusFilter {
+  HAS_CART = 'HAS_CART',
+  NO_CART = 'NO_CART',
 }
 
 export enum CustomerSortField {
@@ -24,6 +30,10 @@ export enum SortOrder {
 
 registerEnumType(CustomerPlatform, {
   name: 'CustomerPlatform',
+});
+
+registerEnumType(CartStatusFilter, {
+  name: 'CartStatusFilter',
 });
 
 registerEnumType(CustomerSortField, {
@@ -62,6 +72,9 @@ export class GetCustomersInput extends PaginationInput {
 
   @Field({ nullable: true })
   maxSpent?: number;
+
+  @Field(() => CartStatusFilter, { nullable: true })
+  cartStatus?: CartStatusFilter;
 }
 
 @InputType()

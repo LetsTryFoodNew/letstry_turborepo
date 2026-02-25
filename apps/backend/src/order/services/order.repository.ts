@@ -16,6 +16,10 @@ export class OrderRepository {
     return this.orderModel.findOne({ orderId }).exec();
   }
 
+  async findByInternalId(id: string): Promise<Order | null> {
+    return this.orderModel.findById(id).exec();
+  }
+
   async findByPaymentOrderId(paymentOrderId: string): Promise<Order | null> {
     return this.orderModel.findOne({ paymentOrderId }).exec();
   }
@@ -86,6 +90,20 @@ export class OrderRepository {
       .exec();
   }
 
+  async updateStatusByInternalId(
+    id: string,
+    status: OrderStatus,
+    additionalFields?: any,
+  ): Promise<Order | null> {
+    return this.orderModel
+      .findByIdAndUpdate(
+        id,
+        { orderStatus: status, ...additionalFields },
+        { new: true },
+      )
+      .exec();
+  }
+
   async countByStatus(status: OrderStatus): Promise<number> {
     return this.orderModel.countDocuments({ orderStatus: status }).exec();
   }
@@ -96,5 +114,17 @@ export class OrderRepository {
 
   async countTotal(): Promise<number> {
     return this.orderModel.countDocuments().exec();
+  }
+
+  async sumTotalRevenue(): Promise<string> {
+    const result = await this.orderModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: { $toDouble: '$totalAmount' } },
+        },
+      },
+    ]);
+    return result.length > 0 ? result[0].total.toString() : '0';
   }
 }

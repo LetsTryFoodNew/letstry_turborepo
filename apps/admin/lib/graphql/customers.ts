@@ -48,6 +48,10 @@ export const GET_ALL_CUSTOMERS = gql`
           android
           ios
           web
+          macos
+
+          linux
+          windows
         }
         statusStats {
           guest

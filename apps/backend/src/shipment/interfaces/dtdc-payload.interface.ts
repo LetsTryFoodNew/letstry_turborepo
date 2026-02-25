@@ -74,15 +74,20 @@ export interface DtdcBookingPayload {
       address_line_1: string;
       address_line_2?: string;
       pincode: string;
-      city: string;
-      state: string;
-      country: string;
+      city?: string;
+      state?: string;
+      city_name?: string;
+      state_name?: string;
+      country?: string;
       email?: string;
+      latitude?: string;
+      longitude?: string;
     };
     customer_reference_number: string;
     cod_collection_mode?: string;
     cod_amount?: string;
     commodity_id: string;
+    is_risk_surcharge_applicable: boolean;
     description?: string;
     reference_number?: string;
     pieces_detail?: {
@@ -97,13 +102,15 @@ export interface DtdcBookingPayload {
 }
 
 export interface DtdcBookingResponse {
-  success: boolean;
-  consignments: {
+  status: string;
+  data: {
     reference_number: string;
     customer_reference_number: string;
     label_url?: string;
     success: boolean;
     remarks?: string;
+    message?: string;
+    reason?: string;
   }[];
 }
 
@@ -113,15 +120,53 @@ export interface DtdcCancelPayload {
 }
 
 export interface DtdcTrackingResponse {
-  trkType: string;
-  strcnno: string;
-  addtnlDtl: string;
-  trackingDetails: {
-    cnNo: string;
-    statusCode: string;
-    statusDescription: string;
-    location: string;
-    date: string;
-    time: string;
-  }[];
+  statusCode: number;
+  statusFlag: boolean;
+  status: string;
+  errorDetails: { name: string; value: string }[] | null;
+  trackHeader: {
+    strShipmentNo: string;
+    strRefNo: string;
+    strCNType: string;
+    strCNTypeCode: string;
+    strCNTypeName: string;
+    strCNProduct: string;
+    strModeCode: string;
+    strMode: string;
+    strCNProdCODFOD: string;
+    strOrigin: string;
+    strOriginRemarks: string;
+    strBookedDate: string;
+    strBookedTime: string;
+    strPieces: string;
+    strWeightUnit: string;
+    strWeight: string;
+    strDestination: string;
+    strStatus: string;
+    strStatusTransOn: string;
+    strStatusTransTime: string;
+    strStatusRelCode: string;
+    strStatusRelName: string;
+    strRemarks: string;
+    strNoOfAttempts: string;
+    strRtoNumber: string;
+    strExpectedDeliveryDate: string;
+    strRevExpectedDeliveryDate: string;
+  } | null;
+  trackDetails: {
+    strCode: string;
+    strAction: string;
+    strManifestNo: string;
+    strOrigin: string;
+    strDestination: string;
+    strOriginCode: string;
+    strDestinationCode: string;
+    strActionDate: string;
+    strActionTime: string;
+    sTrRemarks: string;
+    strLatitude: string;
+    strLongitude: string;
+    strNDCOTP: string;
+    strSCDOTP?: string;
+  }[] | null;
 }

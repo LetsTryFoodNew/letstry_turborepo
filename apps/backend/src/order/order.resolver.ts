@@ -15,16 +15,21 @@ import {
   OrderShippingAddressType,
   OrderCustomerType,
   OrderWithUserInfo,
+  BoxDimensionType,
 } from './order.graphql';
 import { DualAuthGuard } from '../authentication/common/dual-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../common/enums/role.enum';
 import { OptionalUser } from '../common/decorators/optional-user.decorator';
+import { PackingService } from '../packing/services/packing.service';
 
 @Resolver(() => OrderType)
 export class OrderResolver {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly packingService: PackingService,
+  ) { }
 
   @Query(() => PaginatedOrdersResponse)
   @Roles(Role.ADMIN, Role.USER)
@@ -149,11 +154,32 @@ export class OrderResolver {
   async items(@Parent() order: any): Promise<any[]> {
     return this.orderService.resolveItems(order);
   }
+
+  @ResolveField('estimatedWeight', () => Number, { nullable: true })
+  async estimatedWeight(@Parent() order: any): Promise<number | null> {
+    const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
+    if (details) {
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.weight || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.weight || null;
+  }
+
+  @ResolveField('boxDimensions', () => BoxDimensionType, { nullable: true })
+  async boxDimensions(@Parent() order: any): Promise<BoxDimensionType | null> {
+    const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
+    if (details) {
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.boxDimensions || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.boxDimensions || null;
+  }
 }
 
 @Resolver(() => OrderWithUserInfo)
 export class OrderWithUserInfoResolver {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly packingService: PackingService,
+  ) { }
 
   @ResolveField(() => OrderPaymentType, { nullable: true })
   async payment(@Parent() order: any): Promise<OrderPaymentType | null> {
@@ -175,5 +201,23 @@ export class OrderWithUserInfoResolver {
   @ResolveField('items')
   async items(@Parent() order: any): Promise<any[]> {
     return this.orderService.resolveItems(order);
+  }
+
+  @ResolveField('estimatedWeight', () => Number, { nullable: true })
+  async estimatedWeight(@Parent() order: any): Promise<number | null> {
+    const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
+    if (details) {
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.weight || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.weight || null;
+  }
+
+  @ResolveField('boxDimensions', () => BoxDimensionType, { nullable: true })
+  async boxDimensions(@Parent() order: any): Promise<BoxDimensionType | null> {
+    const details = await this.packingService.getPackingDetailsByOrderId(order.orderId);
+    if (details) {
+      return (await this.packingService.calculateShipmentWeight(order, details.packingOrder, details.evidence))?.boxDimensions || null;
+    }
+    return (await this.packingService.calculateWeightAndBoxFromOrder(order))?.boxDimensions || null;
   }
 }

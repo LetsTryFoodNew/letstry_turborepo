@@ -9,6 +9,7 @@ import { CreateShipmentData, ShipmentFilters } from '../interfaces/shipment.inte
 import { DtdcBookingPayload } from '../interfaces/dtdc-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { ShipmentLoggerService } from './shipment-logger.service';
+import { OrderRepository } from '../../order/services/order.repository';
 
 @Injectable()
 export class ShipmentService {
@@ -20,7 +21,8 @@ export class ShipmentService {
     private readonly statusMapper: ShipmentStatusMapperService,
     private readonly configService: ConfigService,
     private readonly shipmentLogger: ShipmentLoggerService,
-  ) {}
+    private readonly orderRepository: OrderRepository,
+  ) { }
 
   async createShipment(data: CreateShipmentData): Promise<{ shipment: Shipment; awbNumber: string; labelUrl: string }> {
     const serviceable = await this.dtdcApiService.checkPincode(
@@ -71,10 +73,11 @@ export class ShipmentService {
             latitude: data.destinationDetails.latitude,
             longitude: data.destinationDetails.longitude,
           },
-          customer_reference_number: data.orderId || `REF-${Date.now()}`,
+          customer_reference_number: data.orderNumber || data.orderId || `REF-${Date.now()}`,
           cod_collection_mode: data.codCollectionMode || '',
           cod_amount: data.codAmount?.toString() || '',
           commodity_id: data.commodityId,
+          is_risk_surcharge_applicable: data.isRiskSurchargeApplicable || false,
           description: data.description,
           invoice_number: data.invoiceNumber,
           invoice_date: data.invoiceDate ? data.invoiceDate.toISOString().split('T')[0] : undefined,
@@ -93,11 +96,12 @@ export class ShipmentService {
 
     const bookingResponse = await this.dtdcApiService.bookShipment(bookingPayload);
 
-    if (!bookingResponse.success || !bookingResponse.consignments[0].success) {
-      throw new BadRequestException(bookingResponse.consignments[0].remarks || 'Booking failed');
+    if (bookingResponse.status !== 'OK' || !bookingResponse.data?.[0]?.success) {
+      const errorMsg = bookingResponse.data?.[0]?.message || bookingResponse.data?.[0]?.remarks || 'Booking failed';
+      throw new BadRequestException(errorMsg);
     }
 
-    const awbNumber = bookingResponse.consignments[0].reference_number;
+    const awbNumber = bookingResponse.data[0].reference_number;
     const trackingDisabledAfter = new Date();
     const trackingValidityDays = this.configService.get<number>('dtdc.defaults.trackingValidityDays') || 90;
     trackingDisabledAfter.setDate(trackingDisabledAfter.getDate() + trackingValidityDays);
@@ -151,6 +155,15 @@ export class ShipmentService {
 
   async findById(id: string): Promise<Shipment | null> {
     return this.shipmentModel.findById(id).exec();
+  }
+
+  async findActiveShipmentsForTracking(): Promise<Shipment[]> {
+    return this.shipmentModel.find({
+      isDelivered: false,
+      isCancelled: false,
+      isRto: false,
+      dtdcAwbNumber: { $ne: null },
+    }).exec();
   }
 
   async findByOrderId(orderId: string): Promise<Shipment[]> {
@@ -260,5 +273,40 @@ export class ShipmentService {
     const tracking = await this.trackingService.getShipmentTimeline(shipment._id.toString());
 
     return { shipment, tracking };
+  }
+
+  async getShipmentWithFreshTracking(awbNumber: string): Promise<{ shipment: Shipment; tracking: any[]; order: any | null }> {
+    const shipment = await this.findByAwbNumber(awbNumber);
+
+    if (!shipment) {
+      throw new NotFoundException(`Shipment with AWB ${awbNumber} not found`);
+    }
+
+    const shipmentId = shipment._id.toString();
+
+    try {
+      const trackResponse = await this.dtdcApiService.trackShipment(awbNumber);
+
+      if (trackResponse?.statusFlag && trackResponse.trackDetails?.length) {
+        const newEvents = await this.trackingService.syncTrackingData(shipmentId, trackResponse.trackDetails);
+
+        if (newEvents && newEvents.length > 0) {
+          const latestEvent = newEvents[newEvents.length - 1];
+          const statusDescription = this.statusMapper.getStatusDescription(latestEvent.statusCode);
+          await this.updateStatus(awbNumber, latestEvent.statusCode, statusDescription, latestEvent.location);
+        }
+      }
+    } catch {
+    }
+
+    const updatedShipment = await this.findByAwbNumber(awbNumber);
+    const tracking = await this.trackingService.getShipmentTimeline(shipmentId);
+
+    let order: any | null = null;
+    if (updatedShipment!.orderId) {
+      order = await this.orderRepository.findByInternalId(updatedShipment!.orderId.toString());
+    }
+
+    return { shipment: updatedShipment!, tracking, order };
   }
 }

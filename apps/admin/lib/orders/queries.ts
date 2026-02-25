@@ -3,6 +3,7 @@ import {
   GET_ALL_ORDERS,
   GET_ORDER_BY_ID,
   UPDATE_ORDER_STATUS,
+  ADMIN_PUNCH_SHIPMENT,
 } from "../graphql/orders";
 
 export type OrderStatus =
@@ -10,7 +11,8 @@ export type OrderStatus =
   | "PACKED"
   | "SHIPPED"
   | "IN_TRANSIT"
-  | "DELIVERED";
+  | "DELIVERED"
+  | "SHIPMENT_FAILED";
 export type PaymentStatus =
   | "NOT_STARTED"
   | "EXECUTING"
@@ -35,6 +37,7 @@ interface StatusCounts {
   shipped: number;
   inTransit: number;
   delivered: number;
+  shipmentFailed: number;
 }
 
 interface GetAllOrdersData {
@@ -51,6 +54,14 @@ interface GetOrderByIdData {
 
 interface UpdateOrderStatusData {
   updateOrderStatus: Order;
+}
+
+interface AdminPunchShipmentData {
+  adminPunchShipment: {
+    id: string;
+    orderId: string;
+    status: string;
+  };
 }
 
 export interface Customer {
@@ -111,6 +122,12 @@ export interface Order {
   cancellationReason?: string;
   createdAt: string;
   updatedAt: string;
+  estimatedWeight?: number;
+  boxDimensions?: {
+    l: number;
+    w: number;
+    h: number;
+  };
 }
 
 export interface OrdersSummary {
@@ -138,6 +155,11 @@ export interface UpdateOrderStatusInput {
   orderId: string;
   status: OrderStatus;
   trackingNumber?: string;
+}
+
+export interface AdminPunchShipmentInput {
+  orderId: string;
+  serviceType?: string;
 }
 
 export const useAllOrders = (input: GetAllOrdersInput = {}) => {
@@ -202,6 +224,25 @@ export const useUpdateOrderStatus = () => {
   };
 };
 
+export const useAdminPunchShipment = () => {
+  const [adminPunchShipment, { loading, error }] =
+    useMutation<AdminPunchShipmentData>(ADMIN_PUNCH_SHIPMENT);
+
+  const punchShipment = async (input: AdminPunchShipmentInput) => {
+    const result = await adminPunchShipment({
+      variables: { input },
+      refetchQueries: ["GetAllOrders"],
+    });
+    return result.data?.adminPunchShipment;
+  };
+
+  return {
+    punchShipment,
+    loading,
+    error,
+  };
+};
+
 export const getOrderStats = (summary?: OrdersSummary) => {
   if (!summary) {
     return {
@@ -211,6 +252,7 @@ export const getOrderStats = (summary?: OrdersSummary) => {
       shipped: 0,
       inTransit: 0,
       delivered: 0,
+      shipmentFailed: 0,
       totalRevenue: 0,
     };
   }
@@ -222,6 +264,7 @@ export const getOrderStats = (summary?: OrdersSummary) => {
     shipped: summary.statusCounts.shipped,
     inTransit: summary.statusCounts.inTransit,
     delivered: summary.statusCounts.delivered,
+    shipmentFailed: summary.statusCounts.shipmentFailed,
     totalRevenue: parseFloat(summary.totalRevenue || "0"),
   };
 };

@@ -19,7 +19,10 @@ export class PlatformStats {
   macos: number;
 
   @Field(() => Int)
-  desktop: number;
+  linux: number;
+
+  @Field(() => Int)
+  windows: number;
 }
 
 @ObjectType()
@@ -69,7 +72,7 @@ export class EnrichedCustomer extends Identity {
   @Field(() => Int)
   totalOrders: number;
 
-  @Field(() => Int)
+  @Field(() => Number)
   totalSpent: number;
 
   @Field(() => Int, { nullable: true })
@@ -99,7 +102,7 @@ export class CustomerDetails extends Identity {
   @Field(() => Int)
   totalOrders: number;
 
-  @Field(() => Int)
+  @Field(() => Number)
   totalSpent: number;
 
   @Field()

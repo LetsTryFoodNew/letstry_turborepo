@@ -15,7 +15,7 @@ export class PackingOrderCreatorService {
 
   async createFromOrder(order: Order): Promise<any> {
     try {
-      const items = await this.extractItems(order);
+      const items = await this.extractItemsForOrder(order);
 
       const packingOrder = await this.packingOrderCrud.create({
         orderId: order._id.toString(),
@@ -41,7 +41,7 @@ export class PackingOrderCreatorService {
     }
   }
 
-  private async extractItems(order: Order): Promise<any[]> {
+  async extractItemsForOrder(order: Order): Promise<any[]> {
     const items = await Promise.all(
       order.items.map(async (item) => {
         try {

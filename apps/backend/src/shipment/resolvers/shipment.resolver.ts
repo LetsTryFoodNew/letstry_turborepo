@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { ShipmentService } from '../services/shipment.service';
 import { TrackingService } from '../services/tracking.service';
+import { DtdcApiService } from '../services/dtdc-api.service';
 import { JwtAuthGuard } from '../../authentication/common/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -24,7 +25,8 @@ export class ShipmentResolver {
   constructor(
     private readonly shipmentService: ShipmentService,
     private readonly trackingService: TrackingService,
-  ) {}
+    private readonly dtdcApiService: DtdcApiService,
+  ) { }
 
   @Mutation(() => CreateShipmentResponse)
   async createShipment(@Args('input') input: CreateShipmentInput): Promise<CreateShipmentResponse> {
@@ -90,6 +92,7 @@ export class ShipmentResolver {
       },
       awbNumber: result.awbNumber,
       labelUrl: result.labelUrl,
+      trackingLink: `https://letstryfoods.com/track/${result.awbNumber}`,
     };
   }
 
@@ -145,6 +148,7 @@ export class ShipmentResolver {
         ...(s.toObject() as any),
         id: s._id.toString(),
         orderId: s.orderId?.toString(),
+        trackingLink: `https://letstryfoods.com/track/${s.dtdcAwbNumber}`,
       })),
       total: shipments.length,
     };
@@ -158,6 +162,7 @@ export class ShipmentResolver {
       ...(result.shipment.toObject() as any),
       id: result.shipment._id.toString(),
       orderId: result.shipment.orderId?.toString(),
+      trackingLink: `https://letstryfoods.com/track/${result.shipment.dtdcAwbNumber}`,
       trackingHistory: result.tracking.map((t) => ({
         ...(t.toObject() as any),
         id: t._id.toString(),
@@ -174,6 +179,32 @@ export class ShipmentResolver {
       ...obj,
       id: shipment._id.toString(),
       orderId: shipment.orderId?.toString(),
+      trackingLink: `https://letstryfoods.com/track/${shipment.dtdcAwbNumber}`,
     };
+  }
+
+  @Query(() => String, { nullable: true })
+  async getShipmentLabel(@Args('awbNumber') awbNumber: string): Promise<string | null> {
+    const shipment = await this.shipmentService.findByAwbNumber(awbNumber);
+    if (!shipment) {
+      return null;
+    }
+
+    if (shipment.labelUrl && shipment.labelUrl.startsWith('data:application/pdf;base64,')) {
+      return shipment.labelUrl.replace('data:application/pdf;base64,', '');
+    }
+
+    try {
+      const liveLabelUrl = await this.dtdcApiService.getLabel(awbNumber, shipment._id.toString());
+      if (liveLabelUrl && liveLabelUrl.startsWith('data:application/pdf;base64,')) {
+        shipment.labelUrl = liveLabelUrl;
+        await shipment.save();
+        return liveLabelUrl.replace('data:application/pdf;base64,', '');
+      }
+    } catch (error) {
+      console.error('Failed to fetch live DTDC label:', error);
+    }
+
+    return null;
   }
 }

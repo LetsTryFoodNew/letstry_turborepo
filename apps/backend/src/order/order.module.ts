@@ -10,19 +10,23 @@ import { OrderRepository } from './services/order.repository';
 import { OrderQueryService } from './services/order.query-service';
 import { OrderCommandService } from './services/order.command-service';
 import { OrderItemService } from './services/order.item-service';
-import { PaymentOrder, PaymentOrderSchema } from '../payment/entities/payment.schema';
+import { PaymentOrder, PaymentOrderSchema, PaymentEvent, PaymentEventSchema } from '../payment/entities/payment.schema';
 import { Address, AddressSchema } from '../address/address.schema'; import { PackingModule } from '../packing/packing.module';
+import { OrderController } from './order.controller';
+import { InvoiceService } from './services/invoice.service';
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Order.name, schema: OrderSchema },
       { name: Identity.name, schema: IdentitySchema },
       { name: PaymentOrder.name, schema: PaymentOrderSchema },
+      { name: PaymentEvent.name, schema: PaymentEventSchema },
       { name: Address.name, schema: AddressSchema },
     ]),
     ProductModule,
     forwardRef(() => PackingModule),
   ],
+  controllers: [OrderController],
   providers: [
     OrderService,
     OrderResolver,
@@ -32,6 +36,7 @@ import { Address, AddressSchema } from '../address/address.schema'; import { Pac
     OrderQueryService,
     OrderCommandService,
     OrderItemService,
+    InvoiceService,
   ],
   exports: [OrderService, OrderCartLoggerService, OrderRepository],
 })

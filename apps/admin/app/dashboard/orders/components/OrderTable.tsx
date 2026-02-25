@@ -10,15 +10,16 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Package, Truck, CheckCircle, XCircle, RefreshCcw, Clock, Loader2 } from "lucide-react"
+import { Eye, Package, Truck, CheckCircle, XCircle, RefreshCcw, Clock, Loader2, FileDown, Zap } from "lucide-react"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Order, OrderStatus, PaymentStatus } from "@/lib/orders/queries"
+import { Order, OrderStatus, PaymentStatus, useAdminPunchShipment } from "@/lib/orders/queries"
 import { format } from "date-fns"
+import { toast } from "react-hot-toast"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +36,22 @@ interface OrderTableProps {
   onUpdateStatus: (orderId: string, status: OrderStatus) => void
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL?.replace('/graphql', '') || 'http://localhost:5000'
+
 export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTableProps) {
+  const { punchShipment, loading: punching } = useAdminPunchShipment()
+
+  const handlePunchShipment = async (order: Order, serviceType: string) => {
+    try {
+      const result = await punchShipment({ orderId: order._id, serviceType })
+      if (result) {
+        toast.success(`Successfully punched to DTDC!`)
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to punch to DTDC")
+    }
+  }
+
   const getOrderStatusBadge = (status: OrderStatus) => {
     switch (status) {
       case 'CONFIRMED':
@@ -48,6 +64,8 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
         return <Badge variant="outline" className="border-indigo-500 text-indigo-600"><Loader2 className="h-3 w-3 mr-1" /> In Transit</Badge>
       case 'DELIVERED':
         return <Badge className="bg-green-600"><CheckCircle className="h-3 w-3 mr-1" /> Delivered</Badge>
+      case 'SHIPMENT_FAILED':
+        return <Badge variant="outline" className="border-red-500 text-red-600"><XCircle className="h-3 w-3 mr-1" /> Shipment Failed</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -77,7 +95,8 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
       'PACKED': ['SHIPPED'],
       'SHIPPED': ['IN_TRANSIT'],
       'IN_TRANSIT': ['DELIVERED'],
-      'DELIVERED': []
+      'DELIVERED': [],
+      'SHIPMENT_FAILED': [],
     }
     return statusFlow[currentStatus]?.includes(newStatus) || false
   }
@@ -188,6 +207,47 @@ export function OrderTable({ orders, onViewDetails, onUpdateStatus }: OrderTable
                       <TooltipContent>View Details</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          onClick={() => window.open(`${API_BASE_URL}/orders/${order._id}/invoice`, '_blank')}
+                        >
+                          <FileDown className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Download Invoice</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  {order.orderStatus !== 'DELIVERED' && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                          disabled={punching}
+                        >
+                          <Zap className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Punch to DTDC</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => handlePunchShipment(order, 'B2C SMART EXPRESS')}>
+                          B2C Smart Express
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handlePunchShipment(order, 'B2C PRIORITY')}>
+                          B2C Priority
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
 
                   {order.orderStatus !== 'DELIVERED' && (
                     <DropdownMenu>

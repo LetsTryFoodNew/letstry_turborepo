@@ -43,6 +43,7 @@ export const GET_ALL_SHIPMENTS = gql`
         webhookLastReceivedAt
         createdAt
         updatedAt
+        trackingLink
       }
       total
     }
@@ -90,6 +91,7 @@ export const GET_SHIPMENT_BY_ID = gql`
       webhookLastReceivedAt
       createdAt
       updatedAt
+      trackingLink
     }
   }
 `
@@ -135,6 +137,7 @@ export const GET_SHIPMENT_BY_AWB = gql`
       webhookLastReceivedAt
       createdAt
       updatedAt
+      trackingLink
     }
   }
 `
@@ -180,6 +183,7 @@ export const GET_SHIPMENT_WITH_TRACKING = gql`
       webhookLastReceivedAt
       createdAt
       updatedAt
+      trackingLink
       trackingHistory {
         id
         shipmentId
@@ -210,5 +214,11 @@ export const CANCEL_SHIPMENT = gql`
       isCancelled
       cancelledAt
     }
+  }
+`
+
+export const GET_SHIPMENT_LABEL = gql`
+  query GetShipmentLabel($awbNumber: String!) {
+    getShipmentLabel(awbNumber: $awbNumber)
   }
 `

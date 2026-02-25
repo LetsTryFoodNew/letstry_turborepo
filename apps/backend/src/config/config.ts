@@ -15,7 +15,9 @@ export default () => ({
     guestConversionFile:
       process.env.GUEST_CONVERSION_LOG_FILE || 'logs/guest-conversion.log',
     packingFile: process.env.PACKING_LOG_FILE || 'logs/packing.log',
+    scanFile: process.env.SCAN_LOG_FILE || 'logs/scan.log',
     shipmentFile: process.env.SHIPMENT_LOG_FILE || 'logs/shipment.log',
+    trackingFile: process.env.TRACKING_LOG_FILE || 'logs/tracking.log',
   },
   packing: {
     acceptTimeoutHours: parseInt(
@@ -80,13 +82,13 @@ export default () => ({
       process.env.ZAAKPAY_SECRET_KEY || 'a3833da3c2234d218568a690c1714e5d',
     returnUrl:
       process.env.ZAAKPAY_RETURN_URL ||
-      'https://backend.krsna.site/payment/callback',
+      'https://apiv3.letstryfoods.com/payment/callback',
     successUrl:
       process.env.ZAAKPAY_SUCCESS_URL ||
-      'https://frontend.krsna.site/payment-callback?status=success',
+      'https://letstryfoods.com/payment-callback?status=success',
     failureUrl:
       process.env.ZAAKPAY_FAILURE_URL ||
-      'https://frontend.krsna.site/payment-failed',
+      'https://letstryfoods.com/payment-failed',
     environment: process.env.ZAAKPAY_ENVIRONMENT || 'staging',
     baseUrl:
       (process.env.ZAAKPAY_ENVIRONMENT || 'staging') === 'production'
@@ -106,20 +108,37 @@ export default () => ({
     customerCode: process.env.DTDC_CUSTOMER_CODE || '',
     apiKey: process.env.DTDC_API_KEY || '',
     baseUrls: {
-      staging: 'https://blktrackstagingapi.dtdc.com',
-      production: 'https://blktrackapi.dtdc.com',
+      staging: 'https://demodashboardapi.shipsy.in/api/customer/integration/',
+      production: 'https://pxapi.dtdc.in/api/customer/integration/',
     },
     endpoints: {
-      bookingApi: '/dtdc-api/rest/JSONCourier/BookAirWayBill/PostXML',
-      labelApi: '/dtdc-api/rest/JSONBookLabel/GetLabel/CustomerID',
-      trackApi: '/dtdc-api/shipment/rest/JSONWhatsappTrack/trackorder',
-      cancelApi: '/dtdc-api/rest/JSONCourier/DRSCancelWaybill',
-      pincodeApi: '/dtdc-api/rest/JSONServiceablePincode/CheckPincode',
+      bookingApi: 'consignment/softdata',
+      labelApi: 'consignment/shippinglabel/stream',
+      cancelApi: 'consignment/cancel',
+      pincodeApi: 'http://smarttrack.ctbsplus.dtdc.com/ratecalapi/PincodeApiCall',
+    },
+    tracking: {
+      baseUrl: 'https://blktracksvc.dtdc.com/dtdc-api',
+      tokenPath: '/api/dtdc/authenticate',
+      trackPath: '/rest/JSONCnTrk/getTrackDetails',
+      pollIntervalHours: parseInt(process.env.DTDC_TRACKING_POLL_INTERVAL_HOURS || '1', 10),
     },
     defaults: {
       dimensionUnit: 'cm',
       weightUnit: 'kg',
       trackingValidityDays: 90,
+      serviceType: process.env.DTDC_SERVICE_TYPE || 'GROUND EXPRESS',
+      loadType: process.env.DTDC_LOAD_TYPE || 'NON-DOCUMENT',
+      commodityId: process.env.DTDC_COMMODITY_ID || '10',
+    },
+    origin: {
+      name: process.env.WAREHOUSE_NAME || 'Earth Crust Private Limited P',
+      addressLine1: process.env.WAREHOUSE_ADDRESS_LINE1 || 'PLOT NO 2019, PH II SEC 38 HSIIDC RAI DISTT SONIPAT',
+      addressLine2: process.env.WAREHOUSE_ADDRESS_LINE2 || 'RAI, 131029, HSIIDC RAI',
+      city: process.env.WAREHOUSE_CITY || 'Sonipat',
+      state: process.env.WAREHOUSE_STATE || 'Haryana',
+      pincode: process.env.WAREHOUSE_PINCODE || '131029',
+      phone: process.env.WAREHOUSE_PHONE || '9916124895',
     },
   },
 });

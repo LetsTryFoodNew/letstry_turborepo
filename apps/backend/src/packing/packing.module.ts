@@ -25,7 +25,7 @@ import { PackerStatsService } from './services/domain/packer-stats.service';
 import { PackerAuthService } from './services/domain/packer-auth.service';
 import { OrderAssignmentService } from './services/domain/order-assignment.service';
 import { PackingLifecycleService } from './services/domain/packing-lifecycle.service';
-import { ScanValidationService } from './services/domain/scan-validation.service';
+
 import { PackingQueueService } from './services/domain/packing-queue.service';
 import { PriorityCalculatorService } from './services/domain/priority-calculator.service';
 import { RetrospectiveErrorService } from './services/domain/retrospective-error.service';
@@ -35,11 +35,12 @@ import { ReassignmentService } from './services/domain/reassignment.service';
 import { PackingSchedulerService } from './services/domain/packing-scheduler.service';
 import { UnassignedOrderProcessorService } from './services/domain/unassigned-order-processor.service';
 import { QueueCleanupService } from './services/domain/queue-cleanup.service';
+import { ScanLoggerService } from './services/domain/scan-logger.service';
 
 import { PackingService } from './services/packing.service';
 import { PackerService } from './services/packer.service';
 
-import { PackingResolver } from './packing.resolver';
+import { PackingResolver, ScanLogResolver } from './packing.resolver';
 import { PackerResolver } from './packer.resolver';
 
 import { PackerAuthGuard } from './guards/packer-auth.guard';
@@ -93,11 +94,12 @@ import { ShipmentModule } from '../shipment/shipment.module';
     PackerAuthService,
     OrderAssignmentService,
     PackingLifecycleService,
-    ScanValidationService,
+
     PackingQueueService,
     PriorityCalculatorService,
     RetrospectiveErrorService,
     PackingLoggerService,
+    ScanLoggerService,
     PackingOrderCreatorService,
     ReassignmentService,
     PackingSchedulerService,
@@ -106,6 +108,7 @@ import { ShipmentModule } from '../shipment/shipment.module';
     PackingService,
     PackerService,
     PackingResolver,
+    ScanLogResolver,
     PackerResolver,
     PackerAuthGuard,
     PackingAssignmentProcessor,
