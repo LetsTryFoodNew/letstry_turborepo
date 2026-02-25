@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Package, ChevronDown, ChevronUp, MapPin, CreditCard, User as UserIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Order {
     _id: string;
@@ -18,6 +19,7 @@ interface Order {
     discount: string;
     deliveryCharge: string;
     currency: string;
+    awb_number: string;
     trackingNumber?: string;
     createdAt: string;
     deliveredAt?: string;
@@ -139,6 +141,8 @@ export const ProfileOrders = () => {
         );
     }
 
+    const router = useRouter();
+
     return (
         <div className="space-y-4">
             {orders.map((order: Order) => {
@@ -157,6 +161,11 @@ export const ProfileOrders = () => {
                                         {order.payment && (
                                             <Badge className={getPaymentStatusColor(order.payment.status)}>
                                                 {order.payment.status}
+                                            </Badge>
+                                        )}
+                                        {order.awb_number && (
+                                            <Badge className="bg-green-100 text-green-800 cursor-pointer" onClick={() => router.push(`/track/${order.awb_number}`)}>
+                                                {order.awb_number}
                                             </Badge>
                                         )}
                                     </div>

@@ -98,6 +98,7 @@ export const ProfileSidebar = () => {
           href="/profile/orders"
           isActive={pathname === "/profile/orders"}
           disabled={isLoggingOut}
+          awb_number={awb_number}
         />
         <SidebarItem
           icon={LogOut}
