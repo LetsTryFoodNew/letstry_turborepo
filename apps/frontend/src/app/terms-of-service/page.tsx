@@ -520,6 +520,17 @@ export default async function TermsOfServicePage() {
             acceptance of those changes.
           </p>
         </section>
+
+        <section className="lg:mb-12 md:mb-12">
+          <h3 className="lg:text-xl md:text-xl text-[16px] font-bold mb-2">
+            How to Delete Your Account
+          </h3>
+          <p className="text-[12px] lg:text-[16px] md:text-[16px]">
+            To delete your account and all associated personal data, please contact our support team at ecom@earthcrust.co.in or call us at +91-9654-932-262. Once your request is received, your account and data will be permanently removed from our systems within 30 days.
+
+          </p>
+        </section>
+
       </div>
     );
   }
