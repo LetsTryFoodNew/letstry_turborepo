@@ -101,7 +101,7 @@ export default function BulkCorporatePage() {
                         </div>
 
                         <div className="flex flex-col gap-5">
-                            {/* <div className="flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-5">
+                            <div className="flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-5">
                                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ background: "#001F3F1A", color: NAVY }}>
                                     <Phone className="h-5 w-5" />
                                 </div>
@@ -110,19 +110,13 @@ export default function BulkCorporatePage() {
                                         Call Us
                                     </p>
                                     <a
-                                        href="tel:9599385940"
+                                        href="tel:+919654932262"
                                         className="block text-sm font-medium text-gray-800"
                                     >
-                                        9599385940
-                                    </a>
-                                    <a
-                                        href="tel:9100259090"
-                                        className="block text-sm font-medium text-gray-800"
-                                    >
-                                        9100259090
+                                        +91-9654-932-262
                                     </a>
                                 </div>
-                            </div> */}
+                            </div>
 
                             <div className="flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-5">
                                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ background: "#001F3F1A", color: NAVY }}>
@@ -130,7 +124,7 @@ export default function BulkCorporatePage() {
                                 </div>
                                 <div>
                                     <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                                        Email Us
+                                        Email U
                                     </p>
                                     <a
                                         href="mailto:corporate@letstryfoods.com"
