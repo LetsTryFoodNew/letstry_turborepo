@@ -367,6 +367,25 @@ export type CleanupResult = {
   removed: Scalars['Int']['output'];
 };
 
+export type CorporateEnquiry = {
+  __typename?: 'CorporateEnquiry';
+  _id: Scalars['ID']['output'];
+  companyName?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  otherPurpose?: Maybe<Scalars['String']['output']>;
+  phone: Scalars['String']['output'];
+  purposeOfInquiry: PurposeOfInquiry;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type CorporateEnquiryResponse = {
+  __typename?: 'CorporateEnquiryResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type Coupon = {
   __typename?: 'Coupon';
   _id: Scalars['ID']['output'];
@@ -928,6 +947,7 @@ export type Mutation = {
   setDefaultProductVariant: Product;
   setShippingAddress: Cart;
   startPacking: PackingOrder;
+  submitCorporateEnquiry: CorporateEnquiryResponse;
   subscribeNewsletter: SubscribeNewsletterResponse;
   unarchiveCategory: Category;
   unarchiveProduct: Product;
@@ -1215,6 +1235,11 @@ export type MutationSetShippingAddressArgs = {
 
 export type MutationStartPackingArgs = {
   packingOrderId: Scalars['String']['input'];
+};
+
+
+export type MutationSubmitCorporateEnquiryArgs = {
+  input: SubmitCorporateEnquiryInput;
 };
 
 
@@ -2029,6 +2054,17 @@ export type ProductVariant = {
   weightUnit: Scalars['String']['output'];
 };
 
+export enum PurposeOfInquiry {
+  CorporateGifting = 'CorporateGifting',
+  EmployeeGifting = 'EmployeeGifting',
+  FestiveGifting = 'FestiveGifting',
+  Others = 'Others',
+  PantrySnacking = 'PantrySnacking',
+  PersonalGifting = 'PersonalGifting',
+  WeddingGifting = 'WeddingGifting',
+  WholesaleRetail = 'WholesaleRetail'
+}
+
 export type Query = {
   __typename?: 'Query';
   activeBanners: Array<Banner>;
@@ -2060,6 +2096,7 @@ export type Query = {
   getAdminPaymentsByOrder: Array<PaymentListItemType>;
   getAdminPaymentsList: PaymentsListResponse;
   getAllBoxSizes: Array<BoxSize>;
+  getAllCorporateEnquiries: Array<CorporateEnquiry>;
   getAllCustomers: PaginatedCustomersResponse;
   getAllNewsletterSubscriptions: Array<NewsletterSubscription>;
   getAllOrders: AdminOrdersResponse;
@@ -2602,6 +2639,15 @@ export type StatusStats = {
   registered: Scalars['Int']['output'];
   suspended: Scalars['Int']['output'];
   verified: Scalars['Int']['output'];
+};
+
+export type SubmitCorporateEnquiryInput = {
+  companyName?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  otherPurpose?: InputMaybe<Scalars['String']['input']>;
+  phone: Scalars['String']['input'];
+  purposeOfInquiry: PurposeOfInquiry;
 };
 
 export type SubscribeNewsletterInput = {
