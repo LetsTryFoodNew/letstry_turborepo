@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { useCheckPhone } from '@/lib/address/use-check-phone';
 import { FormInput } from './FormInput';
 import { PhoneInput } from './PhoneInput';
 import { AddressTypeSelector } from './AddressTypeSelector';
@@ -14,7 +13,6 @@ interface AddressDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (details: AddressFormData) => void;
-  onPhoneValidationFailed: (phone: string, formData: AddressFormData) => void;
   initialData?: Partial<AddressFormData>;
   isAuthenticated: boolean;
 }
@@ -37,16 +35,12 @@ export const AddressDetailsModal: React.FC<AddressDetailsModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  onPhoneValidationFailed,
   initialData,
   isAuthenticated,
 }) => {
-  const [shouldCheckPhone, setShouldCheckPhone] = useState(false);
-  const hasShownAlertRef = useRef(false);
-  const lastCheckedPhoneRef = useRef('');
 
 
-  const { register, handleSubmit, watch, setValue, getValues } = useForm<AddressFormData>({
+  const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = useForm<AddressFormData>({
     defaultValues: {
       addressType: initialData?.addressType || 'Home',
       recipientPhone: initialData?.recipientPhone || '',
@@ -62,38 +56,7 @@ export const AddressDetailsModal: React.FC<AddressDetailsModalProps> = ({
   const addressType = watch('addressType');
   const recipientPhone = watch('recipientPhone');
 
-  const { data: phoneCheckData } = useCheckPhone(
-    `+91${recipientPhone}`,
-    shouldCheckPhone && recipientPhone.length >= 10
-  );
 
-  React.useEffect(() => {
-    if ((phoneCheckData as any)?.checkPhoneExists?.requiresLogin) {
-      if (!hasShownAlertRef.current || lastCheckedPhoneRef.current !== recipientPhone) {
-        const currentFormData = getValues();
-        toast.error('This number is already registered. Please login first to continue.', {
-          duration: 4000,
-          position: 'top-center',
-        });
-        onPhoneValidationFailed(`+91${recipientPhone}`, currentFormData);
-        hasShownAlertRef.current = true;
-        lastCheckedPhoneRef.current = recipientPhone;
-      }
-      setShouldCheckPhone(false);
-    }
-  }, [phoneCheckData, recipientPhone, getValues]);
-
-  React.useEffect(() => {
-    if (recipientPhone !== lastCheckedPhoneRef.current) {
-      hasShownAlertRef.current = false;
-    }
-  }, [recipientPhone]);
-
-  const handlePhoneBlur = () => {
-    if (recipientPhone.length >= 10) {
-      setShouldCheckPhone(true);
-    }
-  };
 
   const onSubmit = async (data: AddressFormData) => {
     await onSave(data);
@@ -156,12 +119,17 @@ export const AddressDetailsModal: React.FC<AddressDetailsModalProps> = ({
                     </div>
                     <input
                       type="tel"
-                      {...register('recipientPhone', { required: true })}
-                      onBlur={handlePhoneBlur}
+                      {...register('recipientPhone', { 
+                        required: 'Phone number is required', 
+                        pattern: { value: /^\d{10}$/, message: 'Phone number must be exactly 10 digits' } 
+                      })}
                       className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F4A6A] focus:border-transparent"
                       placeholder="Enter phone number"
                     />
                   </div>
+                  {errors.recipientPhone && (
+                    <p className="text-red-500 text-sm mt-1">{errors.recipientPhone.message}</p>
+                  )}
                 </div>
 
                 <FormInput
@@ -199,11 +167,17 @@ export const AddressDetailsModal: React.FC<AddressDetailsModalProps> = ({
                         </div>
                         <input
                           type="tel"
-                          {...register('placerPhone')}
+                          {...register('placerPhone', { 
+                            required: 'Phone number is required', 
+                            pattern: { value: /^\d{10}$/, message: 'Phone number must be exactly 10 digits' } 
+                          })}
                           className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F4A6A] focus:border-transparent"
                           placeholder="Enter your phone number"
                         />
                       </div>
+                      {errors.placerPhone && (
+                        <p className="text-red-500 text-sm mt-1">{errors.placerPhone.message}</p>
+                      )}
                     </div>
 
                     <FormInput

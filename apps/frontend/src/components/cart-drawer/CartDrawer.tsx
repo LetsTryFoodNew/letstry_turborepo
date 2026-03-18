@@ -56,7 +56,6 @@ interface CartDrawerProps {
   onSelectAddress: (addressId: string) => void;
   onSelectPlace: (placeId: string, description: string) => void;
   onSaveAddressDetails: (details: AddressFormData) => void;
-  onPhoneValidationFailed: (phone: string, formData: AddressFormData) => void;
   coupons: any[];
   appliedCouponCode: string | null;
   onApplyCoupon: (code: string) => Promise<void>;
@@ -98,7 +97,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onSelectAddress,
   onSelectPlace,
   onSaveAddressDetails,
-  onPhoneValidationFailed,
   coupons,
   appliedCouponCode,
   onApplyCoupon,
@@ -247,7 +245,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               isOpen={showAddressDetailsModal}
               onClose={onToggleAddressDetailsModal}
               onSave={onSaveAddressDetails}
-              onPhoneValidationFailed={onPhoneValidationFailed}
               isAuthenticated={isAuthenticated}
             />
 

@@ -14,7 +14,6 @@ import {
   GoogleMapsAddressOutput,
   PlacePredictionOutput,
   PlaceDetailsOutput,
-  PhoneCheckOutput,
 } from './address.graphql';
 import { DualAuthGuard } from '../authentication/common/dual-auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -108,13 +107,5 @@ export class AddressResolver {
       input.placeId,
       input.sessionToken,
     );
-  }
-
-  @Public()
-  @Query(() => PhoneCheckOutput, { name: 'checkPhoneExists' })
-  async checkPhoneExists(
-    @Args('phoneNumber') phoneNumber: string,
-  ): Promise<PhoneCheckOutput> {
-    return this.addressService.checkPhoneExists(phoneNumber);
   }
 }

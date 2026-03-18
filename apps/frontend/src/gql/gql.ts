@@ -21,7 +21,6 @@ type Documents = {
     "\n  query GetPlaceDetails($placeId: String!, $sessionToken: String) {\n    getPlaceDetails(input: { placeId: $placeId, sessionToken: $sessionToken }) {\n      placeId\n      formattedAddress\n      streetAddress\n      locality\n      region\n      postalCode\n      country\n      latitude\n      longitude\n    }\n  }\n": typeof types.GetPlaceDetailsDocument,
     "\n  query GetMyAddresses {\n    myAddresses {\n      _id\n      addressType\n      recipientPhone\n      recipientName\n      buildingName\n      floor\n      streetArea\n      landmark\n      addressLocality\n      addressRegion\n      postalCode\n      addressCountry\n      isDefault\n      latitude\n      longitude\n      formattedAddress\n      placeId\n    }\n  }\n": typeof types.GetMyAddressesDocument,
     "\n  mutation CreateAddress($input: CreateAddressInput!) {\n    createAddress(input: $input) {\n      _id\n      addressType\n      formattedAddress\n      isDefault\n    }\n  }\n": typeof types.CreateAddressDocument,
-    "\n  query CheckPhoneExists($phoneNumber: String!) {\n    checkPhoneExists(phoneNumber: $phoneNumber) {\n      exists\n      requiresLogin\n      message\n    }\n  }\n": typeof types.CheckPhoneExistsDocument,
     "\n  mutation AdminLogout {\n    adminLogout\n  }\n": typeof types.AdminLogoutDocument,
     "\n  mutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n      _id\n      firstName\n      lastName\n      email\n      phoneNumber\n      dateOfBirth\n    }\n  }\n": typeof types.UpdateUserDocument,
     "\n  query Me {\n    me {\n      _id\n      phoneNumber\n      firstName\n      lastName\n      email\n      dateOfBirth\n    }\n  }\n": typeof types.MeDocument,
@@ -61,7 +60,6 @@ const documents: Documents = {
     "\n  query GetPlaceDetails($placeId: String!, $sessionToken: String) {\n    getPlaceDetails(input: { placeId: $placeId, sessionToken: $sessionToken }) {\n      placeId\n      formattedAddress\n      streetAddress\n      locality\n      region\n      postalCode\n      country\n      latitude\n      longitude\n    }\n  }\n": types.GetPlaceDetailsDocument,
     "\n  query GetMyAddresses {\n    myAddresses {\n      _id\n      addressType\n      recipientPhone\n      recipientName\n      buildingName\n      floor\n      streetArea\n      landmark\n      addressLocality\n      addressRegion\n      postalCode\n      addressCountry\n      isDefault\n      latitude\n      longitude\n      formattedAddress\n      placeId\n    }\n  }\n": types.GetMyAddressesDocument,
     "\n  mutation CreateAddress($input: CreateAddressInput!) {\n    createAddress(input: $input) {\n      _id\n      addressType\n      formattedAddress\n      isDefault\n    }\n  }\n": types.CreateAddressDocument,
-    "\n  query CheckPhoneExists($phoneNumber: String!) {\n    checkPhoneExists(phoneNumber: $phoneNumber) {\n      exists\n      requiresLogin\n      message\n    }\n  }\n": types.CheckPhoneExistsDocument,
     "\n  mutation AdminLogout {\n    adminLogout\n  }\n": types.AdminLogoutDocument,
     "\n  mutation UpdateUser($input: UpdateUserInput!) {\n    updateUser(input: $input) {\n      _id\n      firstName\n      lastName\n      email\n      phoneNumber\n      dateOfBirth\n    }\n  }\n": types.UpdateUserDocument,
     "\n  query Me {\n    me {\n      _id\n      phoneNumber\n      firstName\n      lastName\n      email\n      dateOfBirth\n    }\n  }\n": types.MeDocument,
@@ -119,10 +117,6 @@ export function graphql(source: "\n  query GetMyAddresses {\n    myAddresses {\n
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateAddress($input: CreateAddressInput!) {\n    createAddress(input: $input) {\n      _id\n      addressType\n      formattedAddress\n      isDefault\n    }\n  }\n"): typeof import('./graphql').CreateAddressDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  query CheckPhoneExists($phoneNumber: String!) {\n    checkPhoneExists(phoneNumber: $phoneNumber) {\n      exists\n      requiresLogin\n      message\n    }\n  }\n"): typeof import('./graphql').CheckPhoneExistsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -33,7 +33,6 @@ export const CartContainer = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedPlaceData, setSelectedPlaceData] = useState<any>(null);
   const [pendingAddressData, setPendingAddressData] = useState<AddressFormData | null>(null);
-  const [pendingPhone, setPendingPhone] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
   const [updatingItems, setUpdatingItems] = useState<Set<string>>(new Set());
 
@@ -235,16 +234,9 @@ export const CartContainer = () => {
       setShowAddressModal(false);
       setShowAddressDetailsModal(false);
       setPendingAddressData(null);
-      setPendingPhone('');
     } catch (error) {
       console.error('Failed to save address:', error);
     }
-  };
-
-  const handlePhoneValidationFailed = (phone: string, formData: AddressFormData) => {
-    setPendingPhone(phone);
-    setPendingAddressData(formData);
-    setShowLoginModal(true);
   };
 
   const handleLoginSuccess = () => {
@@ -315,7 +307,6 @@ export const CartContainer = () => {
         onSelectAddress={handleSelectAddress}
         onSelectPlace={handleSelectPlace}
         onSaveAddressDetails={handleSaveAddressDetails}
-        onPhoneValidationFailed={handlePhoneValidationFailed}
         coupons={coupons}
         appliedCouponCode={appliedCouponCode}
         onApplyCoupon={handleApplyCoupon}

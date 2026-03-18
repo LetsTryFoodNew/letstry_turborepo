@@ -2920,13 +2920,6 @@ export type CreateAddressMutationVariables = Exact<{
 
 export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', _id: string, addressType: string, formattedAddress: string, isDefault: boolean } };
 
-export type CheckPhoneExistsQueryVariables = Exact<{
-  phoneNumber: Scalars['String']['input'];
-}>;
-
-
-export type CheckPhoneExistsQuery = { __typename?: 'Query', checkPhoneExists: { __typename?: 'PhoneCheckOutput', exists: boolean, requiresLogin: boolean, message?: string | null } };
-
 export type AdminLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3234,15 +3227,6 @@ export const CreateAddressDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<CreateAddressMutation, CreateAddressMutationVariables>;
-export const CheckPhoneExistsDocument = new TypedDocumentString(`
-    query CheckPhoneExists($phoneNumber: String!) {
-  checkPhoneExists(phoneNumber: $phoneNumber) {
-    exists
-    requiresLogin
-    message
-  }
-}
-    `) as unknown as TypedDocumentString<CheckPhoneExistsQuery, CheckPhoneExistsQueryVariables>;
 export const AdminLogoutDocument = new TypedDocumentString(`
     mutation AdminLogout {
   adminLogout

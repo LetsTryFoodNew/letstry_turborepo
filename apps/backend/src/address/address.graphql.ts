@@ -74,15 +74,3 @@ export class PlaceDetailsOutput {
   @Field(() => Float)
   longitude: number;
 }
-
-@ObjectType()
-export class PhoneCheckOutput {
-  @Field()
-  exists: boolean;
-
-  @Field()
-  requiresLogin: boolean;
-
-  @Field({ nullable: true })
-  message?: string;
-}

@@ -61,13 +61,3 @@ export const CREATE_ADDRESS = graphql(`
     }
   }
 `);
-
-export const CHECK_PHONE_EXISTS = graphql(`
-  query CheckPhoneExists($phoneNumber: String!) {
-    checkPhoneExists(phoneNumber: $phoneNumber) {
-      exists
-      requiresLogin
-      message
-    }
-  }
-`);

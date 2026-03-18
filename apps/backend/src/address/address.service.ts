@@ -30,7 +30,9 @@ export class AddressService {
   ): Promise<AddressDocument> {
     this.logger.log('Creating address', { identityId, input }, 'AddressModule');
 
-    await this.validatePhoneNotRegistered(input.recipientPhone, identityId);
+    if (!/^\d{10}$/.test(input.recipientPhone)) {
+      throw new BadRequestException('Recipient phone number must be exactly 10 digits');
+    }
 
     if (input.isDefault) {
       await this.addressModel.updateMany({ identityId }, { isDefault: false });
@@ -74,6 +76,10 @@ export class AddressService {
     );
 
     const address = await this.getAddress(id, identityId);
+
+    if (input.recipientPhone && !/^\d{10}$/.test(input.recipientPhone)) {
+      throw new BadRequestException('Recipient phone number must be exactly 10 digits');
+    }
 
     if (input.isDefault) {
       await this.addressModel.updateMany({ identityId }, { isDefault: false });
@@ -146,75 +152,5 @@ export class AddressService {
       { count: result.modifiedCount },
       'AddressModule',
     );
-  }
-
-  async checkPhoneExists(
-    phoneNumber: string,
-  ): Promise<{ exists: boolean; requiresLogin: boolean; message?: string }> {
-    this.logger.log(
-      'Checking if phone exists',
-      { phoneNumber },
-      'AddressModule',
-    );
-
-    const existingIdentity = await this.identityModel
-      .findOne({
-        phoneNumber,
-        status: {
-          $in: [
-            IdentityStatus.REGISTERED,
-            IdentityStatus.VERIFIED,
-            IdentityStatus.ACTIVE,
-          ],
-        },
-      })
-      .exec();
-
-    if (existingIdentity) {
-      return {
-        exists: true,
-        requiresLogin: true,
-        message:
-          'This phone number is already registered. Please login to continue.',
-      };
-    }
-
-    return {
-      exists: false,
-      requiresLogin: false,
-    };
-  }
-
-  private async validatePhoneNotRegistered(
-    phoneNumber: string,
-    currentIdentityId: string,
-  ): Promise<void> {
-    const existingIdentity = await this.identityModel
-      .findOne({
-        phoneNumber,
-        status: {
-          $in: [
-            IdentityStatus.REGISTERED,
-            IdentityStatus.VERIFIED,
-            IdentityStatus.ACTIVE,
-          ],
-        },
-        _id: { $ne: currentIdentityId },
-      })
-      .exec();
-
-    if (existingIdentity) {
-      this.logger.warn(
-        'Attempted to create address with registered phone',
-        { phoneNumber },
-        'AddressModule',
-      );
-      throw new BadRequestException({
-        code: 'PHONE_ALREADY_REGISTERED',
-        message:
-          'This phone number is already registered. Please login to continue.',
-        requiresLogin: true,
-      });
-    }
   }
 }
