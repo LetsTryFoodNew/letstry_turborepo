@@ -58,6 +58,25 @@ export class WhatsAppService {
     return this.sendTemplate(payload);
   }
 
+  async sendOrderPackedNotification(
+    phoneNumber: string,
+    orderId: string,
+    orderDate: string,
+    trackingUrl: string,
+  ): Promise<boolean> {
+    const payload: WhatsAppTemplatePayload = {
+      template: 'deliveryutility',
+      recipients: [
+        {
+          phone: phoneNumber,
+          variables: [orderId, orderDate, trackingUrl],
+        },
+      ],
+    };
+
+    return this.sendTemplate(payload);
+  }
+
   async sendPackerCredentials(
     phoneNumber: string,
     employeeId: string,
