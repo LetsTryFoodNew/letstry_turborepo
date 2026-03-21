@@ -399,7 +399,7 @@ export class PackingService {
 
         // Send WhatsApp notification for order packed
         const phoneNumber = order?.recipientContact?.phone;
-        if (!phoneNumber) {
+        if (!phoneNumber || phoneNumber === 'N/A') {
           this.shipmentLogger.logInfo('No phone number found for order, skipping WhatsApp notification', { orderId });
           return existingShipments[0];
         }
@@ -474,9 +474,9 @@ export class PackingService {
 
       // Send WhatsApp notification for order packed
       const phoneNumber = order?.recipientContact?.phone;
-      if (!phoneNumber) {
+      if (!phoneNumber || phoneNumber === 'N/A') {
         this.shipmentLogger.logInfo('No phone number found for order, skipping WhatsApp notification', { orderId });
-        return;
+        return shipmentResult;
       }
       const orderDate = new Date(order.createdAt).toLocaleDateString('en-IN'); // Format as DD/MM/YYYY
       const trackingUrl = `https://letstryfoods.com/track/${shipmentResult.awbNumber}`;
