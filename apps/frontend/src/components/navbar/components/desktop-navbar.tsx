@@ -44,7 +44,7 @@ export const DesktopNavbar = ({
         {/* <LocationSelector className="hidden md:flex" /> */}
       </div>
 
-      <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:flex items-center gap-8">
+      <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:flex items-center gap-4 xl:gap-8">
         {navigationLinks.map((link) => (
           <div
             key={link.href}
@@ -53,21 +53,21 @@ export const DesktopNavbar = ({
             onMouseLeave={() => setHoveredMenu(null)}
           >
             {link.hasDropdown ? (
-              <span className="text-lg font-medium text-gray-900 hover:text-[#0C5273] transition-colors flex items-center gap-1 h-full cursor-default">
+              <span className="text-lg font-medium text-gray-900 hover:text-[#0C5273] transition-colors flex items-center gap-1 h-full cursor-default whitespace-nowrap">
                 {link.label}
                 <ChevronDown className="h-4 w-4" />
               </span>
             ) : link.isLogin === true ? (
               <button
                 onClick={onLoginClick}
-                className={`text-lg font-medium ${pathname === link.href ? "text-[#0C5273]" : "text-gray-900"} hover:text-[#0C5273] transition-colors flex items-center gap-1 h-full`}
+                className={`text-lg font-medium whitespace-nowrap ${pathname === link.href ? "text-[#0C5273]" : "text-gray-900"} hover:text-[#0C5273] transition-colors flex items-center gap-1 h-full`}
               >
                 {link.label}
               </button>
             ) : (
               <Link
                 href={link.href}
-                className={`text-lg font-medium ${!link.disableActive && pathname === link.href ? "text-[#0C5273]" : "text-gray-900"} hover:text-[#0C5273] transition-colors flex items-center gap-1 h-full`}
+                className={`text-lg font-medium whitespace-nowrap ${!link.disableActive && pathname === link.href ? "text-[#0C5273]" : "text-gray-900"} hover:text-[#0C5273] transition-colors flex items-center gap-1 h-full`}
               >
                 {link.label}
               </Link>
