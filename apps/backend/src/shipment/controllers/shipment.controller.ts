@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, HttpCode, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { TrackingCronService } from '../services/tracking-cron.service';
 import { ShipmentService } from '../services/shipment.service';
 import { Public } from '../../common/decorators/public.decorator';
@@ -60,5 +60,17 @@ export class ShipmentController {
                 };
             }),
         };
+    }
+    @Public()
+    @Get('lookup')
+    async lookupShipment(@Query('q') q: string) {
+        if (!q || !q.trim()) {
+            throw new BadRequestException('Search query is required');
+        }
+        const awbNumber = await this.shipmentService.findAwbByLookup(q.trim());
+        if (!awbNumber) {
+            throw new NotFoundException('No shipment found for the provided query');
+        }
+        return { awbNumber };
     }
 }

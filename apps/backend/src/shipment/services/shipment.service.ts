@@ -309,4 +309,23 @@ export class ShipmentService {
 
     return { shipment: updatedShipment!, tracking, order };
   }
+
+  async findAwbByLookup(query: string): Promise<string | null> {
+    const byAwb = await this.shipmentModel.findOne({ dtdcAwbNumber: query }).exec();
+    if (byAwb) return byAwb.dtdcAwbNumber;
+
+    const byOrderId = await this.orderRepository.findById(query);
+    if (byOrderId) {
+      const shipments = await this.findByOrderId(byOrderId._id.toString());
+      if (shipments.length > 0) return shipments[0].dtdcAwbNumber;
+    }
+
+    const byPhone = await this.orderRepository.findByPhone(query);
+    if (byPhone) {
+      const shipments = await this.findByOrderId(byPhone._id.toString());
+      if (shipments.length > 0) return shipments[0].dtdcAwbNumber;
+    }
+
+    return null;
+  }
 }

@@ -127,4 +127,16 @@ export class OrderRepository {
     ]);
     return result.length > 0 ? result[0].total.toString() : '0';
   }
+
+  async findByPhone(phone: string): Promise<Order | null> {
+    return this.orderModel
+      .findOne({
+        $or: [
+          { 'placerContact.phone': phone },
+          { 'recipientContact.phone': phone },
+        ],
+      })
+      .sort({ createdAt: -1 })
+      .exec();
+  }
 }

@@ -71,6 +71,7 @@ export const Navbar = ({ initialAuth, categories = [] }: NavbarProps) => {
         ],
       },
 
+      { href: '/track', label: 'Track Order', disableActive: true },
       // { href: "/blog", label: "Blog" },
       { href: "/about-us", label: "About us" },
       
